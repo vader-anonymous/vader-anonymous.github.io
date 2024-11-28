@@ -1793,7 +1793,8 @@
 
     <!-- ######################## -->
     <!-- ViCLIP Training Curve -->
-    <div class="container">
+    <div class="container"
+      style="background-color: #fffefe; padding: 30px; border-radius: 8px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);">
       <div class="columns is-centered">
         <div class="column is-full-width">
           <h3 id="reward-curve" class="title pt-5 pb-2 has-text-centered"
@@ -1816,17 +1817,14 @@
 
     <!-- ######################## -->
     <!-- Training efficiency comparison -->
-    <div class="container">
+    <div class="container"
+      style="background-color: #f7f9fc; padding: 30px; border-radius: 8px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);">
       <div class="columns is-centered">
         <div class="column is-full-width">
           <h3 id="training-efficiency-comparison" class="title pt-5 pb-2 has-text-centered"
             style="text-align: center; padding-bottom: 10px;">
             <strong>Training Efficiency Comparison</strong>
           </h3>
-          <p class="subtitle has-text-centered"
-            style="text-align: center; padding-bottom: 10px; color: black; font-family: 'Google Sans', sans-serif;">
-            Training Curve for ModelScope-based VADER.
-          </p>
         </div>
       </div>
       <div class="columns" style="display: flex; justify-content: center; align-items: center;">
@@ -1835,23 +1833,35 @@
             style="max-width: 80%; height: auto; border-radius: 8px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);">
         </div>
       </div>
+
+      <!-- Updated text section -->
+      <div class="columns is-centered">
+        <p class="subtitle"
+          style="width: 80%; text-align: justify; text-justify: inter-word; padding: 10px 20px; color: black; font-family: 'Google Sans', sans-serif; line-height: 1.8; font-size: 1rem;">
+          Training efficiency comparison against various baselines, when trained for longer. The base model used here is
+          ModelScope. We compare VADER against DPO, DDPO, on-policy DPO, and on-policy DDPO. For implementing the
+          on-policy
+          version of the baselines, we simply reduce the UTD (update-to-data) ratio to 1, thus only doing a single
+          gradient
+          update for each datapoint sampled. We observe that VADER significantly outperforms all of them in terms of
+          compute
+          efficiency.
+        </p>
+      </div>
     </div>
 
 
 
+
     <!-- ######################## -->
-    <div class="container">
+    <div class="container"
+      style="background-color: #fffefe; padding: 30px; border-radius: 8px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);">
       <div class="columns is-centered">
         <div class="column is-full-width">
           <h3 id="diversity-test" class="title pt-5 pb-2 has-text-centered"
             style="text-align: center; padding-bottom: 10px;">
             <strong>Diversity Test</strong>
           </h3>
-          <p class="subtitle has-text-centered"
-            style="text-align: center; padding-bottom: 10px; color: black; font-family: 'Google Sans', sans-serif;">
-            Compute the average variance of VideoMAE latent space embeddings across 500 videos for each of 5 prompts
-            (VideoCrafter-based VADER).
-          </p>
         </div>
       </div>
       <div class="table-container">
@@ -1877,21 +1887,51 @@
           </tbody>
         </table>
       </div>
+      <!-- Updated text section -->
+      <div class="columns is-centered">
+        <p class="subtitle"
+          style="width: 80%; text-align: justify; text-justify: inter-word; padding: 10px 20px; color: black; font-family: 'Google Sans', sans-serif; line-height: 1.8; font-size: 1rem;">
+          Diversity of generated videos for VADER. The base model is VideoCrafter.
+          We generate 500 videos for each model and prompt combination. We use 5 prompts resulting in
+          a total of 2500 videos per model. The diversity is calculated using the variance of VideoMAE
+          latent space embeddings across the 500 videos for each prompt. We then average the variances
+          over all prompts. We find that VADER variants exhibit reduced diversity compared to the
+          baseline model VideoCrafter. Prior works <a href="https://arxiv.org/abs/2310.06452">Robert Kirk, et al.</a>
+          and <a href="https://arxiv.org/abs/2411.04427">Sonia K Murthy, et al.</a> have found similar results, where
+          aligning
+          a model for a specific use case often results in reduced diversity.
+        </p>
+      </div>
+
     </div>
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     <!-- ######################## -->
-    <div class="container">
+    <div class="container"
+      style="background-color: #f7f9fc; padding: 30px; border-radius: 8px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);">
       <div class="columns is-centered">
         <div class="column is-full-width">
           <h3 id="memory-usage-comparison" class="title pt-5 pb-2 has-text-centered"
             style="text-align: center; padding-bottom: 10px;">
             <strong>Memory Usage Comparison</strong>
           </h3>
-          <p class="subtitle has-text-centered"
-            style="text-align: center; padding-bottom: 10px; color: black; font-family: 'Google Sans', sans-serif;">
-            Intermediate gradients were offloaded to system memory due to limited GPU capacity in this experiment
-            (ModelScope-based VADER).
-          </p>
         </div>
       </div>
       <div class="table-container">
@@ -1932,22 +1972,33 @@
           </tbody>
         </table>
       </div>
+
+      <!-- Updated text section -->
+      <div class="columns is-centered">
+        <p class="subtitle"
+          style="width: 80%; text-align: justify; text-justify: inter-word; padding: 10px 20px; color: black; font-family: 'Google Sans', sans-serif; line-height: 1.8; font-size: 1rem;">
+          Ablation of memory usage for different components in ModelScope-based VADER.
+          For this experiment, we offload the memory to the CPU main memory to prevent
+          GPU out-of-memory error. Starting with the standard LoRA + Mixed Precision,
+          each row represents an added component (Subsampling Frames, Truncated Backpropagation,
+          and Gradient Checkpointing) applied incrementally to the previous row. The total RAM
+          reduced is about 240 GB after implementing all the steps.
+        </p>
+      </div>
+
     </div>
 
 
 
     <!-- ######################## -->
-    <div class="container">
+    <div class="container"
+      style="background-color: #fffefe; padding: 30px; border-radius: 8px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);">
       <div class="columns is-centered">
         <div class="column is-full-width">
           <h3 id="reward-correlation" class="title pt-5 pb-2 has-text-centered"
             style="text-align: center; padding-bottom: 10px;">
             <strong>Reward Correlation</strong>
           </h3>
-          <p class="subtitle has-text-centered"
-            style="text-align: center; padding-bottom: 10px; color: black; font-family: 'Google Sans', sans-serif;">
-            Evaluated on VideoCrafter-based VADER.
-          </p>
         </div>
       </div>
       <div class="table-container">
@@ -1999,12 +2050,28 @@
         <img src="videos/correlation.png" alt="Reward Curve"
           style="max-width: 81%; height: auto; border-radius: 8px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);">
       </div>
+
+      <!-- Updated text section -->
+      <div class="columns is-centered">
+        <p class="subtitle"
+          style="width: 80%; text-align: justify; text-justify: inter-word; padding: 10px 20px; color: black; font-family: 'Google Sans', sans-serif; line-height: 1.8; font-size: 1rem;">
+          The base model is VideoCrafter. In this Table, we study how optimizing for specific reward functions via VADER
+          affects scores on other
+          reward functions. We observe that the HPS score increases significantly after fine-tuning the base
+          model via the PickScore model, indicating a strong correlation. We study correlation across different
+          reward models for VADER.
+          We find that there is a strong positive correlation between PickScore and HPS scores, while a strong
+          negative correlation between ViCLIP and Aesthetic reward function.
+        </p>
+      </div>
+
     </div>
 
 
 
     <!-- ######################## -->
-    <div class="container">
+    <div class="container"
+      style="background-color: #f7f9fc; padding: 30px; border-radius: 8px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);">
       <div class="columns is-centered">
         <div class="column is-full-width">
           <h3 id="evalcrafter-evaluation" class="title pt-5 pb-2 has-text-centered"
@@ -2050,20 +2117,32 @@
           </tbody>
         </table>
       </div>
+      <!-- Updated text section -->
+      <div class="columns is-centered">
+        <p class="subtitle"
+          style="width: 80%; text-align: justify; text-justify: inter-word; padding: 10px 20px; color: black; font-family: 'Google Sans', sans-serif; line-height: 1.8; font-size: 1rem;">
+          EvalCrafter evaluation results for VADER.
+          EvalCrafter calculates Temporal Coherence using Warping Error,
+          Semantic Consistency (cosine similarity of the embeddings of consecutive frames),
+          and Face Consistency, which assess frame-wise pixel and semantic consistency.
+          Motion Quality is evaluated through Action-Score (action classification accuracy),
+          Flow-Score (average optical flow between frames obtained from RAFT), and
+          Motion AC-Score (amplitude classification consistency with the text prompt). We generate 700 videos
+          from each model for this comparision. Results demonstrate that all the VADER-variants outperform the
+          base model (VideoCrafter).
+        </p>
+      </div>
     </div>
 
     <!-- ######################## -->
-    <div class="container">
+    <div class="container"
+      style="background-color: #fffefe; padding: 30px; border-radius: 8px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);">
       <div class="columns is-centered">
         <div class="column is-full-width">
           <h3 id="vbench-evaluation" class="title pt-5 pb-2 has-text-centered"
             style="text-align: center; padding-bottom: 10px;">
             <strong>VBench Evaluation</strong>
           </h3>
-          <p class="subtitle has-text-centered"
-            style="text-align: center; padding-bottom: 10px; color: black; font-family: 'Google Sans', sans-serif;">
-            Evaluate VideoCrafter-based VADER.
-          </p>
         </div>
       </div>
       <div class="table-container">
@@ -2119,21 +2198,36 @@
           </tbody>
         </table>
       </div>
+
+      <!-- Updated text section -->
+      <div class="columns is-centered">
+        <p class="subtitle"
+          style="width: 80%; text-align: justify; text-justify: inter-word; padding: 10px 20px; color: black; font-family: 'Google Sans', sans-serif; line-height: 1.8; font-size: 1rem;">
+          VBench evaluation results VADER. The base model is VideoCrafter. The metrics used in VBench include:
+          Subject Consistency (consistency of the main subject across frames,
+          evaluated using DINO feature similarity),
+          Background Consistency (using CLIP feature similarity),
+          Motion Smoothness (fluidity of motion, based on motion priors from a frame interpolation model),
+          Dynamic Degree (extent of motion in the video, estimated with RAFT),
+          Aesthetic Quality (assessed via the LAION aesthetic predictor), and
+          Imaging Quality (using MUSIQ). We generate 700 videos
+          for each model using prompts not seen during training. We find that VADER-Pick has the
+          best consistency score, while VADER-HPS shows the best aesthetic and imaging quality.
+        </p>
+      </div>
+
     </div>
 
     <!-- ######################## -->
     <!--VADER-V-JEPA Evaluation-->
-    <div class="container">
+    <div class="container"
+      style="background-color: #f7f9fc; padding: 30px; border-radius: 8px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);">
       <div class="columns is-centered">
         <div class="column is-full-width">
           <h3 id="v-jepa-evaluation" class="title pt-5 pb-2 has-text-centered"
             style="text-align: center; padding-bottom: 10px;">
             <strong>VADER-V-JEPA Evaluation</strong>
           </h3>
-          <p class="subtitle has-text-centered"
-            style="text-align: center; padding-bottom: 10px; color: black; font-family: 'Google Sans', sans-serif;">
-            Evaluate Stable Video Diffusion based VADER using VBench.
-          </p>
         </div>
       </div>
       <div class="table-container">
@@ -2171,22 +2265,31 @@
           </tbody>
         </table>
       </div>
+
+      <!-- Updated text section -->
+      <div class="columns is-centered">
+        <p class="subtitle"
+          style="width: 80%; text-align: justify; text-justify: inter-word; padding: 10px 20px; color: black; font-family: 'Google Sans', sans-serif; line-height: 1.8; font-size: 1rem;">
+          VBench evaluation results for Image to Video diffusion models.
+          The base model is Stable Video Diffusion. We compare Stable Video Diffusion and
+          VADER-V-JEPA. VADER-V-JEPA demonstrates improvements across most metrics, particularly
+          in consistency and aesthetic quality.
+        </p>
+      </div>
+
     </div>
 
 
     <!-- ######################## -->
     <!--VADER-V-JEPA Evaluation-->
-    <div class="container">
+    <div class="container"
+      style="background-color: #fffefe; padding: 30px; border-radius: 8px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);">
       <div class="columns is-centered">
         <div class="column is-full-width">
           <h3 id="truncated-backpropagation-ablation" class="title pt-5 pb-2 has-text-centered"
             style="text-align: center; padding-bottom: 10px;">
             <strong>Truncated Backpropagation Ablation</strong>
           </h3>
-          <p class="subtitle has-text-centered"
-            style="text-align: center; padding-bottom: 10px; color: black; font-family: 'Google Sans', sans-serif;">
-          Base model is VideCrafter, while we use Aesthetic and HPS Reward.
-          </p>
         </div>
       </div>
       <div class="table-container">
@@ -2253,6 +2356,20 @@
         </div>
       </div>
 
+      <!-- Updated text section -->
+      <div class="columns is-centered">
+        <p class="subtitle"
+          style="width: 80%; text-align: justify; text-justify: inter-word; padding: 10px 20px; color: black; font-family: 'Google Sans', sans-serif; line-height: 1.8; font-size: 1rem;">
+          We ablate the number of truncated backpropagation steps (K) in VADER. For this experiment,
+          we use VADER trained using Aesthetic and HPS Rewards. The base model is VideoCrafter. We find that higher
+          values of K result in
+          more semantic level changes, while K=1 results in more fine-grained changes, specifically in
+          the earlier steps of training. Further, we find as we train longer, both the models start
+          exhibiting semantic level changes. We also find it is easier to optimize with a smaller value of
+          K, as can be seen in the results below.
+        </p>
+      </div>
+
     </div>
     <!-- end of truncated section -->
 
@@ -2271,7 +2388,8 @@
 
     <!-- ######################## -->
     <!-- DOODL vs VADER -->
-    <div class="container">
+    <div class="container"
+      style="background-color: #f7f9fc; padding: 30px; border-radius: 8px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);">
       <div class="columns is-centered">
         <div class="column is-full-width">
           <h3 id="doodl-vader" class="title pt-5 pb-2 has-text-centered"
@@ -2410,7 +2528,8 @@
 
 
     <!-- ######################## -->
-    <div class="container" style="text-align: center; padding-bottom: 8em;">
+    <div class="container"
+      style="text-align: center; padding-bottom: 8em; background-color: #fffefe; padding: 30px; border-radius: 8px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);">
       <div class="columns is-centered">
         <div class="column is-full-width">
           <h3 id="video-gallery" class="title pt-5 pb-2 has-text-centered"
