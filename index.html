@@ -1,0 +1,2194 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>VADER: Video Diffusion Alignment via Reward Gradient</title>
+
+
+  <link href="https://fonts.googleapis.com/css?family=Google+Sans|Noto+Sans|Castoro"
+        rel="stylesheet">
+
+  <link rel="stylesheet" href="./static/css/bulma.min.css">
+  <link rel="stylesheet" href="./static/css/bulma-carousel.min.css">
+  <link rel="stylesheet" href="./static/css/bulma-slider.min.css">
+  <link rel="stylesheet" href="./static/css/fontawesome.all.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/jpswalsh/academicons@1/css/academicons.min.css">
+  <link rel="stylesheet" href="./static/css/index.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script defer src="./static/js/fontawesome.all.min.js"></script>
+  <script src="./static/js/bulma-carousel.min.js"></script>
+  <script src="./static/js/bulma-slider.min.js"></script>
+  <script src="./static/js/mySwiper.js"></script>
+  <script src="./static/js/index.js"></script>
+
+  <link rel="icon" href="./favicon.ico?">
+
+
+
+  <script type="text/javascript" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.9/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+  <meta property="og:image:width" content="1600" />
+  <meta property="og:image:height" content="900" />
+  
+  <style>
+    .carousel-control-prev,
+    .carousel-control-next {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 5%;
+      align-items: center;
+      justify-content: center;
+      height: 100%; /* Ensure the buttons take the full height of the container */
+    }
+
+    .video-wrapper {
+      display: flex;
+      justify-content: center; /* Center the video containers horizontally */
+      align-items: center; /* Center the video containers vertically */
+      position: relative;
+      width: 70%; /* Adjust the width to make the whole container smaller */
+      margin: auto; /* Center the container */
+      gap: 1%; /* Adjust the gap between videos */
+      border: none; /* Remove any border */
+      padding: 0; /* Remove any padding */
+      background: none; /* Remove any background */
+    }
+
+    .video-container {
+      position: relative;
+      width: 50%; /* Adjust the width of each video container */
+      overflow: hidden; /* Ensure the video doesn't overflow the container */
+      border-radius: 10px; /* Apply rounded corners */
+    }
+
+    .video-container video {
+      width: 100%;
+      height: auto;
+      border-radius: 10px; /* Ensure the video itself has rounded corners */
+      border: 1px solid #ccc; /* Add a border around the video */
+    }
+
+    .carousel-caption {
+      position: relative;
+      left: 0;
+      color: black;
+      margin-top: 10px; /* Adjust margin as needed */
+      text-align: center;
+  }
+
+  .carousel-inner {
+    overflow: hidden; /* Ensure no overflow is visible during transitions */
+    margin: 0; /* Remove any margin */
+    padding: 0; /* Remove any padding */
+  }
+  .text-box {
+    position: absolute;
+    top: 0; /* Adjust position above the video wrapper */
+    left: 0; /* Position it in the left upper corner */
+    /* background-color: black; */
+    color: white;
+    padding: 5px 10px;
+    border-radius: 10px;
+    box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.2);
+    z-index: 1; /* Ensure it stays above other elements */
+    font-size: 12px;
+  
+}
+  .button-container {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin-top: 20px;
+  }
+
+  .button-container a {
+    display: inline-flex;
+    align-items: center;
+    padding: 10px 20px;
+    border-radius: 30px;
+    border: 1px solid #ccc;
+    text-decoration: none;
+    color: #333;
+    font-size: 16px;
+  }
+
+  .button-container a i {
+    margin-right: 8px;
+  }
+
+
+        .table-container {
+            width: 80%; /* 调整表格宽度，不占满屏幕 */
+            margin: 20px auto; /* 居中表格 */
+            border: 1px solid #ddd; /* 添加外边框 */
+            border-radius: 8px; /* 圆角边框 */
+            overflow: hidden; /* 修复边框溢出 */
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* 添加阴影 */
+            margin-top: -20px; /* 如果表格距离过远，减少间距 */
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th, td {
+            border: 1px solid #ddd;
+            text-align: center;
+            padding: 8px;
+        }
+
+        th {
+            background-color: #f4f4f4;
+            font-weight: bold;
+        }
+
+        tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+
+        tr:hover {
+            background-color: #f1f1f1;
+        }
+          
+        
+  </style>
+</head>
+<body>
+
+  <!-- 添加导航链接 -->
+  <nav class="navbar is-light" role="navigation" aria-label="main navigation">
+    <div class="container" style="text-align: center;">
+      <div class="navbar-menu" style="display: flex; justify-content: center; align-items: center;">
+        <div class="navbar-start" style="display: flex; justify-content: center; gap: 10px;">
+          <a class="navbar-item" href="#aesthetic-hps-reward">Aesthetic and HPS Reward</a>
+          <a class="navbar-item" href="#pickscore-reward">PickScore Reward</a>
+          <a class="navbar-item" href="#hps-reward">HPS Reward</a>
+          <a class="navbar-item" href="#object-removal-reward">Object Removal Reward</a>
+          <a class="navbar-item" href="#v-jepa-reward">V-JEPA Reward</a>
+          <a class="navbar-item" href="#aesthetic-and-viclip-reward">Aesthetic and ViCLIP Reward</a>
+          <a class="navbar-item" href="#reward-curve">Reward Curve</a>
+          
+          <div class="navbar-item has-dropdown is-hoverable">
+            <a class="navbar-link">More</a>
+            <div class="navbar-dropdown">
+              <a class="navbar-item" href="#training-efficiency-comparison">Training Efficiency Comparison</a>
+              <a class="navbar-item" href="#diversity-test">Diversity Test</a>
+              <a class="navbar-item" href="#memory-usage-comparison">Memory Usage Comparison</a>
+              <a class="navbar-item" href="#reward-correlation">Reward Correlation</a>
+              <a class="navbar-item" href="#evalcrafter-evaluation">EvalCrafter Evaluation</a>
+              <a class="navbar-item" href="#vbench-evaluation">VBench Evaluation</a>
+              <a class="navbar-item" href="#v-jepa-evaluation">VADER-V-JEPA Evaluation</a>
+              <a class="navbar-item" href="#truncated-backpropagation-ablation">Truncated Backpropagation Ablation</a>
+              <a class="navbar-item" href="#image-gallery">Image Gallery</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </nav>
+  
+  <section class="hero">
+    <div class="hero-body no-bottom-padding">
+      <div class="container">
+        <div class="columns is-centered">
+          <div class="column has-text-centered">
+            <h1 class="title is-1 publication-title">Video Diffusion Alignment via Reward Gradient</h1>
+            <div class="is-size-5 publication-authors">
+              <span class="author-block">
+                Anonymous Authors
+              </span>
+            </div>
+            </div>
+  
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+  <div class="gallery">
+    <div class="image-container">
+      <div class="flipper">
+        <video class="front" autoplay loop muted>
+          <source src="videos/row1/compressed_9_0_0001.mp4" type="video/mp4">
+        </video>
+        <video class="back" autoplay loop muted>
+          <source src="videos/row1/compressed_9_0_0002.mp4" type="video/mp4">
+        </video>
+      </div>
+    </div>
+
+    <div class="image-container">
+      <div class="flipper">
+        <video class="front" autoplay loop muted>
+          <source src="videos/row1/compressed_1_1_0001.mp4" type="video/mp4">
+        </video>
+        <video class="back" autoplay loop muted>
+          <source src="videos/row1/compressed_0_1_0002.mp4" type="video/mp4">
+        </video>
+      </div>
+    </div>
+
+    <div class="image-container">
+      <div class="flipper">
+        <video class="front" autoplay loop muted>
+          <source src="videos/row4/compressed_5_1_0002.mp4" type="video/mp4">
+        </video>
+        <video class="back" autoplay loop muted>
+          <source src="videos/row4/compressed_14_0_0002.mp4" type="video/mp4">
+        </video>
+      </div>
+    </div>
+
+    <div class="image-container">
+      <div class="flipper">
+        <video class="front" autoplay loop muted>
+          <source src="videos/row7/compressed_3_sample_4_0_2036ceb9981c766b281a.mp4" type="video/mp4">
+        </video>
+        <video class="back" autoplay loop muted>
+          <source src="videos/row4/compressed_14_1_0001.mp4" type="video/mp4">
+        </video>
+      </div>
+    </div>
+
+    <div class="image-container">
+      <div class="flipper">
+        <video class="front" autoplay loop muted>
+          <source src="videos/row7/compressed_3_0_0003.mp4" type="video/mp4">
+        </video>
+        <video class="back" autoplay loop muted>
+          <source src="videos/row7/compressed_5_0_0003.mp4" type="video/mp4">
+        </video>
+      </div>
+    </div>
+
+    <div class="image-container">
+      <div class="flipper">
+        <video class="front" autoplay loop muted>
+          <source src="videos/row2/compressed_6_1_0001.mp4" type="video/mp4">
+        </video>
+        <video class="back" autoplay loop muted>
+          <source src="videos/row7/compressed_0_3_0004.mp4" type="video/mp4">
+        </video>
+      </div>
+    </div>
+
+    <div class="image-container">
+      <div class="flipper">
+        <video class="front" autoplay loop muted>
+          <source src="videos/row7/compressed_5_3_0002.mp4" type="video/mp4">
+        </video>
+        <video class="back" autoplay loop muted>
+          <source src="videos/row7/compressed_2_2_0004.mp4" type="video/mp4">
+        </video>
+      </div>
+    </div>
+
+    <div class="image-container">
+      <div class="flipper">
+        <video class="front" autoplay loop muted>
+          <source src="videos/row7/compressed_0_0_0002.mp4" type="video/mp4">
+        </video>
+        <video class="back" autoplay loop muted>
+          <source src="videos/row7/compressed_6_2_0001.mp4" type="video/mp4">
+        </video>
+      </div>
+    </div>
+
+    <div class="image-container">
+      <div class="flipper">
+        <video class="front" autoplay loop muted>
+          <source src="videos/row8/compressed_7_1_0001.mp4" type="video/mp4">
+        </video>
+        <video class="back" autoplay loop muted>
+          <source src="videos/row8/compressed_3_1_0004.mp4" type="video/mp4">
+        </video>
+      </div>
+    </div>
+
+    <div class="image-container">
+      <div class="flipper">
+        <video class="front" autoplay loop muted>
+          <source src="videos/row8/compressed_0_2_0004.mp4" type="video/mp4">
+        </video>
+        <video class="back" autoplay loop muted>
+          <source src="videos/row8/compressed_3_3_0002.mp4" type="video/mp4">
+        </video>
+      </div>
+    </div>
+
+    <div class="image-container">
+      <div class="flipper">
+        <video class="front" autoplay loop muted>
+          <source src="videos/row8/compressed_5_sample_5_0_4e281d9fecf625735e77.mp4" type="video/mp4">
+        </video>
+        <video class="back" autoplay loop muted>
+          <source src="videos/row8/compressed_5_1_0002.mp4" type="video/mp4">
+        </video>
+      </div>
+    </div>
+
+    <div class="image-container">
+      <div class="flipper">
+        <video class="front" autoplay loop muted>
+          <source src="videos/row8/compressed_1_1_0002.mp4" type="video/mp4">
+        </video>
+        <video class="back" autoplay loop muted>
+          <source src="videos/row8/compressed_5_2_0003.mp4" type="video/mp4">
+        </video>
+      </div>
+    </div>
+
+    
+  </div> <!-- Closing gallery div -->
+
+
+
+
+  <section class="hero is-light is-small">
+    <div class="hero-body">
+      <div class="container is-two-thirds">
+        <div class="columns is-centered has-text-centered">
+          <div class="column is-two-thirds">
+            <h2 class="title is-3">Abstract</h2>
+          </div>
+      </div>
+    
+      <div class="columns is-centered has-text-centered">
+        <div class="column is-two-thirds ">
+          <div class="content has-text-justified">
+            We have made significant progress towards building foundational video diffusion models. As these models are trained using large-scale unsupervised data, it has become crucial to adapt these models to specific downstream tasks, such as video-text alignment or ethical video generation. Adapting these models via supervised fine-tuning requires collecting target datasets of videos, which is challenging and tedious. In this work, we instead utilize pre-trained reward models that are learned via preferences on top of powerful discriminative models. These models contain dense gradient information with respect to generated RGB pixels, which is critical to be able to learn efficiently in complex search spaces, such as videos. We show that our approach can enable alignment of video diffusion for aesthetic generations, similarity between text context and video, as well long horizon video generations that are 3X longer than the training sequence length. We show our approach can learn much more efficiently in terms of reward queries and compute than previous gradient-free approaches for video generation.
+          </div>
+        </div>
+        </div>
+      </div>
+      </div>
+    </div>
+  </section>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  <!-- ######################## -->
+  <!-- Aesthetic and HPS section -->
+  <div class="container">
+      <div class="columns is-centered">
+        <div class="column is-full-width">
+          <h3 id="aesthetic-hps-reward" class="title pt-5 pb-2 has-text-centered">
+            <strong>Aesthetic and HPS Reward</strong>
+          </h3>
+        </div>
+      </div>
+  </div>
+    <div id="videoCarouselIndicators" class="carousel slide" data-ride="carousel" data-interval="5000">
+      <div class="carousel-inner">
+        <!-- video 1 -->
+        <div class="carousel-item active">
+          <div class="d-flex justify-content-center video-wrapper">
+            <div class="video-container">
+              <div class="text-box">Before</div>
+              <video class="d-block w-100" autoplay muted loop>
+                <source src="videos/aesthetic_hps/origin/compressed_2_0_0004.mp4" type="video/mp4">
+              </video>
+            </div>
+            <div class="video-container">
+              <div class="text-box">After</div>
+              <video class="d-block w-100" autoplay muted loop>
+                <source src="videos/aesthetic_hps/vader/compressed_2_0_0004.mp4" type="video/mp4">
+              </video>
+            </div>
+            <a class="carousel-control-prev" href="#videoCarouselIndicators" role="button" data-slide="prev">
+              <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+              <span class="sr-only">Previous</span>
+            </a>
+            <a class="carousel-control-next" href="#videoCarouselIndicators" role="button" data-slide="next">
+              <span class="carousel-control-next-icon" aria-hidden="true"></span>
+              <span class="sr-only">Next</span>
+            </a>
+          </div>
+          <div class="carousel-caption">
+            A person singing on a stage with twinkling lights and a dreamy backdrop.
+          </div>
+        </div>
+        <!-- video 15 -->
+        <div class="carousel-item">
+          <div class="d-flex justify-content-center video-wrapper">
+            <div class="video-container">
+              <div class="text-box">Before</div>
+              <video class="d-block w-100" autoplay muted loop>
+                <source src="videos/aesthetic_hps/origin/compressed_1_sample_6_0_0016630e92d5930f1a7a.mp4" type="video/mp4">
+              </video>
+            </div>
+            <div class="video-container">
+              <div class="text-box">After</div>
+              <video class="d-block w-100" autoplay muted loop>
+                <source src="videos/aesthetic_hps/vader/compressed_1_sample_6_0_15ede0856d0c94c1e79f.mp4" type="video/mp4">
+              </video>
+            </div>
+            <a class="carousel-control-prev" href="#videoCarouselIndicators" role="button" data-slide="prev">
+              <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+              <span class="sr-only">Previous</span>
+            </a>
+            <a class="carousel-control-next" href="#videoCarouselIndicators" role="button" data-slide="next">
+              <span class="carousel-control-next-icon" aria-hidden="true"></span>
+              <span class="sr-only">Next</span>
+            </a>
+          </div>
+          <div class="carousel-caption">
+            A rabbit playing an upright piano in a quaint cafe while patrons enjoy their coffee.
+          </div>
+        </div>
+        <!-- video 2 -->
+        <div class="carousel-item">
+          <div class="d-flex justify-content-center video-wrapper">
+            <div class="video-container">
+              <div class="text-box">Before</div>
+              <video class="d-block w-100" autoplay muted loop>
+                <source src="videos/aesthetic_hps/origin/compressed_17_1_0001.mp4" type="video/mp4">
+              </video>
+            </div>
+            <div class="video-container">
+              <div class="text-box">After</div>
+              <video class="d-block w-100" autoplay muted loop>
+                <source src="videos/aesthetic_hps/vader/compressed_17_1_0001.mp4" type="video/mp4">
+              </video>
+            </div>
+            <a class="carousel-control-prev" href="#videoCarouselIndicators" role="button" data-slide="prev">
+              <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+              <span class="sr-only">Previous</span>
+            </a>
+            <a class="carousel-control-next" href="#videoCarouselIndicators" role="button" data-slide="next">
+              <span class="carousel-control-next-icon" aria-hidden="true"></span>
+              <span class="sr-only">Next</span>
+            </a>
+          </div>
+          <div class="carousel-caption">
+            The dog is wearing a green shirt and digging a hole.
+          </div>
+        </div>
+        <!-- video 3 -->
+        <div class="carousel-item">
+          <div class="d-flex justify-content-center video-wrapper">
+            <div class="video-container">
+              <div class="text-box">Before</div>
+              <video class="d-block w-100" autoplay muted loop>
+                <source src="videos/aesthetic_hps/origin/compressed_1_0_0001.mp4" type="video/mp4">
+              </video>
+            </div>
+            <div class="video-container">
+              <div class="text-box">After</div>
+              <video class="d-block w-100" autoplay muted loop>
+                <source src="videos/aesthetic_hps/vader/compressed_1_0_0001.mp4" type="video/mp4">
+              </video>
+            </div>
+            <a class="carousel-control-prev" href="#videoCarouselIndicators" role="button" data-slide="prev">
+              <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+              <span class="sr-only">Previous</span>
+            </a>
+            <a class="carousel-control-next" href="#videoCarouselIndicators" role="button" data-slide="next">
+              <span class="carousel-control-next-icon" aria-hidden="true"></span>
+              <span class="sr-only">Next</span>
+            </a>
+          </div>
+          <div class="carousel-caption">
+            A person playing a guitar by a campfire under a starry sky.
+          </div>
+        </div>
+        <!-- video 4 -->
+        <div class="carousel-item">
+          <div class="d-flex justify-content-center video-wrapper">
+            <div class="video-container">
+              <div class="text-box">Before</div>
+              <video class="d-block w-100" autoplay muted loop>
+                <source src="videos/aesthetic_hps/origin/compressed_0_0_0001.mp4" type="video/mp4">
+              </video>
+            </div>
+            <div class="video-container">
+              <div class="text-box">After</div>
+              <video class="d-block w-100" autoplay muted loop>
+                <source src="videos/aesthetic_hps/vader/compressed_0_0_0001.mp4" type="video/mp4">
+              </video>
+            </div>
+            <a class="carousel-control-prev" href="#videoCarouselIndicators" role="button" data-slide="prev">
+              <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+              <span class="sr-only">Previous</span>
+            </a>
+            <a class="carousel-control-next" href="#videoCarouselIndicators" role="button" data-slide="next">
+              <span class="carousel-control-next-icon" aria-hidden="true"></span>
+              <span class="sr-only">Next</span>
+            </a>
+          </div>
+          <div class="carousel-caption">
+            The fox is wearing a red hat and playing with leaves.
+          </div>
+        </div>
+        <!-- video 5 -->
+        <div class="carousel-item">
+          <div class="d-flex justify-content-center video-wrapper">
+            <div class="video-container">
+              <div class="text-box">Before</div>
+              <video class="d-block w-100" autoplay muted loop>
+                <source src="videos/aesthetic_hps/origin/compressed_5_0_0001.mp4" type="video/mp4">
+              </video>
+            </div>
+            <div class="video-container">
+              <div class="text-box">After</div>
+              <video class="d-block w-100" autoplay muted loop>
+                <source src="videos/aesthetic_hps/vader/compressed_5_0_0001.mp4" type="video/mp4">
+              </video>
+            </div>
+            <a class="carousel-control-prev" href="#videoCarouselIndicators" role="button" data-slide="prev">
+              <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+              <span class="sr-only">Previous</span>
+            </a>
+            <a class="carousel-control-next" href="#videoCarouselIndicators" role="button" data-slide="next">
+              <span class="carousel-control-next-icon" aria-hidden="true"></span>
+              <span class="sr-only">Next</span>
+            </a>
+          </div>
+          <div class="carousel-caption">
+            A person running through a field with a kite soaring high in the sky.
+          </div>
+        </div>
+        <!-- video 6 -->
+        <div class="carousel-item">
+          <div class="d-flex justify-content-center video-wrapper">
+            <div class="video-container">
+              <div class="text-box">Before</div>
+              <video class="d-block w-100" autoplay muted loop>
+                <source src="videos/aesthetic_hps/origin/compressed_6_1_0002.mp4" type="video/mp4">
+              </video>
+            </div>
+            <div class="video-container">
+              <div class="text-box">After</div>
+              <video class="d-block w-100" autoplay muted loop>
+                <source src="videos/aesthetic_hps/vader/compressed_6_1_0002.mp4" type="video/mp4">
+              </video>
+            </div>
+            <a class="carousel-control-prev" href="#videoCarouselIndicators" role="button" data-slide="prev">
+              <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+              <span class="sr-only">Previous</span>
+            </a>
+            <a class="carousel-control-next" href="#videoCarouselIndicators" role="button" data-slide="next">
+              <span class="carousel-control-next-icon" aria-hidden="true"></span>
+              <span class="sr-only">Next</span>
+            </a>
+          </div>
+          <div class="carousel-caption">
+            The raccoon is wearing a red coat and holding a snowball.
+          </div>
+        </div>
+        <!-- video 7 -->
+        <div class="carousel-item">
+          <div class="d-flex justify-content-center video-wrapper">
+            <div class="video-container">
+              <div class="text-box">Before</div>
+              <video class="d-block w-100" autoplay muted loop>
+                <source src="videos/aesthetic_hps/origin/compressed_13_1_0001.mp4" type="video/mp4">
+              </video>
+            </div>
+            <div class="video-container">
+              <div class="text-box">After</div>
+              <video class="d-block w-100" autoplay muted loop>
+                <source src="videos/aesthetic_hps/vader/compressed_13_1_0001.mp4" type="video/mp4">
+              </video>
+            </div>
+            <a class="carousel-control-prev" href="#videoCarouselIndicators" role="button" data-slide="prev">
+              <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+              <span class="sr-only">Previous</span>
+            </a>
+            <a class="carousel-control-next" href="#videoCarouselIndicators" role="button" data-slide="next">
+              <span class="carousel-control-next-icon" aria-hidden="true"></span>
+              <span class="sr-only">Next</span>
+            </a>
+          </div>
+          <div class="carousel-caption">
+            The bear is wearing a yellow shirt and painting a picture.
+          </div>
+        </div>
+        <!-- video 8 -->
+        <div class="carousel-item">
+          <div class="d-flex justify-content-center video-wrapper">
+            <div class="video-container">
+              <div class="text-box">Before</div>
+              <video class="d-block w-100" autoplay muted loop>
+                <source src="videos/aesthetic_hps/origin/compressed_10_0_0002.mp4" type="video/mp4">
+              </video>
+            </div>
+            <div class="video-container">
+              <div class="text-box">After</div>
+              <video class="d-block w-100" autoplay muted loop>
+                <source src="videos/aesthetic_hps/vader/compressed_10_0_0002.mp4" type="video/mp4">
+              </video>
+            </div>
+            <a class="carousel-control-prev" href="#videoCarouselIndicators" role="button" data-slide="prev">
+              <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+              <span class="sr-only">Previous</span>
+            </a>
+            <a class="carousel-control-next" href="#videoCarouselIndicators" role="button" data-slide="next">
+              <span class="carousel-control-next-icon" aria-hidden="true"></span>
+              <span class="sr-only">Next</span>
+            </a>
+          </div>
+          <div class="carousel-caption">
+            The panda is wearing a blue hat and holding a balloon.
+          </div>
+        </div>
+        <!-- video 9 -->
+        <div class="carousel-item">
+          <div class="d-flex justify-content-center video-wrapper">
+            <div class="video-container">
+              <div class="text-box">Before</div>
+              <video class="d-block w-100" autoplay muted loop>
+                <source src="videos/aesthetic_hps/origin/compressed_30_0_0002.mp4" type="video/mp4">
+              </video>
+            </div>
+            <div class="video-container">
+              <div class="text-box">After</div>
+              <video class="d-block w-100" autoplay muted loop>
+                <source src="videos/aesthetic_hps/vader/compressed_30_0_0002.mp4" type="video/mp4">
+              </video>
+            </div>
+            <a class="carousel-control-prev" href="#videoCarouselIndicators" role="button" data-slide="prev">
+              <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+              <span class="sr-only">Previous</span>
+            </a>
+            <a class="carousel-control-next" href="#videoCarouselIndicators" role="button" data-slide="next">
+              <span class="carousel-control-next-icon" aria-hidden="true"></span>
+              <span class="sr-only">Next</span>
+            </a>
+          </div>
+          <div class="carousel-caption">
+            The fox is wearing a green shirt and sitting in a garden.
+          </div>
+        </div>
+        <!-- video 10 -->
+        <div class="carousel-item">
+          <div class="d-flex justify-content-center video-wrapper">
+            <div class="video-container">
+              <div class="text-box">Before</div>
+              <video class="d-block w-100" autoplay muted loop>
+                <source src="videos/aesthetic_hps/origin/compressed_9_0_0002.mp4" type="video/mp4">
+              </video>
+            </div>
+            <div class="video-container">
+              <div class="text-box">After</div>
+              <video class="d-block w-100" autoplay muted loop>
+                <source src="videos/aesthetic_hps/vader/compressed_9_0_0002.mp4" type="video/mp4">
+              </video>
+            </div>
+            <a class="carousel-control-prev" href="#videoCarouselIndicators" role="button" data-slide="prev">
+              <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+              <span class="sr-only">Previous</span>
+            </a>
+            <a class="carousel-control-next" href="#videoCarouselIndicators" role="button" data-slide="next">
+              <span class="carousel-control-next-icon" aria-hidden="true"></span>
+              <span class="sr-only">Next</span>
+            </a>
+          </div>
+          <div class="carousel-caption">
+            The rabbit is wearing a red shirt and watering plants.
+          </div>
+        </div>
+        <!-- video 11 -->
+        <div class="carousel-item">
+          <div class="d-flex justify-content-center video-wrapper">
+            <div class="video-container">
+              <div class="text-box">Before</div>
+              <video class="d-block w-100" autoplay muted loop>
+                <source src="videos/aesthetic_hps/origin/compressed_1_1_0003.mp4" type="video/mp4">
+              </video>
+            </div>
+            <div class="video-container">
+              <div class="text-box">After</div>
+              <video class="d-block w-100" autoplay muted loop>
+                <source src="videos/aesthetic_hps/vader/compressed_1_1_0003.mp4" type="video/mp4">
+              </video>
+            </div>
+            <a class="carousel-control-prev" href="#videoCarouselIndicators" role="button" data-slide="prev">
+              <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+              <span class="sr-only">Previous</span>
+            </a>
+            <a class="carousel-control-next" href="#videoCarouselIndicators" role="button" data-slide="next">
+              <span class="carousel-control-next-icon" aria-hidden="true"></span>
+              <span class="sr-only">Next</span>
+            </a>
+          </div>
+          <div class="carousel-caption">
+            A person picking fresh vegetables in a garden with morning dew glistening.
+          </div>
+        </div>
+        <!-- video 12 -->
+        <div class="carousel-item">
+          <div class="d-flex justify-content-center video-wrapper">
+            <div class="video-container">
+              <div class="text-box">Before</div>
+              <video class="d-block w-100" autoplay muted loop>
+                <source src="videos/aesthetic_hps/origin/compressed_5_0_0004.mp4" type="video/mp4">
+              </video>
+            </div>
+            <div class="video-container">
+              <div class="text-box">After</div>
+              <video class="d-block w-100" autoplay muted loop>
+                <source src="videos/aesthetic_hps/vader/compressed_5_0_0004.mp4" type="video/mp4">
+              </video>
+            </div>
+            <a class="carousel-control-prev" href="#videoCarouselIndicators" role="button" data-slide="prev">
+              <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+              <span class="sr-only">Previous</span>
+            </a>
+            <a class="carousel-control-next" href="#videoCarouselIndicators" role="button" data-slide="next">
+              <span class="carousel-control-next-icon" aria-hidden="true"></span>
+              <span class="sr-only">Next</span>
+            </a>
+          </div>
+          <div class="carousel-caption">
+            A teacher writing on a chalkboard in a classroom, explaining a lesson to students.
+          </div>
+        </div>
+        <!-- video 13 -->
+        <div class="carousel-item">
+          <div class="d-flex justify-content-center video-wrapper">
+            <div class="video-container">
+              <div class="text-box">Before</div>
+              <video class="d-block w-100" autoplay muted loop>
+                <source src="videos/aesthetic_hps/origin/compressed_5_0_0003.mp4" type="video/mp4">
+              </video>
+            </div>
+            <div class="video-container">
+              <div class="text-box">After</div>
+              <video class="d-block w-100" autoplay muted loop>
+                <source src="videos/aesthetic_hps/vader/compressed_5_0_0003.mp4" type="video/mp4">
+              </video>
+            </div>
+            <a class="carousel-control-prev" href="#videoCarouselIndicators" role="button" data-slide="prev">
+              <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+              <span class="sr-only">Previous</span>
+            </a>
+            <a class="carousel-control-next" href="#videoCarouselIndicators" role="button" data-slide="next">
+              <span class="carousel-control-next-icon" aria-hidden="true"></span>
+              <span class="sr-only">Next</span>
+            </a>
+          </div>
+          <div class="carousel-caption">
+            A person writing poetry in a cozy room with a fireplace crackling nearby.
+          </div>
+        </div>
+        <!-- video 14 -->
+        <div class="carousel-item">
+          <div class="d-flex justify-content-center video-wrapper">
+            <div class="video-container">
+              <div class="text-box">Before</div>
+              <video class="d-block w-100" autoplay muted loop>
+                <source src="videos/aesthetic_hps/origin/compressed_0_sample_0_0_2200a8000e5ca6b3ac70.mp4" type="video/mp4">
+              </video>
+            </div>
+            <div class="video-container">
+              <div class="text-box">After</div>
+              <video class="d-block w-100" autoplay muted loop>
+                <source src="videos/aesthetic_hps/vader/compressed_0_sample_0_0_fc1f830725e7ece0ce92.mp4" type="video/mp4">
+              </video>
+            </div>
+            <a class="carousel-control-prev" href="#videoCarouselIndicators" role="button" data-slide="prev">
+              <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+              <span class="sr-only">Previous</span>
+            </a>
+            <a class="carousel-control-next" href="#videoCarouselIndicators" role="button" data-slide="next">
+              <span class="carousel-control-next-icon" aria-hidden="true"></span>
+              <span class="sr-only">Next</span>
+            </a>
+          </div>
+          <div class="carousel-caption">
+            A dog playing a slide guitar on a porch during a gentle rainstorm.
+          </div>
+        </div>
+        <!-- Add more carousel items as needed -->
+      </div>
+    </div>
+  
+
+  
+
+
+  
+  <!-- ######################## -->
+   <!-- PickScore section -->
+  <div class="container">
+      <div class="columns is-centered">
+        <div class="column is-full-width">
+          <h3 id="pickscore-reward" class="title pt-5 pb-2 has-text-centered" style="text-align: center; padding-bottom: 10px;">
+            <strong>PickScore Reward</strong>
+          </h3>
+        </div>
+      </div>
+  </div>
+    <div id="videoCarouselIndicators3" class="carousel slide" data-ride="carousel" data-interval="5000">
+      <div class="carousel-inner">
+        <!-- video 1 -->
+        <div class="carousel-item active">
+          <div class="d-flex justify-content-center video-wrapper">
+            <div class="video-container">
+              <div class="text-box">Before</div>
+              <video class="d-block w-100" autoplay muted loop>
+                <source src="videos/pickScore_videocrafter/origin/compressed_5_0_0002.mp4" type="video/mp4">
+              </video>
+            </div>
+            <div class="video-container">
+              <div class="text-box">After</div>
+              <video class="d-block w-100" autoplay muted loop>
+                <source src="videos/pickScore_videocrafter/vader/compressed_5_0_0002.mp4" type="video/mp4">
+              </video>
+            </div>
+            <a class="carousel-control-prev" href="#videoCarouselIndicators3" role="button" data-slide="prev">
+              <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+              <span class="sr-only">Previous</span>
+            </a>
+            <a class="carousel-control-next" href="#videoCarouselIndicators3" role="button" data-slide="next">
+              <span class="carousel-control-next-icon" aria-hidden="true"></span>
+              <span class="sr-only">Next</span>
+            </a>
+          </div>
+          <div class="carousel-caption">
+            A peaceful deer eating grass in a thick forest, with sunlight filtering through the trees.
+          </div>
+        </div>
+        <!-- video 2 -->
+        <div class="carousel-item">
+          <div class="d-flex justify-content-center video-wrapper">
+            <div class="text-box">Before</div>
+            <div class="video-container">
+              <video class="d-block w-100" autoplay muted loop>
+                <source src="videos/pickScore_videocrafter/origin/compressed_2_0_0002.mp4" type="video/mp4">
+              </video>
+            </div>
+            <div class="video-container">
+              <div class="text-box">After</div>
+              <video class="d-block w-100" autoplay muted loop>
+                <source src="videos/pickScore_videocrafter/vader/compressed_2_0_0002.mp4" type="video/mp4">
+              </video>
+            </div>
+            <a class="carousel-control-prev" href="#videoCarouselIndicators3" role="button" data-slide="prev">
+              <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+              <span class="sr-only">Previous</span>
+            </a>
+            <a class="carousel-control-next" href="#videoCarouselIndicators3" role="button" data-slide="next">
+              <span class="carousel-control-next-icon" aria-hidden="true"></span>
+              <span class="sr-only">Next</span>
+            </a>
+          </div>
+          <div class="carousel-caption">
+            A strong lion and a graceful lioness resting together in the shade of a big tree on a wide grassland.
+          </div>
+        </div>
+        <!-- video 3 -->
+        <div class="carousel-item">
+          <div class="d-flex justify-content-center video-wrapper">
+            <div class="text-box">Before</div>
+            <div class="video-container">
+              <video class="d-block w-100" autoplay muted loop>
+                <source src="videos/pickScore_videocrafter/origin/compressed_18_1_0001.mp4" type="video/mp4">
+              </video>
+            </div>
+            <div class="video-container">
+              <div class="text-box">After</div>
+              <video class="d-block w-100" autoplay muted loop>
+                <source src="videos/pickScore_videocrafter/vader/compressed_18_1_0001.mp4" type="video/mp4">
+              </video>
+            </div>
+            <a class="carousel-control-prev" href="#videoCarouselIndicators3" role="button" data-slide="prev">
+              <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+              <span class="sr-only">Previous</span>
+            </a>
+            <a class="carousel-control-next" href="#videoCarouselIndicators3" role="button" data-slide="next">
+              <span class="carousel-control-next-icon" aria-hidden="true"></span>
+              <span class="sr-only">Next</span>
+            </a>
+          </div>
+          <div class="carousel-caption">
+            Hedgehog in a blue dress.
+          </div>
+        </div>
+        <!-- video 4 -->
+        <div class="carousel-item">
+          <div class="d-flex justify-content-center video-wrapper">
+            <div class="text-box">Before</div>
+            <div class="video-container">
+              <video class="d-block w-100" autoplay muted loop>
+                <source src="videos/pickScore_videocrafter/origin/compressed_5_1_0002.mp4" type="video/mp4">
+              </video>
+            </div>
+            <div class="video-container">
+              <div class="text-box">After</div>
+              <video class="d-block w-100" autoplay muted loop>
+                <source src="videos/pickScore_videocrafter/vader/compressed_5_1_0002.mp4" type="video/mp4">
+              </video>
+            </div>
+            <a class="carousel-control-prev" href="#videoCarouselIndicators3" role="button" data-slide="prev">
+              <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+              <span class="sr-only">Previous</span>
+            </a>
+            <a class="carousel-control-next" href="#videoCarouselIndicators3" role="button" data-slide="next">
+              <span class="carousel-control-next-icon" aria-hidden="true"></span>
+              <span class="sr-only">Next</span>
+            </a>
+          </div>
+          <div class="carousel-caption">
+            Raccoon in a black jacket.
+          </div>
+        </div>
+        <!-- video 5 -->
+        <div class="carousel-item">
+          <div class="d-flex justify-content-center video-wrapper">
+            <div class="text-box">Before</div>
+            <div class="video-container">
+              <video class="d-block w-100" autoplay muted loop>
+                <source src="videos/pickScore_videocrafter/origin/compressed_1_sample_2_0_b95b3e71b772a6488e35.mp4" type="video/mp4">
+              </video>
+            </div>
+            <div class="video-container">
+              <div class="text-box">After</div>
+              <video class="d-block w-100" autoplay muted loop>
+                <source src="videos/pickScore_videocrafter/vader/compressed_1_sample_2_0_0937b5868c0e06c10f51.mp4" type="video/mp4">
+              </video>
+            </div>
+            <a class="carousel-control-prev" href="#videoCarouselIndicators3" role="button" data-slide="prev">
+              <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+              <span class="sr-only">Previous</span>
+            </a>
+            <a class="carousel-control-next" href="#videoCarouselIndicators3" role="button" data-slide="next">
+              <span class="carousel-control-next-icon" aria-hidden="true"></span>
+              <span class="sr-only">Next</span>
+            </a>
+          </div>
+          <div class="carousel-caption">
+            A dog strumming an acoustic guitar by a lakeside campfire under the stars-origin.
+          </div>
+        </div>
+
+        <!-- Add more carousel items as needed -->
+      </div>
+  </div>
+  <!-- end of PickScore section -->
+
+
+
+  <!-- ######################## -->
+  <!-- HPS section -->
+  <div class="container">
+    <div class="columns is-centered">
+      <div class="column is-full-width">
+        <h3 id="hps-reward" class="title pt-5 pb-2 has-text-centered" style="text-align: center; padding-bottom: 10px;">
+          <strong>HPS Reward</strong>
+        </h3>
+      </div>
+    </div>
+  </div>
+    <div id="videoCarouselIndicators2" class="carousel slide" data-ride="carousel" data-interval="5000">
+      <div class="carousel-inner">
+        <!-- video 1 -->
+        <div class="carousel-item active">
+          <div class="d-flex justify-content-center video-wrapper">
+            <div class="video-container">
+              <div class="text-box">Before</div>
+              <video class="d-block w-100" autoplay muted loop>
+                <source src="videos/hps_videocrafter/origin/compressed_6_0_0002.mp4" type="video/mp4">
+              </video>
+            </div>
+            <div class="video-container">
+              <div class="text-box">After</div>
+              <video class="d-block w-100" autoplay muted loop>
+                <source src="videos/hps_videocrafter/vader/compressed_6_0_0002.mp4" type="video/mp4">
+              </video>
+            </div>
+            <a class="carousel-control-prev" href="#videoCarouselIndicators2" role="button" data-slide="prev">
+              <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+              <span class="sr-only">Previous</span>
+            </a>
+            <a class="carousel-control-next" href="#videoCarouselIndicators2" role="button" data-slide="next">
+              <span class="carousel-control-next-icon" aria-hidden="true"></span>
+              <span class="sr-only">Next</span>
+            </a>
+          </div>
+          <div class="carousel-caption">
+            Raccoon eating watermelon.
+          </div>
+        </div>
+        <!-- video 2 -->
+        <div class="carousel-item">
+          <div class="d-flex justify-content-center video-wrapper">
+            <div class="video-container">
+              <div class="text-box">Before</div>
+              <video class="d-block w-100" autoplay muted loop>
+                <source src="videos/hps_videocrafter/origin/compressed_6_1_0004.mp4" type="video/mp4">
+              </video>
+            </div>
+            <div class="video-container">
+              <div class="text-box">After</div>
+              <video class="d-block w-100" autoplay muted loop>
+                <source src="videos/hps_videocrafter/vader/compressed_6_1_0004.mp4" type="video/mp4">
+              </video>
+            </div>
+            <a class="carousel-control-prev" href="#videoCarouselIndicators2" role="button" data-slide="prev">
+              <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+              <span class="sr-only">Previous</span>
+            </a>
+            <a class="carousel-control-next" href="#videoCarouselIndicators2" role="button" data-slide="next">
+              <span class="carousel-control-next-icon" aria-hidden="true"></span>
+              <span class="sr-only">Next</span>
+            </a>
+          </div>
+          <div class="carousel-caption">
+            A turtle playing chess.
+          </div>
+        </div>
+        <!-- video 3 -->
+        <div class="carousel-item">
+          <div class="d-flex justify-content-center video-wrapper">
+            <div class="video-container">
+              <div class="text-box">Before</div>
+              <video class="d-block w-100" autoplay muted loop>
+                <source src="videos/hps_videocrafter/origin/compressed_11_0_0003.mp4" type="video/mp4">
+              </video>
+            </div>
+            <div class="video-container">
+              <div class="text-box">After</div>
+              <video class="d-block w-100" autoplay muted loop>
+                <source src="videos/hps_videocrafter/vader/compressed_11_0_0003.mp4" type="video/mp4">
+              </video>
+            </div>
+            <a class="carousel-control-prev" href="#videoCarouselIndicators2" role="button" data-slide="prev">
+              <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+              <span class="sr-only">Previous</span>
+            </a>
+            <a class="carousel-control-next" href="#videoCarouselIndicators2" role="button" data-slide="next">
+              <span class="carousel-control-next-icon" aria-hidden="true"></span>
+              <span class="sr-only">Next</span>
+            </a>
+          </div>
+          <div class="carousel-caption">
+            Monkey eating watermelon.
+          </div>
+        </div>
+        <!-- video 4 -->
+        <div class="carousel-item">
+          <div class="d-flex justify-content-center video-wrapper">
+            <div class="video-container">
+              <div class="text-box">Before</div>
+              <video class="d-block w-100" autoplay muted loop>
+                <source src="videos/hps_videocrafter/origin/compressed_4_1_0002.mp4" type="video/mp4">
+              </video>
+            </div>
+            <div class="video-container">
+              <div class="text-box">After</div>
+              <video class="d-block w-100" autoplay muted loop>
+                <source src="videos/hps_videocrafter/vader/compressed_4_1_0002.mp4" type="video/mp4">
+              </video>
+            </div>
+            <a class="carousel-control-prev" href="#videoCarouselIndicators2" role="button" data-slide="prev">
+              <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+              <span class="sr-only">Previous</span>
+            </a>
+            <a class="carousel-control-next" href="#videoCarouselIndicators2" role="button" data-slide="next">
+              <span class="carousel-control-next-icon" aria-hidden="true"></span>
+              <span class="sr-only">Next</span>
+            </a>
+          </div>
+          <div class="carousel-caption">
+            A fox washing the dishes
+          </div>
+        </div>
+        <!-- video 5 -->
+        <div class="carousel-item">
+          <div class="d-flex justify-content-center video-wrapper">
+            <div class="video-container">
+              <div class="text-box">Before</div>
+              <video class="d-block w-100" autoplay muted loop>
+                <source src="videos/hps_videocrafter/origin/compressed_15_0_0001.mp4" type="video/mp4">
+              </video>
+            </div>
+            <div class="video-container">
+              <div class="text-box">After</div>
+              <video class="d-block w-100" autoplay muted loop>
+                <source src="videos/hps_videocrafter/vader/compressed_15_0_0001.mp4" type="video/mp4">
+              </video>
+            </div>
+            <a class="carousel-control-prev" href="#videoCarouselIndicators2" role="button" data-slide="prev">
+              <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+              <span class="sr-only">Previous</span>
+            </a>
+            <a class="carousel-control-next" href="#videoCarouselIndicators2" role="button" data-slide="next">
+              <span class="carousel-control-next-icon" aria-hidden="true"></span>
+              <span class="sr-only">Next</span>
+            </a>
+          </div>
+          <div class="carousel-caption">
+            Rabbit riding a skateboard.
+          </div>
+        </div>
+        <!-- video 3 -->
+        <div class="carousel-item">
+          <div class="d-flex justify-content-center video-wrapper">
+            <div class="video-container">
+              <div class="text-box">Before</div>
+              <video class="d-block w-100" autoplay muted loop>
+                <source src="videos/hps_videocrafter/origin/compressed_5_1_0001.mp4" type="video/mp4">
+              </video>
+            </div>
+            <div class="video-container">
+              <div class="text-box">After</div>
+              <video class="d-block w-100" autoplay muted loop>
+                <source src="videos/hps_videocrafter/vader/compressed_5_1_0001.mp4" type="video/mp4">
+              </video>
+            </div>
+            <a class="carousel-control-prev" href="#videoCarouselIndicators2" role="button" data-slide="prev">
+              <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+              <span class="sr-only">Previous</span>
+            </a>
+            <a class="carousel-control-next" href="#videoCarouselIndicators2" role="button" data-slide="next">
+              <span class="carousel-control-next-icon" aria-hidden="true"></span>
+              <span class="sr-only">Next</span>
+            </a>
+          </div>
+          <div class="carousel-caption">
+            A turtle washing the dishes
+          </div>
+        </div>
+        <!-- video 4 -->
+        <div class="carousel-item">
+          <div class="d-flex justify-content-center video-wrapper">
+            <div class="video-container">
+              <div class="text-box">Before</div>
+              <video class="d-block w-100" autoplay muted loop>
+                <source src="videos/hps_videocrafter/origin/compressed_7_1_0002.mp4" type="video/mp4">
+              </video>
+            </div>
+            <div class="video-container">
+              <div class="text-box">After</div>
+              <video class="d-block w-100" autoplay muted loop>
+                <source src="videos/hps_videocrafter/vader/compressed_7_1_0002.mp4" type="video/mp4">
+              </video>
+            </div>
+            <a class="carousel-control-prev" href="#videoCarouselIndicators2" role="button" data-slide="prev">
+              <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+              <span class="sr-only">Previous</span>
+            </a>
+            <a class="carousel-control-next" href="#videoCarouselIndicators2" role="button" data-slide="next">
+              <span class="carousel-control-next-icon" aria-hidden="true"></span>
+              <span class="sr-only">Next</span>
+            </a>
+          </div>
+          <div class="carousel-caption">
+            A lizard riding a bike
+          </div>
+        </div>
+        <!-- video 5 -->
+        <div class="carousel-item">
+          <div class="d-flex justify-content-center video-wrapper">
+            <div class="video-container">
+              <div class="text-box">Before</div>
+              <video class="d-block w-100" autoplay muted loop>
+                <source src="videos/hps_videocrafter/origin/compressed_6_0_0003.mp4" type="video/mp4">
+              </video>
+            </div>
+            <div class="video-container">
+              <div class="text-box">After</div>
+              <video class="d-block w-100" autoplay muted loop>
+                <source src="videos/hps_videocrafter/vader/compressed_6_0_0003.mp4" type="video/mp4">
+              </video>
+            </div>
+            <a class="carousel-control-prev" href="#videoCarouselIndicators2" role="button" data-slide="prev">
+              <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+              <span class="sr-only">Previous</span>
+            </a>
+            <a class="carousel-control-next" href="#videoCarouselIndicators2" role="button" data-slide="next">
+              <span class="carousel-control-next-icon" aria-hidden="true"></span>
+              <span class="sr-only">Next</span>
+            </a>
+          </div>
+          <div class="carousel-caption">
+            A goose playing chess.
+          </div>
+        </div>
+        <!-- video 6 -->
+        <div class="carousel-item">
+          <div class="d-flex justify-content-center video-wrapper">
+            <div class="video-container">
+              <div class="text-box">Before</div>
+              <video class="d-block w-100" autoplay muted loop>
+                <source src="videos/hps_videocrafter/origin/compressed_3_1_0003.mp4" type="video/mp4">
+              </video>
+            </div>
+            <div class="video-container">
+              <div class="text-box">After</div>
+              <video class="d-block w-100" autoplay muted loop>
+                <source src="videos/hps_videocrafter/vader/compressed_3_1_0003.mp4" type="video/mp4">
+              </video>
+            </div>
+            <a class="carousel-control-prev" href="#videoCarouselIndicators2" role="button" data-slide="prev">
+              <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+              <span class="sr-only">Previous</span>
+            </a>
+            <a class="carousel-control-next" href="#videoCarouselIndicators2" role="button" data-slide="next">
+              <span class="carousel-control-next-icon" aria-hidden="true"></span>
+              <span class="sr-only">Next</span>
+            </a>
+          </div>
+          <div class="carousel-caption">
+            A hedgehog playing chess.
+          </div>
+        </div>
+        <!-- Add more carousel items as needed -->
+      </div>
+    </div>
+
+
+
+  <!-- ######################## -->
+  <!-- Object detection section -->
+  <div class="container">
+      <div class="columns is-centered">
+        <div class="column is-full-width">
+          <h3 id="object-removal-reward" class="title pt-5 pb-2 has-text-centered" style="text-align: center; padding-bottom: 10px;">
+            <strong>Object Removal Reward</strong>
+          </h3>
+          <p class="subtitle has-text-centered" style="text-align: center; padding-bottom: 10px; color: black; font-family: 'Google Sans', sans-serif;">
+            Removing books with the YOLOS object detection model.
+          </p>
+        </div>
+      </div>
+  </div>
+    <div id="videoCarouselIndicators4" class="carousel slide" data-ride="carousel" data-interval="5000">
+      <div class="carousel-inner">
+        <!-- video 1 -->
+        <div class="carousel-item active">
+          <div class="d-flex justify-content-center video-wrapper">
+            <div class="video-container">
+              <div class="text-box">Before</div>
+              <video class="d-block w-100" autoplay muted loop>
+                <source src="videos/yolos/origin/compressed_2_3_0003.mp4" type="video/mp4">
+              </video>
+            </div>
+            <div class="video-container">
+              <div class="text-box">After</div>
+              <video class="d-block w-100" autoplay muted loop>
+                <source src="videos/yolos/final/compressed_2_3_0003.mp4" type="video/mp4">
+              </video>
+            </div>
+            <a class="carousel-control-prev" href="#videoCarouselIndicators4" role="button" data-slide="prev">
+              <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+              <span class="sr-only">Previous</span>
+            </a>
+            <a class="carousel-control-next" href="#videoCarouselIndicators4" role="button" data-slide="next">
+              <span class="carousel-control-next-icon" aria-hidden="true"></span>
+              <span class="sr-only">Next</span>
+            </a>
+          </div>
+          <div class="carousel-caption">
+            A book and a cup of hot chocolate on a windowsill with a snowy view.
+          </div>
+        </div>
+        <!-- video 2 -->
+        <div class="carousel-item">
+          <div class="d-flex justify-content-center video-wrapper">
+            <div class="video-container">
+              <div class="text-box">Before</div>
+              <video class="d-block w-100" autoplay muted loop>
+                <source src="videos/yolos/origin/compressed_3_0_0002.mp4" type="video/mp4">
+              </video>
+            </div>
+            <div class="video-container">
+              <div class="text-box">After</div>
+              <video class="d-block w-100" autoplay muted loop>
+                <source src="videos/yolos/final/compressed_3_0_0002.mp4" type="video/mp4">
+              </video>
+            </div>
+            <a class="carousel-control-prev" href="#videoCarouselIndicators4" role="button" data-slide="prev">
+              <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+              <span class="sr-only">Previous</span>
+            </a>
+            <a class="carousel-control-next" href="#videoCarouselIndicators4" role="button" data-slide="next">
+              <span class="carousel-control-next-icon" aria-hidden="true"></span>
+              <span class="sr-only">Next</span>
+            </a>
+          </div>
+          <div class="carousel-caption">
+            A book and a cup of tea on a blanket in a sunflower field.
+          </div>
+        </div>
+        <!-- video 3 -->
+        <div class="carousel-item">
+          <div class="d-flex justify-content-center video-wrapper">
+            <div class="video-container">
+              <div class="text-box">Before</div>
+              <video class="d-block w-100" autoplay muted loop>
+                <source src="videos/yolos/origin/compressed_4_3_0002.mp4" type="video/mp4">
+              </video>
+            </div>
+            <div class="video-container">
+              <div class="text-box">After</div>
+              <video class="d-block w-100" autoplay muted loop>
+                <source src="videos/yolos/final/compressed_4_3_0002.mp4" type="video/mp4">
+              </video>
+            </div>
+            <a class="carousel-control-prev" href="#videoCarouselIndicators4" role="button" data-slide="prev">
+              <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+              <span class="sr-only">Previous</span>
+            </a>
+            <a class="carousel-control-next" href="#videoCarouselIndicators4" role="button" data-slide="next">
+              <span class="carousel-control-next-icon" aria-hidden="true"></span>
+              <span class="sr-only">Next</span>
+            </a>
+          </div>
+          <div class="carousel-caption">
+            A book and a cup of coffee on a rustic wooden table in a cabin.
+          </div>
+        </div>
+        <!-- video 4 -->
+        <div class="carousel-item">
+          <div class="d-flex justify-content-center video-wrapper">
+            <div class="video-container">
+              <div class="text-box">Before</div>
+              <video class="d-block w-100" autoplay muted loop>
+                <source src="videos/yolos/origin/compressed_5_1_0002.mp4" type="video/mp4">
+              </video>
+            </div>
+            <div class="video-container">
+              <div class="text-box">After</div>
+              <video class="d-block w-100" autoplay muted loop>
+                <source src="videos/yolos/final/compressed_5_1_0002.mp4" type="video/mp4">
+              </video>
+            </div>
+            <a class="carousel-control-prev" href="#videoCarouselIndicators4" role="button" data-slide="prev">
+              <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+              <span class="sr-only">Previous</span>
+            </a>
+            <a class="carousel-control-next" href="#videoCarouselIndicators4" role="button" data-slide="next">
+              <span class="carousel-control-next-icon" aria-hidden="true"></span>
+              <span class="sr-only">Next</span>
+            </a>
+          </div>
+          <div class="carousel-caption">
+            A book and a cup of herbal tea on a bedside table.
+          </div>
+        </div>
+        <!-- Add more carousel items as needed -->
+      </div>
+      
+  </div>
+  <!-- end of Object Removal section -->
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+    <!-- ######################## -->
+  <!-- V-JEPA section -->
+  <div class="container">
+    <div class="columns is-centered">
+      <div class="column is-full-width">
+        <h3 id="v-jepa-reward" class="title pt-5 pb-2 has-text-centered" style="text-align: center; padding-bottom: 10px;">
+          <strong>V-JEPA Reward</strong>
+        </h3>
+        <p class="subtitle has-text-centered" style="text-align: center; padding-bottom: 10px; color: black; font-family: 'Google Sans', sans-serif;">
+          Improve temporal consistency for Stable Video Diffusion, an image-to-video model.
+        </p>
+      </div>
+    </div>
+</div>
+  <div id="videoCarouselIndicators6" class="carousel slide" data-ride="carousel" data-interval="5000">
+    <div class="carousel-inner">
+      <!-- video 1 -->
+      <div class="carousel-item active">
+        <div class="d-flex justify-content-center video-wrapper">
+          <div class="video-container">
+            <div class="text-box">Before</div>
+            <img class="d-block w-100" src="videos/v-jepa/origin/1.gif" alt="Rocket">
+          </div>
+          <div class="video-container">
+            <div class="text-box">After</div>
+            <img class="d-block w-100" src="videos/v-jepa/final/1.gif" alt="Rocket">
+          </div>
+          <a class="carousel-control-prev" href="#videoCarouselIndicators6" role="button" data-slide="prev">
+            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+            <span class="sr-only">Previous</span>
+          </a>
+          <a class="carousel-control-next" href="#videoCarouselIndicators6" role="button" data-slide="next">
+            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+            <span class="sr-only">Next</span>
+          </a>
+        </div>
+      </div>
+      <!-- video 2 -->
+      <div class="carousel-item">
+        <div class="d-flex justify-content-center video-wrapper">
+          <div class="video-container">
+            <div class="text-box">Before</div>
+            <img class="d-block w-100" src="videos/v-jepa/origin/2.gif" alt="Teddy">
+          </div>
+          <div class="video-container">
+            <div class="text-box">After</div>
+            <img class="d-block w-100" src="videos/v-jepa/final/2.gif" alt="Teddy">
+          </div>
+          <a class="carousel-control-prev" href="#videoCarouselIndicators6" role="button" data-slide="prev">
+            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+            <span class="sr-only">Previous</span>
+          </a>
+          <a class="carousel-control-next" href="#videoCarouselIndicators6" role="button" data-slide="next">
+            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+            <span class="sr-only">Next</span>
+          </a>
+        </div>
+      </div>
+      <!-- video 3 -->
+      <div class="carousel-item">
+        <div class="d-flex justify-content-center video-wrapper">
+          <div class="video-container">
+            <div class="text-box">Before</div>
+            <img class="d-block w-100" src="videos/v-jepa/origin/3.gif" alt="Bear">
+          </div>
+          <div class="video-container">
+            <div class="text-box">After</div>
+            <img class="d-block w-100" src="videos/v-jepa/final/3.gif" alt="Bear">
+          </div>
+          <a class="carousel-control-prev" href="#videoCarouselIndicators6" role="button" data-slide="prev">
+            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+            <span class="sr-only">Previous</span>
+          </a>
+          <a class="carousel-control-next" href="#videoCarouselIndicators6" role="button" data-slide="next">
+            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+            <span class="sr-only">Next</span>
+          </a>
+        </div>
+      </div>
+      <!-- video 4 -->
+      <div class="carousel-item">
+        <div class="d-flex justify-content-center video-wrapper">
+          <div class="video-container">
+            <div class="text-box">Before</div>
+            <img class="d-block w-100" src="videos/v-jepa/origin/4.gif" alt="Train">
+          </div>
+          <div class="video-container">
+            <div class="text-box">After</div>
+            <img class="d-block w-100" src="videos/v-jepa/final/4.gif" alt="Train">
+          </div>
+          <a class="carousel-control-prev" href="#videoCarouselIndicators6" role="button" data-slide="prev">
+            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+            <span class="sr-only">Previous</span>
+          </a>
+          <a class="carousel-control-next" href="#videoCarouselIndicators6" role="button" data-slide="next">
+            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+            <span class="sr-only">Next</span>
+          </a>
+        </div>
+      </div>
+      <!-- video 5 -->
+      <div class="carousel-item">
+        <div class="d-flex justify-content-center video-wrapper">
+          <div class="video-container">
+            <div class="text-box">Before</div>
+            <img class="d-block w-100" src="videos/v-jepa/origin/5.gif" alt="hedgehog">
+          </div>
+          <div class="video-container">
+            <div class="text-box">After</div>
+            <img class="d-block w-100" src="videos/v-jepa/final/5.gif" alt="hedgehog">
+          </div>
+          <a class="carousel-control-prev" href="#videoCarouselIndicators6" role="button" data-slide="prev">
+            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+            <span class="sr-only">Previous</span>
+          </a>
+          <a class="carousel-control-next" href="#videoCarouselIndicators6" role="button" data-slide="next">
+            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+            <span class="sr-only">Next</span>
+          </a>
+        </div>
+      </div>
+      <!-- video 6 -->
+      <div class="carousel-item">
+        <div class="d-flex justify-content-center video-wrapper">
+          <div class="video-container">
+            <div class="text-box">Before</div>
+            <img class="d-block w-100" src="videos/v-jepa/origin/6.gif" alt="Cat">
+          </div>
+          <div class="video-container">
+            <div class="text-box">After</div>
+            <img class="d-block w-100" src="videos/v-jepa/final/6.gif" alt="Cat">
+          </div>
+          <a class="carousel-control-prev" href="#videoCarouselIndicators6" role="button" data-slide="prev">
+            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+            <span class="sr-only">Previous</span>
+          </a>
+          <a class="carousel-control-next" href="#videoCarouselIndicators6" role="button" data-slide="next">
+            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+            <span class="sr-only">Next</span>
+          </a>
+        </div>
+      </div>
+    
+      <!-- Add more carousel items as needed -->
+    </div>
+    
+</div>
+<!-- end of PickScore section -->
+
+
+
+
+
+<!-- ######################## -->
+  <!-- Aesthetic and ViCLIP section -->
+  <div class="container">
+    <div class="columns is-centered">
+      <div class="column is-full-width">
+        <h3 id="aesthetic-and-viclip-reward" class="title pt-5 pb-2 has-text-centered" style="text-align: center; padding-bottom: 10px;">
+          <strong>Aesthetic and ViCLIP Reward</strong>
+        </h3>
+        <p class="subtitle has-text-centered" style="text-align: center; padding-bottom: 10px; color: black; font-family: 'Google Sans', sans-serif;">
+          Improve text-video alignment for VideoCrafter.
+        </p>
+      </div>
+    </div>
+</div>
+  <div id="videoCarouselIndicators5" class="carousel slide" data-ride="carousel" data-interval="5000">
+    <div class="carousel-inner">
+      <!-- video 1 -->
+      <div class="carousel-item active">
+        <div class="d-flex justify-content-center video-wrapper">
+          <div class="video-container">
+            <div class="text-box">Before</div>
+            <video class="d-block w-100" autoplay muted loop>
+              <source src="videos/viclip/origin/1.mp4" type="video/mp4">
+            </video>
+          </div>
+          <div class="video-container">
+            <div class="text-box">After</div>
+            <video class="d-block w-100" autoplay muted loop>
+              <source src="videos/viclip/final/1.mp4" type="video/mp4">
+            </video>
+          </div>
+          <a class="carousel-control-prev" href="#videoCarouselIndicators5" role="button" data-slide="prev">
+            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+            <span class="sr-only">Previous</span>
+          </a>
+          <a class="carousel-control-next" href="#videoCarouselIndicators5" role="button" data-slide="next">
+            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+            <span class="sr-only">Next</span>
+          </a>
+        </div>
+        <div class="carousel-caption">
+          A raccoon strumming a ukulele while sitting on a log by a campfire.
+        </div>
+      </div>
+      <!-- video 2 -->
+      <div class="carousel-item">
+        <div class="d-flex justify-content-center video-wrapper">
+          <div class="video-container">
+            <div class="text-box">Before</div>
+            <video class="d-block w-100" autoplay muted loop>
+              <source src="videos/viclip/origin/2.mp4" type="video/mp4">
+            </video>
+          </div>
+          <div class="video-container">
+            <div class="text-box">After</div>
+            <video class="d-block w-100" autoplay muted loop>
+              <source src="videos/viclip/final/2.mp4" type="video/mp4">
+            </video>
+          </div>
+          <a class="carousel-control-prev" href="#videoCarouselIndicators5" role="button" data-slide="prev">
+            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+            <span class="sr-only">Previous</span>
+          </a>
+          <a class="carousel-control-next" href="#videoCarouselIndicators5" role="button" data-slide="next">
+            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+            <span class="sr-only">Next</span>
+          </a>
+        </div>
+        <div class="carousel-caption">
+          A rabbit hitting the drums with its paws in a garden with blooming flowers.
+        </div>
+      </div>
+      <!-- video 3 -->
+      <div class="carousel-item">
+        <div class="d-flex justify-content-center video-wrapper">
+          <div class="video-container">
+            <div class="text-box">Before</div>
+            <video class="d-block w-100" autoplay muted loop>
+              <source src="videos/viclip/origin/3.mp4" type="video/mp4">
+            </video>
+          </div>
+          <div class="video-container">
+            <div class="text-box">After</div>
+            <video class="d-block w-100" autoplay muted loop>
+              <source src="videos/viclip/final/3.mp4" type="video/mp4">
+            </video>
+          </div>
+          <a class="carousel-control-prev" href="#videoCarouselIndicators5" role="button" data-slide="prev">
+            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+            <span class="sr-only">Previous</span>
+          </a>
+          <a class="carousel-control-next" href="#videoCarouselIndicators5" role="button" data-slide="next">
+            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+            <span class="sr-only">Next</span>
+          </a>
+        </div>
+        <div class="carousel-caption">
+          A raccoon strumming a guitar while perched on a tree branch.
+        </div>
+      </div>
+      <!-- video 4 -->
+      <div class="carousel-item">
+        <div class="d-flex justify-content-center video-wrapper">
+          <div class="video-container">
+            <div class="text-box">Before</div>
+            <video class="d-block w-100" autoplay muted loop>
+              <source src="videos/viclip/origin/4.mp4" type="video/mp4">
+            </video>
+          </div>
+          <div class="video-container">
+            <div class="text-box">After</div>
+            <video class="d-block w-100" autoplay muted loop>
+              <source src="videos/viclip/final/4.mp4" type="video/mp4">
+            </video>
+          </div>
+          <a class="carousel-control-prev" href="#videoCarouselIndicators5" role="button" data-slide="prev">
+            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+            <span class="sr-only">Previous</span>
+          </a>
+          <a class="carousel-control-next" href="#videoCarouselIndicators5" role="button" data-slide="next">
+            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+            <span class="sr-only">Next</span>
+          </a>
+        </div>
+        <div class="carousel-caption">
+          A dog playing a piano with its paws in a living room illuminated by fairy lights.
+        </div>
+      </div>
+      <!-- video 5 -->
+      <div class="carousel-item">
+        <div class="d-flex justify-content-center video-wrapper">
+          <div class="video-container">
+            <div class="text-box">Before</div>
+            <video class="d-block w-100" autoplay muted loop>
+              <source src="videos/viclip/origin/5.mp4" type="video/mp4">
+            </video>
+          </div>
+          <div class="video-container">
+            <div class="text-box">After</div>
+            <video class="d-block w-100" autoplay muted loop>
+              <source src="videos/viclip/final/5.mp4" type="video/mp4">
+            </video>
+          </div>
+          <a class="carousel-control-prev" href="#videoCarouselIndicators5" role="button" data-slide="prev">
+            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+            <span class="sr-only">Previous</span>
+          </a>
+          <a class="carousel-control-next" href="#videoCarouselIndicators5" role="button" data-slide="next">
+            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+            <span class="sr-only">Next</span>
+          </a>
+        </div>
+        <div class="carousel-caption">
+          A cat strumming a tiny guitar on a windowsill overlooking a garden.
+        </div>
+      </div>
+    
+    
+    
+      <!-- Add more carousel items as needed -->
+    </div>
+
+
+     <!-- ######################## -->
+  <!-- ViCLIP Training Curve -->
+  <div class="container">
+    <div class="columns is-centered">
+      <div class="column is-full-width">
+        <h3 id="reward-curve" class="title pt-5 pb-2 has-text-centered" style="text-align: center; padding-bottom: 10px;">
+          <strong>Aesthetic and ViCLIP Reward Curve</strong>
+        </h3>
+        <p class="subtitle has-text-centered" style="text-align: center; padding-bottom: 10px; color: black; font-family: 'Google Sans', sans-serif;">
+          Training curve for Videocrater-based VADER fine-tuned using Aesthetic and ViCLIP Reward.
+        </p>
+      </div>
+    </div>
+    <div class="columns" style="display: flex; justify-content: center; align-items: center;">
+      <div class="column is-narrow" style="text-align: center;">
+        <img src="videos/reward_curve_smoothed.png" alt="Reward Curve" style="max-width: 80%; height: auto; border-radius: 8px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);">
+      </div>
+    </div>
+  </div>
+  
+   <!-- ######################## -->
+  <!-- Training efficiency comparison -->
+    <div class="container">
+      <div class="columns is-centered">
+        <div class="column is-full-width">
+          <h3 id="training-efficiency-comparison" class="title pt-5 pb-2 has-text-centered" style="text-align: center; padding-bottom: 10px;">
+            <strong>Training Efficiency Comparison</strong>
+          </h3>
+          <p class="subtitle has-text-centered" style="text-align: center; padding-bottom: 10px; color: black; font-family: 'Google Sans', sans-serif;">
+            Training Curve for ModelScope-based VADER.
+          </p>
+        </div>
+      </div>
+      <div class="columns" style="display: flex; justify-content: center; align-items: center;">
+        <div class="column is-narrow" style="text-align: center;">
+          <img src="videos/reward_curves_main.png" alt="Reward Curve" style="max-width: 80%; height: auto; border-radius: 8px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);">
+        </div>
+      </div>
+    </div>
+
+
+
+<!-- ######################## -->
+<div class="container">
+  <div class="columns is-centered">
+    <div class="column is-full-width">
+      <h3 id="diversity-test" class="title pt-5 pb-2 has-text-centered" style="text-align: center; padding-bottom: 10px;">
+        <strong>Diversity Test</strong>
+      </h3>
+      <p class="subtitle has-text-centered" style="text-align: center; padding-bottom: 10px; color: black; font-family: 'Google Sans', sans-serif;">
+        Compute the average variance of VideoMAE latent space embeddings across 500 videos for each of 5 prompts (VideoCrafter-based VADER). 
+      </p>
+    </div>
+  </div>
+  <div class="table-container">
+      <table>
+          <thead>
+              <tr>
+              <th style="text-align: center;"></th>
+              <th style="text-align: center;">VideoCrafter</th>
+              <th style="text-align: center;">VADER-PickScore Reward</th>
+              <th style="text-align: center;">VADER-Aesthetic and HPS Reward</th>
+              <th style="text-align: center;">VADER-Aesthetic and ViCLIP Reward</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td style="text-align: center;">Average Variance</td>
+              <td style="text-align: center;"><b>0.0037<b></td>
+              <td style="text-align: center;">0.0026</td>
+              <td style="text-align: center;">0.0023</td>
+              <td style="text-align: center;">0.0031</td>
+              
+            </tr>
+          </tbody>
+      </table>
+  </div>
+
+
+<!-- ######################## -->
+  <div class="container">
+    <div class="columns is-centered">
+      <div class="column is-full-width">
+        <h3 id="memory-usage-comparison" class="title pt-5 pb-2 has-text-centered" style="text-align: center; padding-bottom: 10px;">
+          <strong>Memory Usage Comparison</strong>
+        </h3>
+        <p class="subtitle has-text-centered" style="text-align: center; padding-bottom: 10px; color: black; font-family: 'Google Sans', sans-serif;">
+          Intermediate gradients were offloaded to system memory due to limited GPU capacity in this experiment (ModelScope-based VADER).
+        </p>
+      </div>
+    </div>
+    <div class="table-container">
+        <table>
+            <thead>
+                <tr>
+                    <th style="text-align: center;">Method</th>
+                    <th style="text-align: center;">VRAM</th>
+                    <th style="text-align: center;">System RAM</th>
+                    <th style="text-align: center;">Total RAM</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                  <td style="text-align: center;">LoRA + Mixed Precision</td>
+                  <td style="text-align: center;">12.1 GB</td>
+                  <td style="text-align: center;">264.2 GB</td>
+                  <td style="text-align: center;">276.3 GB</td>
+                </tr>
+                <tr>
+                  <td style="text-align: center;">+ Subsampling Frames</td>
+                  <td style="text-align: center;">12.1 GB</td>
+                  <td style="text-align: center;">216.8 GB</td>
+                  <td style="text-align: center;">228.9 GB</td>
+                </tr>
+                <tr>
+                  <td style="text-align: center;">+ Truncated Backpropagation</td>
+                  <td style="text-align: center;">12.1 GB</td>
+                  <td style="text-align: center;">57.3 GB</td>
+                  <td style="text-align: center;">69.4 GB</td>
+                </tr>
+                <tr>
+                  <td style="text-align: center;">+ Gradient Checkpointing</td>
+                  <td style="text-align: center;">12.1 GB</td>
+                  <td style="text-align: center;">20.4 GB</td>
+                  <td style="text-align: center;"><b>32.5 GB<b></td>
+                </tr>
+            </tbody>
+        </table>
+      </div>
+
+
+
+
+    <!-- ######################## -->
+      <div class="container">
+        <div class="columns is-centered">
+          <div class="column is-full-width">
+            <h3 id="reward-correlation" class="title pt-5 pb-2 has-text-centered" style="text-align: center; padding-bottom: 10px;">
+              <strong>Reward Correlation</strong>
+            </h3>
+            <p class="subtitle has-text-centered" style="text-align: center; padding-bottom: 10px; color: black; font-family: 'Google Sans', sans-serif;">
+              Evaluated on VideoCrafter-based VADER.
+            </p>
+          </div>
+        </div>
+        <div class="table-container">
+          <table>
+              <thead>
+                  <tr>
+                      <th style="text-align: center;">Model</th>
+                      <th style="text-align: center;">HPS Score</th>
+                      <th style="text-align: center;">PickScore Score</th>
+                      <th style="text-align: center;">Aesthetic Score</th>
+                      <th style="text-align: center;">ViCLIP Score</th>
+                  </tr>
+              </thead>
+              <tbody>
+                  <tr>
+                      <td style="text-align: center;">VideoCrafter</td>
+                      <td style="text-align: center;">0.2564</td>
+                      <td style="text-align: center;">20.9231</td>
+                      <td style="text-align: center;">5.2219</td>
+                      <td style="text-align: center;"><b>0.2643</b></td>
+                  </tr>
+                  <tr>
+                      <td style="text-align: center;">VADER-Aesthetic and HPS</td>
+                      <td style="text-align: center;">0.2651</td>
+                      <td style="text-align: center;">21.1345</td>
+                      <td style="text-align: center;"><b>5.7965</b></td>
+                      <td style="text-align: center;">0.2622</td>
+                  </tr>
+                  <tr>
+                      <td style="text-align: center;">VADER-PickScore</td>
+                      <td style="text-align: center;"><b>0.2669</b></td>
+                      <td style="text-align: center;"><b>21.4911</b></td>
+                      <td style="text-align: center;">5.5757</td>
+                      <td style="text-align: center;">0.2640</td>
+                  </tr>
+                  <tr>
+                      <td style="text-align: center;">VADER-Aesthetic and ViCLIP</td>
+                      <td style="text-align: center;">0.2511</td>
+                      <td style="text-align: center;">20.8927</td>
+                      <td style="text-align: center;">5.6241</td>
+                      <td style="text-align: center;">0.2628</td>
+                  </tr>
+              </tbody>
+          </table>
+          
+      </div>
+
+      <div class="column is-narrow" style="text-align: center;">
+        <img src="videos/correlation.png" alt="Reward Curve" style="max-width: 81%; height: auto; border-radius: 8px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);">
+      </div>
+      
+
+
+
+      <!-- ######################## -->
+      <div class="container">
+        <div class="columns is-centered">
+          <div class="column is-full-width">
+            <h3 id="evalcrafter-evaluation" class="title pt-5 pb-2 has-text-centered" style="text-align: center; padding-bottom: 10px;">
+              <strong>EvalCrater Evaluation</strong>
+            </h3>
+            <p class="subtitle has-text-centered" style="text-align: center; padding-bottom: 10px; color: black; font-family: 'Google Sans', sans-serif;">
+              Evaluated on VideoCrafter-based VADER.
+            </p>
+          </div>
+        </div>
+        <div class="table-container">
+          <table>
+              <thead>
+                  <tr>
+                      <th style="text-align: center;">Model</th>
+                      <th style="text-align: center;">Temporal Coherence</th>
+                      <th style="text-align: center;">Motion Quality</th>
+                  </tr>
+              </thead>
+              <tbody>
+                  <tr>
+                      <td style="text-align: center;">VideoCrafter</td>
+                      <td style="text-align: center;">55.90</td>
+                      <td style="text-align: center;">52.89</td>
+                  </tr>
+                  <tr>
+                      <td style="text-align: center;">VADER-Aesthetic and HPS</td>
+                      <td style="text-align: center;">59.65</td>
+                      <td style="text-align: center;"><b>55.46</b></td>
+                  </tr>
+                  <tr>
+                      <td style="text-align: center;">VADER-PickScore</td>
+                      <td style="text-align: center;"><b>60.75</b></td>
+                      <td style="text-align: center;">54.65</td>
+                  </tr>
+                  <tr>
+                      <td style="text-align: center;">VADER-Aesthetic and ViCLIP</td>
+                      <td style="text-align: center;">57.08</td>
+                      <td style="text-align: center;">54.25</td>
+                  </tr>
+              </tbody>
+          </table>
+      </div>
+      
+
+      <!-- ######################## -->
+        <div class="container">
+          <div class="columns is-centered">
+            <div class="column is-full-width">
+              <h3 id="vbench-evaluation" class="title pt-5 pb-2 has-text-centered" style="text-align: center; padding-bottom: 10px;">
+                <strong>VBench Evaluation</strong>
+              </h3>
+              <p class="subtitle has-text-centered" style="text-align: center; padding-bottom: 10px; color: black; font-family: 'Google Sans', sans-serif;">
+                Evaluate VideoCrafter-based VADER.
+              </p>
+            </div>
+          </div>
+          <div class="table-container">
+            <table>
+              <thead>
+                <tr>
+                  <th style="text-align: center;">Model</th>
+                  <th style="text-align: center;">Subject Consistency</th>
+                  <th style="text-align: center;">Background Consistency</th>
+                  <th style="text-align: center;">Motion Smoothness</th>
+                  <th style="text-align: center;">Dynamic Degree</th>
+                  <th style="text-align: center;">Aesthetic Quality</th>
+                  <th style="text-align: center;">Imaging Quality</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td style="text-align: center;">VideoCrafter</td>
+                  <td style="text-align: center;">0.9544</td>
+                  <td style="text-align: center;">0.9652</td>
+                  <td style="text-align: center;">0.9688</td>
+                  <td style="text-align: center;">0.5346</td>
+                  <td style="text-align: center;">0.5752</td>
+                  <td style="text-align: center;">0.6677</td>
+                </tr>
+                <tr>
+                  <td style="text-align: center;">VADER-Aesthetic and HPS</td>
+                  <td style="text-align: center;">0.9659</td>
+                  <td style="text-align: center;">0.9713</td>
+                  <td style="text-align: center;"><b>0.9734</b></td>
+                  <td style="text-align: center;">0.4741</td>
+                  <td style="text-align: center;"><b>0.6295</b></td>
+                  <td style="text-align: center;"><b>0.7145</b></td>
+                </tr>
+                <tr>
+                  <td style="text-align: center;">VADER-PickScore</td>
+                  <td style="text-align: center;"><b>0.9668</b></td>
+                  <td style="text-align: center;"><b>0.9727</b></td>
+                  <td style="text-align: center;">0.9726</td>
+                  <td style="text-align: center;">0.3732</td>
+                  <td style="text-align: center;">0.6094</td>
+                  <td style="text-align: center;">0.6762</td>
+                </tr>
+                <tr>
+                  <td style="text-align: center;">VADER-Aesthetic and ViCLIP</td>
+                  <td style="text-align: center;">0.9564</td>
+                  <td style="text-align: center;">0.9662</td>
+                  <td style="text-align: center;">0.9714</td>
+                  <td style="text-align: center;"><b>0.5519</b></td>
+                  <td style="text-align: center;">0.6008</td>
+                  <td style="text-align: center;">0.6566</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          
+
+          <!-- ######################## -->
+          <!--VADER-V-JEPA Evaluation-->
+          <div class="container">
+            <div class="columns is-centered">
+              <div class="column is-full-width">
+                <h3 id="v-jepa-evaluation" class="title pt-5 pb-2 has-text-centered" style="text-align: center; padding-bottom: 10px;">
+                  <strong>VADER-V-JEPA Evaluation</strong>
+                </h3>
+                <p class="subtitle has-text-centered" style="text-align: center; padding-bottom: 10px; color: black; font-family: 'Google Sans', sans-serif;">
+                  Evaluate Stable Video Diffusion based VADER using VBench.
+                </p>
+              </div>
+            </div>
+            <div class="table-container">
+              <table>
+                <thead>
+                  <tr>
+                    <th style="text-align: center;">Model</th>
+                    <th style="text-align: center;">Subject Consistency</th>
+                    <th style="text-align: center;">Background Consistency</th>
+                    <th style="text-align: center;">Motion Smoothness</th>
+                    <th style="text-align: center;">Dynamic Degree</th>
+                    <th style="text-align: center;">Aesthetic Quality</th>
+                    <th style="text-align: center;">Imaging Quality</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td style="text-align: center;">Stable Video Diffusion</td>
+                    <td style="text-align: center;">0.9042</td>
+                    <td style="text-align: center;">0.9469</td>
+                    <td style="text-align: center;">0.9634</td>
+                    <td style="text-align: center;">0.8333</td>
+                    <td style="text-align: center;">0.6782</td>
+                    <td style="text-align: center;">0.6228</td>
+                  </tr>
+                  <tr>
+                    <td style="text-align: center;">VADER-V-JEPA</td>
+                    <td style="text-align: center;"><b>0.9401<b></td>
+                    <td style="text-align: center;"><b>0.9551</b></td>
+                    <td style="text-align: center;"><b>0.9669</b></td>
+                    <td style="text-align: center;">0.8333</td>
+                    <td style="text-align: center;"><b>0.6807</b></td>
+                    <td style="text-align: center;"><b>0.6384</b></td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+
+
+
+            <!-- ######################## -->
+          <!--VADER-V-JEPA Evaluation-->
+          <div class="container">
+            <div class="columns is-centered">
+              <div class="column is-full-width">
+                <h3 id="truncated-backpropagation-ablation" class="title pt-5 pb-2 has-text-centered" style="text-align: center; padding-bottom: 10px;">
+                  <strong>Truncated Backpropagation Ablation</strong>
+                </h3>
+                <p class="subtitle has-text-centered" style="text-align: center; padding-bottom: 10px; color: black; font-family: 'Google Sans', sans-serif;">
+                  Demenstrate videos from training steps 1, 100, 200, and 300 for VideoCrafter-based VADER trained via Aesthetic and HPS Reward. 
+                </p>
+              </div>
+            </div>
+            <div class="table-container">
+              <table>
+                <thead>
+                  <tr>
+                    <th style="text-align: center;">Training Step</th>
+                    <th style="text-align: center;">Reward Value (k=1)</th>
+                    <th style="text-align: center;">Reward Value (k=10)</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td style="text-align: center;">1</td>
+                    <td style="text-align: center;">5.047</td>
+                    <td style="text-align: center;">5.0946</td>
+                  </tr>
+                  <tr>
+                    <td style="text-align: center;">100</td>
+                    <td style="text-align: center;">5.3342</td>
+                    <td style="text-align: center;">5.2523</td>
+                  </tr>
+                  <tr>
+                    <td style="text-align: center;">200</td>
+                    <td style="text-align: center;">5.4977</td>
+                    <td style="text-align: center;">5.2072</td>
+                  </tr>
+                  <tr>
+                    <td style="text-align: center;">300</td>
+                    <td style="text-align: center;"><b>5.6479</b></td>
+                    <td style="text-align: center;">5.1906</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+  
+    <!-- Image Section -->
+    <div class="columns is-centered" style="flex-direction: column; align-items: center; gap: 20px; width: 80%; margin: auto;">
+      
+      <!-- k=1 -->
+      <div class="video-container" style="width: 100%; text-align: center;">
+        <div class="text-box" style="margin-bottom: 10px; font-size: 1em; font-weight: bold; display: inline-block; color: white; padding: 5px 10px; border-radius: 10px; box-shadow: 0 2px 5px rgba(0, 0, 0, 0.7); background-color: #000000;">
+          k=1
+        </div>
+        <img class="d-block w-100" src="videos/truncated/k1.gif" alt="k=1" style="border-radius: 10px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);">
+      </div>
+      <!-- k=10 -->
+      <div class="video-container" style="width: 100%; text-align: center;">
+        <div class="text-box" style="margin-bottom: 10px; font-size: 1em; font-weight: bold; display: inline-block; color: white; padding: 5px 10px; border-radius: 10px; box-shadow: 0 2px 5px rgba(0, 0, 0, 0.7); background-color: #000000;">
+          k=10
+        </div>
+        <img class="d-block w-100" src="videos/truncated/k10.gif" alt="k=10" style="border-radius: 10px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);">
+        <div class="carousel-caption">
+          A rabbit hitting the drums with its paws in a garden with blooming flowers.
+        </div>
+      </div>
+    </div>
+    
+</div>
+<!-- end of truncated section -->
+
+<!-- ######################## -->
+<div class="container">
+  <div class="columns is-centered">
+    <div class="column is-full-width">
+      <h3 id="image-gallery" class="title pt-5 pb-2 has-text-centered" style="text-align: center; padding-bottom: 10px;">
+        <strong>Image Gallery</strong>
+      </h3>
+      <p class="subtitle has-text-centered" style="text-align: center; padding-bottom: 10px; color: black; font-family: 'Google Sans', sans-serif;">
+        More Videos from VADER are exhibited in <a href="./Image_Gallery.html">Image Gallery</a>.</p>
+      </p>
+    </div>
+  </div>
+
+
+<footer class="footer">
+  <div class="container">
+    <div class="content has-text-centered">
+      <br />
+      <p> Template from <a href="https://nerfies.github.io"><span class="dnerf">Nerfies</span></a>.</p>
+    </div>
+  </div>
+</footer>
+
+<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+</body>
+</html>
+
+
