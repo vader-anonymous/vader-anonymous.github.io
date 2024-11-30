@@ -7,33 +7,35 @@ def generate_video_data(captions_file, output_file, base_directory="videos"):
     and generates a JSON file with the desired structure.
     """
     try:
-        # Read the captions from the file
-        with open(captions_file, 'r', encoding='utf-8') as file:
-            captions = file.readlines()
+        # # Read the captions from the file
+        # with open(captions_file, 'r', encoding='utf-8') as file:
+        #     captions = file.readlines()
         
-        # Trim whitespace and remove empty lines
-        captions = [caption.strip() for caption in captions if caption.strip()]
+        # # Trim whitespace and remove empty lines
+        # captions = [caption.strip() for caption in captions if caption.strip()]
+
+        video_files = os.listdir(f"{base_directory}/dog_a_hps")
 
         # Generate video data structure
         video_data = []
-        for index, caption in enumerate(captions):
+        for index, video in enumerate(video_files):
             # Define the expected file paths
-            aesthetic_path = f"{base_directory}/1aesthetic_hps/samples/{index:04d}.mp4"
-            pickscore_path = f"{base_directory}/1pickscore/samples/{index:04d}.mp4"
-            videocrafter_path = f"{base_directory}/1videocrafter/samples/{index:04d}.mp4"
+            aesthetic_path = f"{base_directory}/dog_a_hps/{video}"
+            pickscore_path = f"{base_directory}/dog_pick/{video}"
+            videocrafter_path = f"{base_directory}/dog_origin/{video}"
             
             # Check if all required files exist
             if os.path.exists(aesthetic_path) and os.path.exists(pickscore_path) and os.path.exists(videocrafter_path):
                 # Append the data if all files exist
                 video_entry = {
-                    "caption": caption,
+                    "caption": 'A brown dog eagerly eats from a bowl in a kitchen.',
                     "aestheticPath": aesthetic_path,
                     "pickscorePath": pickscore_path,
                     "videocrafterPath": videocrafter_path
                 }
                 video_data.append(video_entry)
-            else:
-                print(f"Skipping caption: '{caption}' (missing .mp4 files)")
+            # else:
+            #     print(f"Skipping caption: '{caption}' (missing .mp4 files)")
 
         # Write the video data to a JSON file
         with open(output_file, 'w', encoding='utf-8') as json_file:
@@ -45,7 +47,7 @@ def generate_video_data(captions_file, output_file, base_directory="videos"):
 
 # Input and output file paths
 captions_file = "captions.txt"  # Input file containing captions
-output_file = "video_data.json"  # Output JSON file
+output_file = "diversity_video_data.json"  # Output JSON file
 
 # Generate video data
 generate_video_data(captions_file, output_file)
