@@ -14,21 +14,21 @@ def generate_video_data(captions_file, output_file, base_directory="videos"):
         # # Trim whitespace and remove empty lines
         # captions = [caption.strip() for caption in captions if caption.strip()]
 
-        video_files = os.listdir(f"{base_directory}/dog_a_hps")
+        video_files = os.listdir(f"{base_directory}/flower_a_hps")
 
         # Generate video data structure
         video_data = []
         for index, video in enumerate(video_files):
             # Define the expected file paths
-            aesthetic_path = f"{base_directory}/dog_a_hps/{video}"
-            pickscore_path = f"{base_directory}/dog_pick/{video}"
-            videocrafter_path = f"{base_directory}/dog_origin/{video}"
+            aesthetic_path = f"{base_directory}/flower_a_hps/{video}"
+            pickscore_path = f"{base_directory}/flower_pick/{video}"
+            videocrafter_path = f"{base_directory}/flower_origin/{video}"
             
             # Check if all required files exist
             if os.path.exists(aesthetic_path) and os.path.exists(pickscore_path) and os.path.exists(videocrafter_path):
                 # Append the data if all files exist
                 video_entry = {
-                    "caption": 'A brown dog eagerly eats from a bowl in a kitchen.',
+                    "caption": 'A fairy tends to enchanted, glowing flowers.',
                     "aestheticPath": aesthetic_path,
                     "pickscorePath": pickscore_path,
                     "videocrafterPath": videocrafter_path
@@ -47,7 +47,7 @@ def generate_video_data(captions_file, output_file, base_directory="videos"):
 
 # Input and output file paths
 captions_file = "captions.txt"  # Input file containing captions
-output_file = "diversity_video_data.json"  # Output JSON file
+output_file = "diversity_video_data_flower.json"  # Output JSON file
 
 # Generate video data
 generate_video_data(captions_file, output_file)

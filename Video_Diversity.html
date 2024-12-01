@@ -5,7 +5,6 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.9.3/css/bulma.min.css">
   <title>Paginated Video Gallery</title>
 
-
   <style>
     .pagination-wrapper {
       display: flex;
@@ -17,6 +16,39 @@
 
     .pagination .button {
       margin: 0 5px;
+    }
+
+    .video-grid {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      margin-top: 20px;
+    }
+
+    .video-grid-item {
+      width: 9%;
+      margin: 5px;
+      text-align: center;
+    }
+
+    .video-title {
+      font-size: 0.8rem;
+      margin-top: 10px;
+    }
+
+    .category-title {
+      font-size: 1.5rem;
+      text-align: center;
+      margin-top: 20px;
+      margin-bottom: 10px;
+      font-weight: bold;
+    }
+
+    .prompt-title {
+      font-size: 1.2rem;
+      margin-bottom: 20px;
+      text-align: center;
+      font-weight: bold;
     }
   </style>
 </head>
@@ -30,3076 +62,867 @@
     This gallery showcases images generated from prompts that are out of the model's training distribution.
   </p>
 
+  <!-- Display Prompt -->
+  <div id="promptTitle" class="prompt-title"></div>
 
   <div id="videoContainer" class="container"></div>
   <div id="paginationWrapper" class="pagination-wrapper">
     <div id="pagination" class="pagination is-centered"></div>
   </div>
+
   <script>
-    // Define videoData array (paste your complete videoData here)
+    const prompts = [
+      "A fairy tends to enchanted, glowing flowers.",
+      "A brown dog eagerly eats from a bowl in a kitchen.",
+      "A lion is majestically standing on a rocky outcrop, surveying its territory with the golden light of dawn casting a regal glow on its mane.",
+    ];
 
-    const videoData = [
-      {
-          "caption": "A brown dog eagerly eats from a bowl in a kitchen.",
-          "aestheticPath": "videos/dog_a_hps/compressed_147.mp4",
-          "pickscorePath": "videos/dog_pick/compressed_147.mp4",
-          "videocrafterPath": "videos/dog_origin/compressed_147.mp4"
-      },
-      {
-          "caption": "A brown dog eagerly eats from a bowl in a kitchen.",
-          "aestheticPath": "videos/dog_a_hps/compressed_119.mp4",
-          "pickscorePath": "videos/dog_pick/compressed_119.mp4",
-          "videocrafterPath": "videos/dog_origin/compressed_119.mp4"
-      },
-      {
-          "caption": "A brown dog eagerly eats from a bowl in a kitchen.",
-          "aestheticPath": "videos/dog_a_hps/compressed_0.mp4",
-          "pickscorePath": "videos/dog_pick/compressed_0.mp4",
-          "videocrafterPath": "videos/dog_origin/compressed_0.mp4"
-      },
-      {
-          "caption": "A brown dog eagerly eats from a bowl in a kitchen.",
-          "aestheticPath": "videos/dog_a_hps/compressed_1.mp4",
-          "pickscorePath": "videos/dog_pick/compressed_1.mp4",
-          "videocrafterPath": "videos/dog_origin/compressed_1.mp4"
-      },
-      {
-          "caption": "A brown dog eagerly eats from a bowl in a kitchen.",
-          "aestheticPath": "videos/dog_a_hps/compressed_10.mp4",
-          "pickscorePath": "videos/dog_pick/compressed_10.mp4",
-          "videocrafterPath": "videos/dog_origin/compressed_10.mp4"
-      },
-      {
-          "caption": "A brown dog eagerly eats from a bowl in a kitchen.",
-          "aestheticPath": "videos/dog_a_hps/compressed_100.mp4",
-          "pickscorePath": "videos/dog_pick/compressed_100.mp4",
-          "videocrafterPath": "videos/dog_origin/compressed_100.mp4"
-      },
-      {
-          "caption": "A brown dog eagerly eats from a bowl in a kitchen.",
-          "aestheticPath": "videos/dog_a_hps/compressed_103.mp4",
-          "pickscorePath": "videos/dog_pick/compressed_103.mp4",
-          "videocrafterPath": "videos/dog_origin/compressed_103.mp4"
-      },
-      {
-          "caption": "A brown dog eagerly eats from a bowl in a kitchen.",
-          "aestheticPath": "videos/dog_a_hps/compressed_104.mp4",
-          "pickscorePath": "videos/dog_pick/compressed_104.mp4",
-          "videocrafterPath": "videos/dog_origin/compressed_104.mp4"
-      },
-      {
-          "caption": "A brown dog eagerly eats from a bowl in a kitchen.",
-          "aestheticPath": "videos/dog_a_hps/compressed_106.mp4",
-          "pickscorePath": "videos/dog_pick/compressed_106.mp4",
-          "videocrafterPath": "videos/dog_origin/compressed_106.mp4"
-      },
-      {
-          "caption": "A brown dog eagerly eats from a bowl in a kitchen.",
-          "aestheticPath": "videos/dog_a_hps/compressed_109.mp4",
-          "pickscorePath": "videos/dog_pick/compressed_109.mp4",
-          "videocrafterPath": "videos/dog_origin/compressed_109.mp4"
-      },
-      {
-          "caption": "A brown dog eagerly eats from a bowl in a kitchen.",
-          "aestheticPath": "videos/dog_a_hps/compressed_11.mp4",
-          "pickscorePath": "videos/dog_pick/compressed_11.mp4",
-          "videocrafterPath": "videos/dog_origin/compressed_11.mp4"
-      },
-      {
-          "caption": "A brown dog eagerly eats from a bowl in a kitchen.",
-          "aestheticPath": "videos/dog_a_hps/compressed_110.mp4",
-          "pickscorePath": "videos/dog_pick/compressed_110.mp4",
-          "videocrafterPath": "videos/dog_origin/compressed_110.mp4"
-      },
-      {
-          "caption": "A brown dog eagerly eats from a bowl in a kitchen.",
-          "aestheticPath": "videos/dog_a_hps/compressed_111.mp4",
-          "pickscorePath": "videos/dog_pick/compressed_111.mp4",
-          "videocrafterPath": "videos/dog_origin/compressed_111.mp4"
-      },
-      {
-          "caption": "A brown dog eagerly eats from a bowl in a kitchen.",
-          "aestheticPath": "videos/dog_a_hps/compressed_112.mp4",
-          "pickscorePath": "videos/dog_pick/compressed_112.mp4",
-          "videocrafterPath": "videos/dog_origin/compressed_112.mp4"
-      },
-      {
-          "caption": "A brown dog eagerly eats from a bowl in a kitchen.",
-          "aestheticPath": "videos/dog_a_hps/compressed_113.mp4",
-          "pickscorePath": "videos/dog_pick/compressed_113.mp4",
-          "videocrafterPath": "videos/dog_origin/compressed_113.mp4"
-      },
-      {
-          "caption": "A brown dog eagerly eats from a bowl in a kitchen.",
-          "aestheticPath": "videos/dog_a_hps/compressed_114.mp4",
-          "pickscorePath": "videos/dog_pick/compressed_114.mp4",
-          "videocrafterPath": "videos/dog_origin/compressed_114.mp4"
-      },
-      {
-          "caption": "A brown dog eagerly eats from a bowl in a kitchen.",
-          "aestheticPath": "videos/dog_a_hps/compressed_116.mp4",
-          "pickscorePath": "videos/dog_pick/compressed_116.mp4",
-          "videocrafterPath": "videos/dog_origin/compressed_116.mp4"
-      },
-      {
-          "caption": "A brown dog eagerly eats from a bowl in a kitchen.",
-          "aestheticPath": "videos/dog_a_hps/compressed_117.mp4",
-          "pickscorePath": "videos/dog_pick/compressed_117.mp4",
-          "videocrafterPath": "videos/dog_origin/compressed_117.mp4"
-      },
-      {
-          "caption": "A brown dog eagerly eats from a bowl in a kitchen.",
-          "aestheticPath": "videos/dog_a_hps/compressed_118.mp4",
-          "pickscorePath": "videos/dog_pick/compressed_118.mp4",
-          "videocrafterPath": "videos/dog_origin/compressed_118.mp4"
-      },
-      {
-          "caption": "A brown dog eagerly eats from a bowl in a kitchen.",
-          "aestheticPath": "videos/dog_a_hps/compressed_12.mp4",
-          "pickscorePath": "videos/dog_pick/compressed_12.mp4",
-          "videocrafterPath": "videos/dog_origin/compressed_12.mp4"
-      },
-      {
-          "caption": "A brown dog eagerly eats from a bowl in a kitchen.",
-          "aestheticPath": "videos/dog_a_hps/compressed_121.mp4",
-          "pickscorePath": "videos/dog_pick/compressed_121.mp4",
-          "videocrafterPath": "videos/dog_origin/compressed_121.mp4"
-      },
-      {
-          "caption": "A brown dog eagerly eats from a bowl in a kitchen.",
-          "aestheticPath": "videos/dog_a_hps/compressed_122.mp4",
-          "pickscorePath": "videos/dog_pick/compressed_122.mp4",
-          "videocrafterPath": "videos/dog_origin/compressed_122.mp4"
-      },
-      {
-          "caption": "A brown dog eagerly eats from a bowl in a kitchen.",
-          "aestheticPath": "videos/dog_a_hps/compressed_123.mp4",
-          "pickscorePath": "videos/dog_pick/compressed_123.mp4",
-          "videocrafterPath": "videos/dog_origin/compressed_123.mp4"
-      },
-      {
-          "caption": "A brown dog eagerly eats from a bowl in a kitchen.",
-          "aestheticPath": "videos/dog_a_hps/compressed_124.mp4",
-          "pickscorePath": "videos/dog_pick/compressed_124.mp4",
-          "videocrafterPath": "videos/dog_origin/compressed_124.mp4"
-      },
-      {
-          "caption": "A brown dog eagerly eats from a bowl in a kitchen.",
-          "aestheticPath": "videos/dog_a_hps/compressed_125.mp4",
-          "pickscorePath": "videos/dog_pick/compressed_125.mp4",
-          "videocrafterPath": "videos/dog_origin/compressed_125.mp4"
-      },
-      {
-          "caption": "A brown dog eagerly eats from a bowl in a kitchen.",
-          "aestheticPath": "videos/dog_a_hps/compressed_126.mp4",
-          "pickscorePath": "videos/dog_pick/compressed_126.mp4",
-          "videocrafterPath": "videos/dog_origin/compressed_126.mp4"
-      },
-      {
-          "caption": "A brown dog eagerly eats from a bowl in a kitchen.",
-          "aestheticPath": "videos/dog_a_hps/compressed_127.mp4",
-          "pickscorePath": "videos/dog_pick/compressed_127.mp4",
-          "videocrafterPath": "videos/dog_origin/compressed_127.mp4"
-      },
-      {
-          "caption": "A brown dog eagerly eats from a bowl in a kitchen.",
-          "aestheticPath": "videos/dog_a_hps/compressed_128.mp4",
-          "pickscorePath": "videos/dog_pick/compressed_128.mp4",
-          "videocrafterPath": "videos/dog_origin/compressed_128.mp4"
-      },
-      {
-          "caption": "A brown dog eagerly eats from a bowl in a kitchen.",
-          "aestheticPath": "videos/dog_a_hps/compressed_129.mp4",
-          "pickscorePath": "videos/dog_pick/compressed_129.mp4",
-          "videocrafterPath": "videos/dog_origin/compressed_129.mp4"
-      },
-      {
-          "caption": "A brown dog eagerly eats from a bowl in a kitchen.",
-          "aestheticPath": "videos/dog_a_hps/compressed_13.mp4",
-          "pickscorePath": "videos/dog_pick/compressed_13.mp4",
-          "videocrafterPath": "videos/dog_origin/compressed_13.mp4"
-      },
-      {
-          "caption": "A brown dog eagerly eats from a bowl in a kitchen.",
-          "aestheticPath": "videos/dog_a_hps/compressed_130.mp4",
-          "pickscorePath": "videos/dog_pick/compressed_130.mp4",
-          "videocrafterPath": "videos/dog_origin/compressed_130.mp4"
-      },
-      {
-          "caption": "A brown dog eagerly eats from a bowl in a kitchen.",
-          "aestheticPath": "videos/dog_a_hps/compressed_131.mp4",
-          "pickscorePath": "videos/dog_pick/compressed_131.mp4",
-          "videocrafterPath": "videos/dog_origin/compressed_131.mp4"
-      },
-      {
-          "caption": "A brown dog eagerly eats from a bowl in a kitchen.",
-          "aestheticPath": "videos/dog_a_hps/compressed_132.mp4",
-          "pickscorePath": "videos/dog_pick/compressed_132.mp4",
-          "videocrafterPath": "videos/dog_origin/compressed_132.mp4"
-      },
-      {
-          "caption": "A brown dog eagerly eats from a bowl in a kitchen.",
-          "aestheticPath": "videos/dog_a_hps/compressed_133.mp4",
-          "pickscorePath": "videos/dog_pick/compressed_133.mp4",
-          "videocrafterPath": "videos/dog_origin/compressed_133.mp4"
-      },
-      {
-          "caption": "A brown dog eagerly eats from a bowl in a kitchen.",
-          "aestheticPath": "videos/dog_a_hps/compressed_134.mp4",
-          "pickscorePath": "videos/dog_pick/compressed_134.mp4",
-          "videocrafterPath": "videos/dog_origin/compressed_134.mp4"
-      },
-      {
-          "caption": "A brown dog eagerly eats from a bowl in a kitchen.",
-          "aestheticPath": "videos/dog_a_hps/compressed_135.mp4",
-          "pickscorePath": "videos/dog_pick/compressed_135.mp4",
-          "videocrafterPath": "videos/dog_origin/compressed_135.mp4"
-      },
-      {
-          "caption": "A brown dog eagerly eats from a bowl in a kitchen.",
-          "aestheticPath": "videos/dog_a_hps/compressed_136.mp4",
-          "pickscorePath": "videos/dog_pick/compressed_136.mp4",
-          "videocrafterPath": "videos/dog_origin/compressed_136.mp4"
-      },
-      {
-          "caption": "A brown dog eagerly eats from a bowl in a kitchen.",
-          "aestheticPath": "videos/dog_a_hps/compressed_137.mp4",
-          "pickscorePath": "videos/dog_pick/compressed_137.mp4",
-          "videocrafterPath": "videos/dog_origin/compressed_137.mp4"
-      },
-      {
-          "caption": "A brown dog eagerly eats from a bowl in a kitchen.",
-          "aestheticPath": "videos/dog_a_hps/compressed_138.mp4",
-          "pickscorePath": "videos/dog_pick/compressed_138.mp4",
-          "videocrafterPath": "videos/dog_origin/compressed_138.mp4"
-      },
-      {
-          "caption": "A brown dog eagerly eats from a bowl in a kitchen.",
-          "aestheticPath": "videos/dog_a_hps/compressed_139.mp4",
-          "pickscorePath": "videos/dog_pick/compressed_139.mp4",
-          "videocrafterPath": "videos/dog_origin/compressed_139.mp4"
-      },
-      {
-          "caption": "A brown dog eagerly eats from a bowl in a kitchen.",
-          "aestheticPath": "videos/dog_a_hps/compressed_14.mp4",
-          "pickscorePath": "videos/dog_pick/compressed_14.mp4",
-          "videocrafterPath": "videos/dog_origin/compressed_14.mp4"
-      },
-      {
-          "caption": "A brown dog eagerly eats from a bowl in a kitchen.",
-          "aestheticPath": "videos/dog_a_hps/compressed_140.mp4",
-          "pickscorePath": "videos/dog_pick/compressed_140.mp4",
-          "videocrafterPath": "videos/dog_origin/compressed_140.mp4"
-      },
-      {
-          "caption": "A brown dog eagerly eats from a bowl in a kitchen.",
-          "aestheticPath": "videos/dog_a_hps/compressed_141.mp4",
-          "pickscorePath": "videos/dog_pick/compressed_141.mp4",
-          "videocrafterPath": "videos/dog_origin/compressed_141.mp4"
-      },
-      {
-          "caption": "A brown dog eagerly eats from a bowl in a kitchen.",
-          "aestheticPath": "videos/dog_a_hps/compressed_142.mp4",
-          "pickscorePath": "videos/dog_pick/compressed_142.mp4",
-          "videocrafterPath": "videos/dog_origin/compressed_142.mp4"
-      },
-      {
-          "caption": "A brown dog eagerly eats from a bowl in a kitchen.",
-          "aestheticPath": "videos/dog_a_hps/compressed_143.mp4",
-          "pickscorePath": "videos/dog_pick/compressed_143.mp4",
-          "videocrafterPath": "videos/dog_origin/compressed_143.mp4"
-      },
-      {
-          "caption": "A brown dog eagerly eats from a bowl in a kitchen.",
-          "aestheticPath": "videos/dog_a_hps/compressed_144.mp4",
-          "pickscorePath": "videos/dog_pick/compressed_144.mp4",
-          "videocrafterPath": "videos/dog_origin/compressed_144.mp4"
-      },
-      {
-          "caption": "A brown dog eagerly eats from a bowl in a kitchen.",
-          "aestheticPath": "videos/dog_a_hps/compressed_145.mp4",
-          "pickscorePath": "videos/dog_pick/compressed_145.mp4",
-          "videocrafterPath": "videos/dog_origin/compressed_145.mp4"
-      },
-      {
-          "caption": "A brown dog eagerly eats from a bowl in a kitchen.",
-          "aestheticPath": "videos/dog_a_hps/compressed_146.mp4",
-          "pickscorePath": "videos/dog_pick/compressed_146.mp4",
-          "videocrafterPath": "videos/dog_origin/compressed_146.mp4"
-      },
-      {
-          "caption": "A brown dog eagerly eats from a bowl in a kitchen.",
-          "aestheticPath": "videos/dog_a_hps/compressed_148.mp4",
-          "pickscorePath": "videos/dog_pick/compressed_148.mp4",
-          "videocrafterPath": "videos/dog_origin/compressed_148.mp4"
-      },
-      {
-          "caption": "A brown dog eagerly eats from a bowl in a kitchen.",
-          "aestheticPath": "videos/dog_a_hps/compressed_149.mp4",
-          "pickscorePath": "videos/dog_pick/compressed_149.mp4",
-          "videocrafterPath": "videos/dog_origin/compressed_149.mp4"
-      },
-      {
-          "caption": "A brown dog eagerly eats from a bowl in a kitchen.",
-          "aestheticPath": "videos/dog_a_hps/compressed_15.mp4",
-          "pickscorePath": "videos/dog_pick/compressed_15.mp4",
-          "videocrafterPath": "videos/dog_origin/compressed_15.mp4"
-      },
-      {
-          "caption": "A brown dog eagerly eats from a bowl in a kitchen.",
-          "aestheticPath": "videos/dog_a_hps/compressed_150.mp4",
-          "pickscorePath": "videos/dog_pick/compressed_150.mp4",
-          "videocrafterPath": "videos/dog_origin/compressed_150.mp4"
-      },
-      {
-          "caption": "A brown dog eagerly eats from a bowl in a kitchen.",
-          "aestheticPath": "videos/dog_a_hps/compressed_151.mp4",
-          "pickscorePath": "videos/dog_pick/compressed_151.mp4",
-          "videocrafterPath": "videos/dog_origin/compressed_151.mp4"
-      },
-      {
-          "caption": "A brown dog eagerly eats from a bowl in a kitchen.",
-          "aestheticPath": "videos/dog_a_hps/compressed_152.mp4",
-          "pickscorePath": "videos/dog_pick/compressed_152.mp4",
-          "videocrafterPath": "videos/dog_origin/compressed_152.mp4"
-      },
-      {
-          "caption": "A brown dog eagerly eats from a bowl in a kitchen.",
-          "aestheticPath": "videos/dog_a_hps/compressed_153.mp4",
-          "pickscorePath": "videos/dog_pick/compressed_153.mp4",
-          "videocrafterPath": "videos/dog_origin/compressed_153.mp4"
-      },
-      {
-          "caption": "A brown dog eagerly eats from a bowl in a kitchen.",
-          "aestheticPath": "videos/dog_a_hps/compressed_154.mp4",
-          "pickscorePath": "videos/dog_pick/compressed_154.mp4",
-          "videocrafterPath": "videos/dog_origin/compressed_154.mp4"
-      },
-      {
-          "caption": "A brown dog eagerly eats from a bowl in a kitchen.",
-          "aestheticPath": "videos/dog_a_hps/compressed_155.mp4",
-          "pickscorePath": "videos/dog_pick/compressed_155.mp4",
-          "videocrafterPath": "videos/dog_origin/compressed_155.mp4"
-      },
-      {
-          "caption": "A brown dog eagerly eats from a bowl in a kitchen.",
-          "aestheticPath": "videos/dog_a_hps/compressed_156.mp4",
-          "pickscorePath": "videos/dog_pick/compressed_156.mp4",
-          "videocrafterPath": "videos/dog_origin/compressed_156.mp4"
-      },
-      {
-          "caption": "A brown dog eagerly eats from a bowl in a kitchen.",
-          "aestheticPath": "videos/dog_a_hps/compressed_157.mp4",
-          "pickscorePath": "videos/dog_pick/compressed_157.mp4",
-          "videocrafterPath": "videos/dog_origin/compressed_157.mp4"
-      },
-      {
-          "caption": "A brown dog eagerly eats from a bowl in a kitchen.",
-          "aestheticPath": "videos/dog_a_hps/compressed_158.mp4",
-          "pickscorePath": "videos/dog_pick/compressed_158.mp4",
-          "videocrafterPath": "videos/dog_origin/compressed_158.mp4"
-      },
-      {
-          "caption": "A brown dog eagerly eats from a bowl in a kitchen.",
-          "aestheticPath": "videos/dog_a_hps/compressed_159.mp4",
-          "pickscorePath": "videos/dog_pick/compressed_159.mp4",
-          "videocrafterPath": "videos/dog_origin/compressed_159.mp4"
-      },
-      {
-          "caption": "A brown dog eagerly eats from a bowl in a kitchen.",
-          "aestheticPath": "videos/dog_a_hps/compressed_16.mp4",
-          "pickscorePath": "videos/dog_pick/compressed_16.mp4",
-          "videocrafterPath": "videos/dog_origin/compressed_16.mp4"
-      },
-      {
-          "caption": "A brown dog eagerly eats from a bowl in a kitchen.",
-          "aestheticPath": "videos/dog_a_hps/compressed_160.mp4",
-          "pickscorePath": "videos/dog_pick/compressed_160.mp4",
-          "videocrafterPath": "videos/dog_origin/compressed_160.mp4"
-      },
-      {
-          "caption": "A brown dog eagerly eats from a bowl in a kitchen.",
-          "aestheticPath": "videos/dog_a_hps/compressed_161.mp4",
-          "pickscorePath": "videos/dog_pick/compressed_161.mp4",
-          "videocrafterPath": "videos/dog_origin/compressed_161.mp4"
-      },
-      {
-          "caption": "A brown dog eagerly eats from a bowl in a kitchen.",
-          "aestheticPath": "videos/dog_a_hps/compressed_162.mp4",
-          "pickscorePath": "videos/dog_pick/compressed_162.mp4",
-          "videocrafterPath": "videos/dog_origin/compressed_162.mp4"
-      },
-      {
-          "caption": "A brown dog eagerly eats from a bowl in a kitchen.",
-          "aestheticPath": "videos/dog_a_hps/compressed_163.mp4",
-          "pickscorePath": "videos/dog_pick/compressed_163.mp4",
-          "videocrafterPath": "videos/dog_origin/compressed_163.mp4"
-      },
-      {
-          "caption": "A brown dog eagerly eats from a bowl in a kitchen.",
-          "aestheticPath": "videos/dog_a_hps/compressed_164.mp4",
-          "pickscorePath": "videos/dog_pick/compressed_164.mp4",
-          "videocrafterPath": "videos/dog_origin/compressed_164.mp4"
-      },
-      {
-          "caption": "A brown dog eagerly eats from a bowl in a kitchen.",
-          "aestheticPath": "videos/dog_a_hps/compressed_165.mp4",
-          "pickscorePath": "videos/dog_pick/compressed_165.mp4",
-          "videocrafterPath": "videos/dog_origin/compressed_165.mp4"
-      },
-      {
-          "caption": "A brown dog eagerly eats from a bowl in a kitchen.",
-          "aestheticPath": "videos/dog_a_hps/compressed_166.mp4",
-          "pickscorePath": "videos/dog_pick/compressed_166.mp4",
-          "videocrafterPath": "videos/dog_origin/compressed_166.mp4"
-      },
-      {
-          "caption": "A brown dog eagerly eats from a bowl in a kitchen.",
-          "aestheticPath": "videos/dog_a_hps/compressed_167.mp4",
-          "pickscorePath": "videos/dog_pick/compressed_167.mp4",
-          "videocrafterPath": "videos/dog_origin/compressed_167.mp4"
-      },
-      {
-          "caption": "A brown dog eagerly eats from a bowl in a kitchen.",
-          "aestheticPath": "videos/dog_a_hps/compressed_168.mp4",
-          "pickscorePath": "videos/dog_pick/compressed_168.mp4",
-          "videocrafterPath": "videos/dog_origin/compressed_168.mp4"
-      },
-      {
-          "caption": "A brown dog eagerly eats from a bowl in a kitchen.",
-          "aestheticPath": "videos/dog_a_hps/compressed_169.mp4",
-          "pickscorePath": "videos/dog_pick/compressed_169.mp4",
-          "videocrafterPath": "videos/dog_origin/compressed_169.mp4"
-      },
-      {
-          "caption": "A brown dog eagerly eats from a bowl in a kitchen.",
-          "aestheticPath": "videos/dog_a_hps/compressed_17.mp4",
-          "pickscorePath": "videos/dog_pick/compressed_17.mp4",
-          "videocrafterPath": "videos/dog_origin/compressed_17.mp4"
-      },
-      {
-          "caption": "A brown dog eagerly eats from a bowl in a kitchen.",
-          "aestheticPath": "videos/dog_a_hps/compressed_170.mp4",
-          "pickscorePath": "videos/dog_pick/compressed_170.mp4",
-          "videocrafterPath": "videos/dog_origin/compressed_170.mp4"
-      },
-      {
-          "caption": "A brown dog eagerly eats from a bowl in a kitchen.",
-          "aestheticPath": "videos/dog_a_hps/compressed_171.mp4",
-          "pickscorePath": "videos/dog_pick/compressed_171.mp4",
-          "videocrafterPath": "videos/dog_origin/compressed_171.mp4"
-      },
-      {
-          "caption": "A brown dog eagerly eats from a bowl in a kitchen.",
-          "aestheticPath": "videos/dog_a_hps/compressed_172.mp4",
-          "pickscorePath": "videos/dog_pick/compressed_172.mp4",
-          "videocrafterPath": "videos/dog_origin/compressed_172.mp4"
-      },
-      {
-          "caption": "A brown dog eagerly eats from a bowl in a kitchen.",
-          "aestheticPath": "videos/dog_a_hps/compressed_173.mp4",
-          "pickscorePath": "videos/dog_pick/compressed_173.mp4",
-          "videocrafterPath": "videos/dog_origin/compressed_173.mp4"
-      },
-      {
-          "caption": "A brown dog eagerly eats from a bowl in a kitchen.",
-          "aestheticPath": "videos/dog_a_hps/compressed_174.mp4",
-          "pickscorePath": "videos/dog_pick/compressed_174.mp4",
-          "videocrafterPath": "videos/dog_origin/compressed_174.mp4"
-      },
-      {
-          "caption": "A brown dog eagerly eats from a bowl in a kitchen.",
-          "aestheticPath": "videos/dog_a_hps/compressed_175.mp4",
-          "pickscorePath": "videos/dog_pick/compressed_175.mp4",
-          "videocrafterPath": "videos/dog_origin/compressed_175.mp4"
-      },
-      {
-          "caption": "A brown dog eagerly eats from a bowl in a kitchen.",
-          "aestheticPath": "videos/dog_a_hps/compressed_176.mp4",
-          "pickscorePath": "videos/dog_pick/compressed_176.mp4",
-          "videocrafterPath": "videos/dog_origin/compressed_176.mp4"
-      },
-      {
-          "caption": "A brown dog eagerly eats from a bowl in a kitchen.",
-          "aestheticPath": "videos/dog_a_hps/compressed_177.mp4",
-          "pickscorePath": "videos/dog_pick/compressed_177.mp4",
-          "videocrafterPath": "videos/dog_origin/compressed_177.mp4"
-      },
-      {
-          "caption": "A brown dog eagerly eats from a bowl in a kitchen.",
-          "aestheticPath": "videos/dog_a_hps/compressed_178.mp4",
-          "pickscorePath": "videos/dog_pick/compressed_178.mp4",
-          "videocrafterPath": "videos/dog_origin/compressed_178.mp4"
-      },
-      {
-          "caption": "A brown dog eagerly eats from a bowl in a kitchen.",
-          "aestheticPath": "videos/dog_a_hps/compressed_179.mp4",
-          "pickscorePath": "videos/dog_pick/compressed_179.mp4",
-          "videocrafterPath": "videos/dog_origin/compressed_179.mp4"
-      },
-      {
-          "caption": "A brown dog eagerly eats from a bowl in a kitchen.",
-          "aestheticPath": "videos/dog_a_hps/compressed_18.mp4",
-          "pickscorePath": "videos/dog_pick/compressed_18.mp4",
-          "videocrafterPath": "videos/dog_origin/compressed_18.mp4"
-      },
-      {
-          "caption": "A brown dog eagerly eats from a bowl in a kitchen.",
-          "aestheticPath": "videos/dog_a_hps/compressed_180.mp4",
-          "pickscorePath": "videos/dog_pick/compressed_180.mp4",
-          "videocrafterPath": "videos/dog_origin/compressed_180.mp4"
-      },
-      {
-          "caption": "A brown dog eagerly eats from a bowl in a kitchen.",
-          "aestheticPath": "videos/dog_a_hps/compressed_181.mp4",
-          "pickscorePath": "videos/dog_pick/compressed_181.mp4",
-          "videocrafterPath": "videos/dog_origin/compressed_181.mp4"
-      },
-      {
-          "caption": "A brown dog eagerly eats from a bowl in a kitchen.",
-          "aestheticPath": "videos/dog_a_hps/compressed_182.mp4",
-          "pickscorePath": "videos/dog_pick/compressed_182.mp4",
-          "videocrafterPath": "videos/dog_origin/compressed_182.mp4"
-      },
-      {
-          "caption": "A brown dog eagerly eats from a bowl in a kitchen.",
-          "aestheticPath": "videos/dog_a_hps/compressed_183.mp4",
-          "pickscorePath": "videos/dog_pick/compressed_183.mp4",
-          "videocrafterPath": "videos/dog_origin/compressed_183.mp4"
-      },
-      {
-          "caption": "A brown dog eagerly eats from a bowl in a kitchen.",
-          "aestheticPath": "videos/dog_a_hps/compressed_184.mp4",
-          "pickscorePath": "videos/dog_pick/compressed_184.mp4",
-          "videocrafterPath": "videos/dog_origin/compressed_184.mp4"
-      },
-      {
-          "caption": "A brown dog eagerly eats from a bowl in a kitchen.",
-          "aestheticPath": "videos/dog_a_hps/compressed_185.mp4",
-          "pickscorePath": "videos/dog_pick/compressed_185.mp4",
-          "videocrafterPath": "videos/dog_origin/compressed_185.mp4"
-      },
-      {
-          "caption": "A brown dog eagerly eats from a bowl in a kitchen.",
-          "aestheticPath": "videos/dog_a_hps/compressed_186.mp4",
-          "pickscorePath": "videos/dog_pick/compressed_186.mp4",
-          "videocrafterPath": "videos/dog_origin/compressed_186.mp4"
-      },
-      {
-          "caption": "A brown dog eagerly eats from a bowl in a kitchen.",
-          "aestheticPath": "videos/dog_a_hps/compressed_187.mp4",
-          "pickscorePath": "videos/dog_pick/compressed_187.mp4",
-          "videocrafterPath": "videos/dog_origin/compressed_187.mp4"
-      },
-      {
-          "caption": "A brown dog eagerly eats from a bowl in a kitchen.",
-          "aestheticPath": "videos/dog_a_hps/compressed_188.mp4",
-          "pickscorePath": "videos/dog_pick/compressed_188.mp4",
-          "videocrafterPath": "videos/dog_origin/compressed_188.mp4"
-      },
-      {
-          "caption": "A brown dog eagerly eats from a bowl in a kitchen.",
-          "aestheticPath": "videos/dog_a_hps/compressed_189.mp4",
-          "pickscorePath": "videos/dog_pick/compressed_189.mp4",
-          "videocrafterPath": "videos/dog_origin/compressed_189.mp4"
-      },
-      {
-          "caption": "A brown dog eagerly eats from a bowl in a kitchen.",
-          "aestheticPath": "videos/dog_a_hps/compressed_19.mp4",
-          "pickscorePath": "videos/dog_pick/compressed_19.mp4",
-          "videocrafterPath": "videos/dog_origin/compressed_19.mp4"
-      },
-      {
-          "caption": "A brown dog eagerly eats from a bowl in a kitchen.",
-          "aestheticPath": "videos/dog_a_hps/compressed_190.mp4",
-          "pickscorePath": "videos/dog_pick/compressed_190.mp4",
-          "videocrafterPath": "videos/dog_origin/compressed_190.mp4"
-      },
-      {
-          "caption": "A brown dog eagerly eats from a bowl in a kitchen.",
-          "aestheticPath": "videos/dog_a_hps/compressed_191.mp4",
-          "pickscorePath": "videos/dog_pick/compressed_191.mp4",
-          "videocrafterPath": "videos/dog_origin/compressed_191.mp4"
-      },
-      {
-          "caption": "A brown dog eagerly eats from a bowl in a kitchen.",
-          "aestheticPath": "videos/dog_a_hps/compressed_192.mp4",
-          "pickscorePath": "videos/dog_pick/compressed_192.mp4",
-          "videocrafterPath": "videos/dog_origin/compressed_192.mp4"
-      },
-      {
-          "caption": "A brown dog eagerly eats from a bowl in a kitchen.",
-          "aestheticPath": "videos/dog_a_hps/compressed_193.mp4",
-          "pickscorePath": "videos/dog_pick/compressed_193.mp4",
-          "videocrafterPath": "videos/dog_origin/compressed_193.mp4"
-      },
-      {
-          "caption": "A brown dog eagerly eats from a bowl in a kitchen.",
-          "aestheticPath": "videos/dog_a_hps/compressed_194.mp4",
-          "pickscorePath": "videos/dog_pick/compressed_194.mp4",
-          "videocrafterPath": "videos/dog_origin/compressed_194.mp4"
-      },
-      {
-          "caption": "A brown dog eagerly eats from a bowl in a kitchen.",
-          "aestheticPath": "videos/dog_a_hps/compressed_195.mp4",
-          "pickscorePath": "videos/dog_pick/compressed_195.mp4",
-          "videocrafterPath": "videos/dog_origin/compressed_195.mp4"
-      },
-      {
-          "caption": "A brown dog eagerly eats from a bowl in a kitchen.",
-          "aestheticPath": "videos/dog_a_hps/compressed_196.mp4",
-          "pickscorePath": "videos/dog_pick/compressed_196.mp4",
-          "videocrafterPath": "videos/dog_origin/compressed_196.mp4"
-      },
-      {
-          "caption": "A brown dog eagerly eats from a bowl in a kitchen.",
-          "aestheticPath": "videos/dog_a_hps/compressed_197.mp4",
-          "pickscorePath": "videos/dog_pick/compressed_197.mp4",
-          "videocrafterPath": "videos/dog_origin/compressed_197.mp4"
-      },
-      {
-          "caption": "A brown dog eagerly eats from a bowl in a kitchen.",
-          "aestheticPath": "videos/dog_a_hps/compressed_198.mp4",
-          "pickscorePath": "videos/dog_pick/compressed_198.mp4",
-          "videocrafterPath": "videos/dog_origin/compressed_198.mp4"
-      },
-      {
-          "caption": "A brown dog eagerly eats from a bowl in a kitchen.",
-          "aestheticPath": "videos/dog_a_hps/compressed_199.mp4",
-          "pickscorePath": "videos/dog_pick/compressed_199.mp4",
-          "videocrafterPath": "videos/dog_origin/compressed_199.mp4"
-      },
-      {
-          "caption": "A brown dog eagerly eats from a bowl in a kitchen.",
-          "aestheticPath": "videos/dog_a_hps/compressed_2.mp4",
-          "pickscorePath": "videos/dog_pick/compressed_2.mp4",
-          "videocrafterPath": "videos/dog_origin/compressed_2.mp4"
-      },
-      {
-          "caption": "A brown dog eagerly eats from a bowl in a kitchen.",
-          "aestheticPath": "videos/dog_a_hps/compressed_20.mp4",
-          "pickscorePath": "videos/dog_pick/compressed_20.mp4",
-          "videocrafterPath": "videos/dog_origin/compressed_20.mp4"
-      },
-      {
-          "caption": "A brown dog eagerly eats from a bowl in a kitchen.",
-          "aestheticPath": "videos/dog_a_hps/compressed_200.mp4",
-          "pickscorePath": "videos/dog_pick/compressed_200.mp4",
-          "videocrafterPath": "videos/dog_origin/compressed_200.mp4"
-      },
-      {
-          "caption": "A brown dog eagerly eats from a bowl in a kitchen.",
-          "aestheticPath": "videos/dog_a_hps/compressed_201.mp4",
-          "pickscorePath": "videos/dog_pick/compressed_201.mp4",
-          "videocrafterPath": "videos/dog_origin/compressed_201.mp4"
-      },
-      {
-          "caption": "A brown dog eagerly eats from a bowl in a kitchen.",
-          "aestheticPath": "videos/dog_a_hps/compressed_202.mp4",
-          "pickscorePath": "videos/dog_pick/compressed_202.mp4",
-          "videocrafterPath": "videos/dog_origin/compressed_202.mp4"
-      },
-      {
-          "caption": "A brown dog eagerly eats from a bowl in a kitchen.",
-          "aestheticPath": "videos/dog_a_hps/compressed_203.mp4",
-          "pickscorePath": "videos/dog_pick/compressed_203.mp4",
-          "videocrafterPath": "videos/dog_origin/compressed_203.mp4"
-      },
-      {
-          "caption": "A brown dog eagerly eats from a bowl in a kitchen.",
-          "aestheticPath": "videos/dog_a_hps/compressed_204.mp4",
-          "pickscorePath": "videos/dog_pick/compressed_204.mp4",
-          "videocrafterPath": "videos/dog_origin/compressed_204.mp4"
-      },
-      {
-          "caption": "A brown dog eagerly eats from a bowl in a kitchen.",
-          "aestheticPath": "videos/dog_a_hps/compressed_205.mp4",
-          "pickscorePath": "videos/dog_pick/compressed_205.mp4",
-          "videocrafterPath": "videos/dog_origin/compressed_205.mp4"
-      },
-      {
-          "caption": "A brown dog eagerly eats from a bowl in a kitchen.",
-          "aestheticPath": "videos/dog_a_hps/compressed_206.mp4",
-          "pickscorePath": "videos/dog_pick/compressed_206.mp4",
-          "videocrafterPath": "videos/dog_origin/compressed_206.mp4"
-      },
-      {
-          "caption": "A brown dog eagerly eats from a bowl in a kitchen.",
-          "aestheticPath": "videos/dog_a_hps/compressed_207.mp4",
-          "pickscorePath": "videos/dog_pick/compressed_207.mp4",
-          "videocrafterPath": "videos/dog_origin/compressed_207.mp4"
-      },
-      {
-          "caption": "A brown dog eagerly eats from a bowl in a kitchen.",
-          "aestheticPath": "videos/dog_a_hps/compressed_208.mp4",
-          "pickscorePath": "videos/dog_pick/compressed_208.mp4",
-          "videocrafterPath": "videos/dog_origin/compressed_208.mp4"
-      },
-      {
-          "caption": "A brown dog eagerly eats from a bowl in a kitchen.",
-          "aestheticPath": "videos/dog_a_hps/compressed_209.mp4",
-          "pickscorePath": "videos/dog_pick/compressed_209.mp4",
-          "videocrafterPath": "videos/dog_origin/compressed_209.mp4"
-      },
-      {
-          "caption": "A brown dog eagerly eats from a bowl in a kitchen.",
-          "aestheticPath": "videos/dog_a_hps/compressed_21.mp4",
-          "pickscorePath": "videos/dog_pick/compressed_21.mp4",
-          "videocrafterPath": "videos/dog_origin/compressed_21.mp4"
-      },
-      {
-          "caption": "A brown dog eagerly eats from a bowl in a kitchen.",
-          "aestheticPath": "videos/dog_a_hps/compressed_210.mp4",
-          "pickscorePath": "videos/dog_pick/compressed_210.mp4",
-          "videocrafterPath": "videos/dog_origin/compressed_210.mp4"
-      },
-      {
-          "caption": "A brown dog eagerly eats from a bowl in a kitchen.",
-          "aestheticPath": "videos/dog_a_hps/compressed_211.mp4",
-          "pickscorePath": "videos/dog_pick/compressed_211.mp4",
-          "videocrafterPath": "videos/dog_origin/compressed_211.mp4"
-      },
-      {
-          "caption": "A brown dog eagerly eats from a bowl in a kitchen.",
-          "aestheticPath": "videos/dog_a_hps/compressed_212.mp4",
-          "pickscorePath": "videos/dog_pick/compressed_212.mp4",
-          "videocrafterPath": "videos/dog_origin/compressed_212.mp4"
-      },
-      {
-          "caption": "A brown dog eagerly eats from a bowl in a kitchen.",
-          "aestheticPath": "videos/dog_a_hps/compressed_213.mp4",
-          "pickscorePath": "videos/dog_pick/compressed_213.mp4",
-          "videocrafterPath": "videos/dog_origin/compressed_213.mp4"
-      },
-      {
-          "caption": "A brown dog eagerly eats from a bowl in a kitchen.",
-          "aestheticPath": "videos/dog_a_hps/compressed_214.mp4",
-          "pickscorePath": "videos/dog_pick/compressed_214.mp4",
-          "videocrafterPath": "videos/dog_origin/compressed_214.mp4"
-      },
-      {
-          "caption": "A brown dog eagerly eats from a bowl in a kitchen.",
-          "aestheticPath": "videos/dog_a_hps/compressed_215.mp4",
-          "pickscorePath": "videos/dog_pick/compressed_215.mp4",
-          "videocrafterPath": "videos/dog_origin/compressed_215.mp4"
-      },
-      {
-          "caption": "A brown dog eagerly eats from a bowl in a kitchen.",
-          "aestheticPath": "videos/dog_a_hps/compressed_216.mp4",
-          "pickscorePath": "videos/dog_pick/compressed_216.mp4",
-          "videocrafterPath": "videos/dog_origin/compressed_216.mp4"
-      },
-      {
-          "caption": "A brown dog eagerly eats from a bowl in a kitchen.",
-          "aestheticPath": "videos/dog_a_hps/compressed_217.mp4",
-          "pickscorePath": "videos/dog_pick/compressed_217.mp4",
-          "videocrafterPath": "videos/dog_origin/compressed_217.mp4"
-      },
-      {
-          "caption": "A brown dog eagerly eats from a bowl in a kitchen.",
-          "aestheticPath": "videos/dog_a_hps/compressed_218.mp4",
-          "pickscorePath": "videos/dog_pick/compressed_218.mp4",
-          "videocrafterPath": "videos/dog_origin/compressed_218.mp4"
-      },
-      {
-          "caption": "A brown dog eagerly eats from a bowl in a kitchen.",
-          "aestheticPath": "videos/dog_a_hps/compressed_219.mp4",
-          "pickscorePath": "videos/dog_pick/compressed_219.mp4",
-          "videocrafterPath": "videos/dog_origin/compressed_219.mp4"
-      },
-      {
-          "caption": "A brown dog eagerly eats from a bowl in a kitchen.",
-          "aestheticPath": "videos/dog_a_hps/compressed_22.mp4",
-          "pickscorePath": "videos/dog_pick/compressed_22.mp4",
-          "videocrafterPath": "videos/dog_origin/compressed_22.mp4"
-      },
-      {
-          "caption": "A brown dog eagerly eats from a bowl in a kitchen.",
-          "aestheticPath": "videos/dog_a_hps/compressed_220.mp4",
-          "pickscorePath": "videos/dog_pick/compressed_220.mp4",
-          "videocrafterPath": "videos/dog_origin/compressed_220.mp4"
-      },
-      {
-          "caption": "A brown dog eagerly eats from a bowl in a kitchen.",
-          "aestheticPath": "videos/dog_a_hps/compressed_221.mp4",
-          "pickscorePath": "videos/dog_pick/compressed_221.mp4",
-          "videocrafterPath": "videos/dog_origin/compressed_221.mp4"
-      },
-      {
-          "caption": "A brown dog eagerly eats from a bowl in a kitchen.",
-          "aestheticPath": "videos/dog_a_hps/compressed_222.mp4",
-          "pickscorePath": "videos/dog_pick/compressed_222.mp4",
-          "videocrafterPath": "videos/dog_origin/compressed_222.mp4"
-      },
-      {
-          "caption": "A brown dog eagerly eats from a bowl in a kitchen.",
-          "aestheticPath": "videos/dog_a_hps/compressed_223.mp4",
-          "pickscorePath": "videos/dog_pick/compressed_223.mp4",
-          "videocrafterPath": "videos/dog_origin/compressed_223.mp4"
-      },
-      {
-          "caption": "A brown dog eagerly eats from a bowl in a kitchen.",
-          "aestheticPath": "videos/dog_a_hps/compressed_224.mp4",
-          "pickscorePath": "videos/dog_pick/compressed_224.mp4",
-          "videocrafterPath": "videos/dog_origin/compressed_224.mp4"
-      },
-      {
-          "caption": "A brown dog eagerly eats from a bowl in a kitchen.",
-          "aestheticPath": "videos/dog_a_hps/compressed_225.mp4",
-          "pickscorePath": "videos/dog_pick/compressed_225.mp4",
-          "videocrafterPath": "videos/dog_origin/compressed_225.mp4"
-      },
-      {
-          "caption": "A brown dog eagerly eats from a bowl in a kitchen.",
-          "aestheticPath": "videos/dog_a_hps/compressed_226.mp4",
-          "pickscorePath": "videos/dog_pick/compressed_226.mp4",
-          "videocrafterPath": "videos/dog_origin/compressed_226.mp4"
-      },
-      {
-          "caption": "A brown dog eagerly eats from a bowl in a kitchen.",
-          "aestheticPath": "videos/dog_a_hps/compressed_227.mp4",
-          "pickscorePath": "videos/dog_pick/compressed_227.mp4",
-          "videocrafterPath": "videos/dog_origin/compressed_227.mp4"
-      },
-      {
-          "caption": "A brown dog eagerly eats from a bowl in a kitchen.",
-          "aestheticPath": "videos/dog_a_hps/compressed_228.mp4",
-          "pickscorePath": "videos/dog_pick/compressed_228.mp4",
-          "videocrafterPath": "videos/dog_origin/compressed_228.mp4"
-      },
-      {
-          "caption": "A brown dog eagerly eats from a bowl in a kitchen.",
-          "aestheticPath": "videos/dog_a_hps/compressed_229.mp4",
-          "pickscorePath": "videos/dog_pick/compressed_229.mp4",
-          "videocrafterPath": "videos/dog_origin/compressed_229.mp4"
-      },
-      {
-          "caption": "A brown dog eagerly eats from a bowl in a kitchen.",
-          "aestheticPath": "videos/dog_a_hps/compressed_23.mp4",
-          "pickscorePath": "videos/dog_pick/compressed_23.mp4",
-          "videocrafterPath": "videos/dog_origin/compressed_23.mp4"
-      },
-      {
-          "caption": "A brown dog eagerly eats from a bowl in a kitchen.",
-          "aestheticPath": "videos/dog_a_hps/compressed_230.mp4",
-          "pickscorePath": "videos/dog_pick/compressed_230.mp4",
-          "videocrafterPath": "videos/dog_origin/compressed_230.mp4"
-      },
-      {
-          "caption": "A brown dog eagerly eats from a bowl in a kitchen.",
-          "aestheticPath": "videos/dog_a_hps/compressed_231.mp4",
-          "pickscorePath": "videos/dog_pick/compressed_231.mp4",
-          "videocrafterPath": "videos/dog_origin/compressed_231.mp4"
-      },
-      {
-          "caption": "A brown dog eagerly eats from a bowl in a kitchen.",
-          "aestheticPath": "videos/dog_a_hps/compressed_232.mp4",
-          "pickscorePath": "videos/dog_pick/compressed_232.mp4",
-          "videocrafterPath": "videos/dog_origin/compressed_232.mp4"
-      },
-      {
-          "caption": "A brown dog eagerly eats from a bowl in a kitchen.",
-          "aestheticPath": "videos/dog_a_hps/compressed_233.mp4",
-          "pickscorePath": "videos/dog_pick/compressed_233.mp4",
-          "videocrafterPath": "videos/dog_origin/compressed_233.mp4"
-      },
-      {
-          "caption": "A brown dog eagerly eats from a bowl in a kitchen.",
-          "aestheticPath": "videos/dog_a_hps/compressed_234.mp4",
-          "pickscorePath": "videos/dog_pick/compressed_234.mp4",
-          "videocrafterPath": "videos/dog_origin/compressed_234.mp4"
-      },
-      {
-          "caption": "A brown dog eagerly eats from a bowl in a kitchen.",
-          "aestheticPath": "videos/dog_a_hps/compressed_235.mp4",
-          "pickscorePath": "videos/dog_pick/compressed_235.mp4",
-          "videocrafterPath": "videos/dog_origin/compressed_235.mp4"
-      },
-      {
-          "caption": "A brown dog eagerly eats from a bowl in a kitchen.",
-          "aestheticPath": "videos/dog_a_hps/compressed_236.mp4",
-          "pickscorePath": "videos/dog_pick/compressed_236.mp4",
-          "videocrafterPath": "videos/dog_origin/compressed_236.mp4"
-      },
-      {
-          "caption": "A brown dog eagerly eats from a bowl in a kitchen.",
-          "aestheticPath": "videos/dog_a_hps/compressed_237.mp4",
-          "pickscorePath": "videos/dog_pick/compressed_237.mp4",
-          "videocrafterPath": "videos/dog_origin/compressed_237.mp4"
-      },
-      {
-          "caption": "A brown dog eagerly eats from a bowl in a kitchen.",
-          "aestheticPath": "videos/dog_a_hps/compressed_238.mp4",
-          "pickscorePath": "videos/dog_pick/compressed_238.mp4",
-          "videocrafterPath": "videos/dog_origin/compressed_238.mp4"
-      },
-      {
-          "caption": "A brown dog eagerly eats from a bowl in a kitchen.",
-          "aestheticPath": "videos/dog_a_hps/compressed_239.mp4",
-          "pickscorePath": "videos/dog_pick/compressed_239.mp4",
-          "videocrafterPath": "videos/dog_origin/compressed_239.mp4"
-      },
-      {
-          "caption": "A brown dog eagerly eats from a bowl in a kitchen.",
-          "aestheticPath": "videos/dog_a_hps/compressed_24.mp4",
-          "pickscorePath": "videos/dog_pick/compressed_24.mp4",
-          "videocrafterPath": "videos/dog_origin/compressed_24.mp4"
-      },
-      {
-          "caption": "A brown dog eagerly eats from a bowl in a kitchen.",
-          "aestheticPath": "videos/dog_a_hps/compressed_240.mp4",
-          "pickscorePath": "videos/dog_pick/compressed_240.mp4",
-          "videocrafterPath": "videos/dog_origin/compressed_240.mp4"
-      },
-      {
-          "caption": "A brown dog eagerly eats from a bowl in a kitchen.",
-          "aestheticPath": "videos/dog_a_hps/compressed_241.mp4",
-          "pickscorePath": "videos/dog_pick/compressed_241.mp4",
-          "videocrafterPath": "videos/dog_origin/compressed_241.mp4"
-      },
-      {
-          "caption": "A brown dog eagerly eats from a bowl in a kitchen.",
-          "aestheticPath": "videos/dog_a_hps/compressed_242.mp4",
-          "pickscorePath": "videos/dog_pick/compressed_242.mp4",
-          "videocrafterPath": "videos/dog_origin/compressed_242.mp4"
-      },
-      {
-          "caption": "A brown dog eagerly eats from a bowl in a kitchen.",
-          "aestheticPath": "videos/dog_a_hps/compressed_243.mp4",
-          "pickscorePath": "videos/dog_pick/compressed_243.mp4",
-          "videocrafterPath": "videos/dog_origin/compressed_243.mp4"
-      },
-      {
-          "caption": "A brown dog eagerly eats from a bowl in a kitchen.",
-          "aestheticPath": "videos/dog_a_hps/compressed_244.mp4",
-          "pickscorePath": "videos/dog_pick/compressed_244.mp4",
-          "videocrafterPath": "videos/dog_origin/compressed_244.mp4"
-      },
-      {
-          "caption": "A brown dog eagerly eats from a bowl in a kitchen.",
-          "aestheticPath": "videos/dog_a_hps/compressed_245.mp4",
-          "pickscorePath": "videos/dog_pick/compressed_245.mp4",
-          "videocrafterPath": "videos/dog_origin/compressed_245.mp4"
-      },
-      {
-          "caption": "A brown dog eagerly eats from a bowl in a kitchen.",
-          "aestheticPath": "videos/dog_a_hps/compressed_246.mp4",
-          "pickscorePath": "videos/dog_pick/compressed_246.mp4",
-          "videocrafterPath": "videos/dog_origin/compressed_246.mp4"
-      },
-      {
-          "caption": "A brown dog eagerly eats from a bowl in a kitchen.",
-          "aestheticPath": "videos/dog_a_hps/compressed_247.mp4",
-          "pickscorePath": "videos/dog_pick/compressed_247.mp4",
-          "videocrafterPath": "videos/dog_origin/compressed_247.mp4"
-      },
-      {
-          "caption": "A brown dog eagerly eats from a bowl in a kitchen.",
-          "aestheticPath": "videos/dog_a_hps/compressed_248.mp4",
-          "pickscorePath": "videos/dog_pick/compressed_248.mp4",
-          "videocrafterPath": "videos/dog_origin/compressed_248.mp4"
-      },
-      {
-          "caption": "A brown dog eagerly eats from a bowl in a kitchen.",
-          "aestheticPath": "videos/dog_a_hps/compressed_249.mp4",
-          "pickscorePath": "videos/dog_pick/compressed_249.mp4",
-          "videocrafterPath": "videos/dog_origin/compressed_249.mp4"
-      },
-      {
-          "caption": "A brown dog eagerly eats from a bowl in a kitchen.",
-          "aestheticPath": "videos/dog_a_hps/compressed_25.mp4",
-          "pickscorePath": "videos/dog_pick/compressed_25.mp4",
-          "videocrafterPath": "videos/dog_origin/compressed_25.mp4"
-      },
-      {
-          "caption": "A brown dog eagerly eats from a bowl in a kitchen.",
-          "aestheticPath": "videos/dog_a_hps/compressed_250.mp4",
-          "pickscorePath": "videos/dog_pick/compressed_250.mp4",
-          "videocrafterPath": "videos/dog_origin/compressed_250.mp4"
-      },
-      {
-          "caption": "A brown dog eagerly eats from a bowl in a kitchen.",
-          "aestheticPath": "videos/dog_a_hps/compressed_251.mp4",
-          "pickscorePath": "videos/dog_pick/compressed_251.mp4",
-          "videocrafterPath": "videos/dog_origin/compressed_251.mp4"
-      },
-      {
-          "caption": "A brown dog eagerly eats from a bowl in a kitchen.",
-          "aestheticPath": "videos/dog_a_hps/compressed_252.mp4",
-          "pickscorePath": "videos/dog_pick/compressed_252.mp4",
-          "videocrafterPath": "videos/dog_origin/compressed_252.mp4"
-      },
-      {
-          "caption": "A brown dog eagerly eats from a bowl in a kitchen.",
-          "aestheticPath": "videos/dog_a_hps/compressed_253.mp4",
-          "pickscorePath": "videos/dog_pick/compressed_253.mp4",
-          "videocrafterPath": "videos/dog_origin/compressed_253.mp4"
-      },
-      {
-          "caption": "A brown dog eagerly eats from a bowl in a kitchen.",
-          "aestheticPath": "videos/dog_a_hps/compressed_254.mp4",
-          "pickscorePath": "videos/dog_pick/compressed_254.mp4",
-          "videocrafterPath": "videos/dog_origin/compressed_254.mp4"
-      },
-      {
-          "caption": "A brown dog eagerly eats from a bowl in a kitchen.",
-          "aestheticPath": "videos/dog_a_hps/compressed_255.mp4",
-          "pickscorePath": "videos/dog_pick/compressed_255.mp4",
-          "videocrafterPath": "videos/dog_origin/compressed_255.mp4"
-      },
-      {
-          "caption": "A brown dog eagerly eats from a bowl in a kitchen.",
-          "aestheticPath": "videos/dog_a_hps/compressed_256.mp4",
-          "pickscorePath": "videos/dog_pick/compressed_256.mp4",
-          "videocrafterPath": "videos/dog_origin/compressed_256.mp4"
-      },
-      {
-          "caption": "A brown dog eagerly eats from a bowl in a kitchen.",
-          "aestheticPath": "videos/dog_a_hps/compressed_257.mp4",
-          "pickscorePath": "videos/dog_pick/compressed_257.mp4",
-          "videocrafterPath": "videos/dog_origin/compressed_257.mp4"
-      },
-      {
-          "caption": "A brown dog eagerly eats from a bowl in a kitchen.",
-          "aestheticPath": "videos/dog_a_hps/compressed_258.mp4",
-          "pickscorePath": "videos/dog_pick/compressed_258.mp4",
-          "videocrafterPath": "videos/dog_origin/compressed_258.mp4"
-      },
-      {
-          "caption": "A brown dog eagerly eats from a bowl in a kitchen.",
-          "aestheticPath": "videos/dog_a_hps/compressed_259.mp4",
-          "pickscorePath": "videos/dog_pick/compressed_259.mp4",
-          "videocrafterPath": "videos/dog_origin/compressed_259.mp4"
-      },
-      {
-          "caption": "A brown dog eagerly eats from a bowl in a kitchen.",
-          "aestheticPath": "videos/dog_a_hps/compressed_26.mp4",
-          "pickscorePath": "videos/dog_pick/compressed_26.mp4",
-          "videocrafterPath": "videos/dog_origin/compressed_26.mp4"
-      },
-      {
-          "caption": "A brown dog eagerly eats from a bowl in a kitchen.",
-          "aestheticPath": "videos/dog_a_hps/compressed_260.mp4",
-          "pickscorePath": "videos/dog_pick/compressed_260.mp4",
-          "videocrafterPath": "videos/dog_origin/compressed_260.mp4"
-      },
-      {
-          "caption": "A brown dog eagerly eats from a bowl in a kitchen.",
-          "aestheticPath": "videos/dog_a_hps/compressed_261.mp4",
-          "pickscorePath": "videos/dog_pick/compressed_261.mp4",
-          "videocrafterPath": "videos/dog_origin/compressed_261.mp4"
-      },
-      {
-          "caption": "A brown dog eagerly eats from a bowl in a kitchen.",
-          "aestheticPath": "videos/dog_a_hps/compressed_262.mp4",
-          "pickscorePath": "videos/dog_pick/compressed_262.mp4",
-          "videocrafterPath": "videos/dog_origin/compressed_262.mp4"
-      },
-      {
-          "caption": "A brown dog eagerly eats from a bowl in a kitchen.",
-          "aestheticPath": "videos/dog_a_hps/compressed_263.mp4",
-          "pickscorePath": "videos/dog_pick/compressed_263.mp4",
-          "videocrafterPath": "videos/dog_origin/compressed_263.mp4"
-      },
-      {
-          "caption": "A brown dog eagerly eats from a bowl in a kitchen.",
-          "aestheticPath": "videos/dog_a_hps/compressed_264.mp4",
-          "pickscorePath": "videos/dog_pick/compressed_264.mp4",
-          "videocrafterPath": "videos/dog_origin/compressed_264.mp4"
-      },
-      {
-          "caption": "A brown dog eagerly eats from a bowl in a kitchen.",
-          "aestheticPath": "videos/dog_a_hps/compressed_265.mp4",
-          "pickscorePath": "videos/dog_pick/compressed_265.mp4",
-          "videocrafterPath": "videos/dog_origin/compressed_265.mp4"
-      },
-      {
-          "caption": "A brown dog eagerly eats from a bowl in a kitchen.",
-          "aestheticPath": "videos/dog_a_hps/compressed_266.mp4",
-          "pickscorePath": "videos/dog_pick/compressed_266.mp4",
-          "videocrafterPath": "videos/dog_origin/compressed_266.mp4"
-      },
-      {
-          "caption": "A brown dog eagerly eats from a bowl in a kitchen.",
-          "aestheticPath": "videos/dog_a_hps/compressed_267.mp4",
-          "pickscorePath": "videos/dog_pick/compressed_267.mp4",
-          "videocrafterPath": "videos/dog_origin/compressed_267.mp4"
-      },
-      {
-          "caption": "A brown dog eagerly eats from a bowl in a kitchen.",
-          "aestheticPath": "videos/dog_a_hps/compressed_268.mp4",
-          "pickscorePath": "videos/dog_pick/compressed_268.mp4",
-          "videocrafterPath": "videos/dog_origin/compressed_268.mp4"
-      },
-      {
-          "caption": "A brown dog eagerly eats from a bowl in a kitchen.",
-          "aestheticPath": "videos/dog_a_hps/compressed_269.mp4",
-          "pickscorePath": "videos/dog_pick/compressed_269.mp4",
-          "videocrafterPath": "videos/dog_origin/compressed_269.mp4"
-      },
-      {
-          "caption": "A brown dog eagerly eats from a bowl in a kitchen.",
-          "aestheticPath": "videos/dog_a_hps/compressed_27.mp4",
-          "pickscorePath": "videos/dog_pick/compressed_27.mp4",
-          "videocrafterPath": "videos/dog_origin/compressed_27.mp4"
-      },
-      {
-          "caption": "A brown dog eagerly eats from a bowl in a kitchen.",
-          "aestheticPath": "videos/dog_a_hps/compressed_270.mp4",
-          "pickscorePath": "videos/dog_pick/compressed_270.mp4",
-          "videocrafterPath": "videos/dog_origin/compressed_270.mp4"
-      },
-      {
-          "caption": "A brown dog eagerly eats from a bowl in a kitchen.",
-          "aestheticPath": "videos/dog_a_hps/compressed_271.mp4",
-          "pickscorePath": "videos/dog_pick/compressed_271.mp4",
-          "videocrafterPath": "videos/dog_origin/compressed_271.mp4"
-      },
-      {
-          "caption": "A brown dog eagerly eats from a bowl in a kitchen.",
-          "aestheticPath": "videos/dog_a_hps/compressed_272.mp4",
-          "pickscorePath": "videos/dog_pick/compressed_272.mp4",
-          "videocrafterPath": "videos/dog_origin/compressed_272.mp4"
-      },
-      {
-          "caption": "A brown dog eagerly eats from a bowl in a kitchen.",
-          "aestheticPath": "videos/dog_a_hps/compressed_273.mp4",
-          "pickscorePath": "videos/dog_pick/compressed_273.mp4",
-          "videocrafterPath": "videos/dog_origin/compressed_273.mp4"
-      },
-      {
-          "caption": "A brown dog eagerly eats from a bowl in a kitchen.",
-          "aestheticPath": "videos/dog_a_hps/compressed_274.mp4",
-          "pickscorePath": "videos/dog_pick/compressed_274.mp4",
-          "videocrafterPath": "videos/dog_origin/compressed_274.mp4"
-      },
-      {
-          "caption": "A brown dog eagerly eats from a bowl in a kitchen.",
-          "aestheticPath": "videos/dog_a_hps/compressed_275.mp4",
-          "pickscorePath": "videos/dog_pick/compressed_275.mp4",
-          "videocrafterPath": "videos/dog_origin/compressed_275.mp4"
-      },
-      {
-          "caption": "A brown dog eagerly eats from a bowl in a kitchen.",
-          "aestheticPath": "videos/dog_a_hps/compressed_276.mp4",
-          "pickscorePath": "videos/dog_pick/compressed_276.mp4",
-          "videocrafterPath": "videos/dog_origin/compressed_276.mp4"
-      },
-      {
-          "caption": "A brown dog eagerly eats from a bowl in a kitchen.",
-          "aestheticPath": "videos/dog_a_hps/compressed_277.mp4",
-          "pickscorePath": "videos/dog_pick/compressed_277.mp4",
-          "videocrafterPath": "videos/dog_origin/compressed_277.mp4"
-      },
-      {
-          "caption": "A brown dog eagerly eats from a bowl in a kitchen.",
-          "aestheticPath": "videos/dog_a_hps/compressed_278.mp4",
-          "pickscorePath": "videos/dog_pick/compressed_278.mp4",
-          "videocrafterPath": "videos/dog_origin/compressed_278.mp4"
-      },
-      {
-          "caption": "A brown dog eagerly eats from a bowl in a kitchen.",
-          "aestheticPath": "videos/dog_a_hps/compressed_279.mp4",
-          "pickscorePath": "videos/dog_pick/compressed_279.mp4",
-          "videocrafterPath": "videos/dog_origin/compressed_279.mp4"
-      },
-      {
-          "caption": "A brown dog eagerly eats from a bowl in a kitchen.",
-          "aestheticPath": "videos/dog_a_hps/compressed_28.mp4",
-          "pickscorePath": "videos/dog_pick/compressed_28.mp4",
-          "videocrafterPath": "videos/dog_origin/compressed_28.mp4"
-      },
-      {
-          "caption": "A brown dog eagerly eats from a bowl in a kitchen.",
-          "aestheticPath": "videos/dog_a_hps/compressed_280.mp4",
-          "pickscorePath": "videos/dog_pick/compressed_280.mp4",
-          "videocrafterPath": "videos/dog_origin/compressed_280.mp4"
-      },
-      {
-          "caption": "A brown dog eagerly eats from a bowl in a kitchen.",
-          "aestheticPath": "videos/dog_a_hps/compressed_281.mp4",
-          "pickscorePath": "videos/dog_pick/compressed_281.mp4",
-          "videocrafterPath": "videos/dog_origin/compressed_281.mp4"
-      },
-      {
-          "caption": "A brown dog eagerly eats from a bowl in a kitchen.",
-          "aestheticPath": "videos/dog_a_hps/compressed_282.mp4",
-          "pickscorePath": "videos/dog_pick/compressed_282.mp4",
-          "videocrafterPath": "videos/dog_origin/compressed_282.mp4"
-      },
-      {
-          "caption": "A brown dog eagerly eats from a bowl in a kitchen.",
-          "aestheticPath": "videos/dog_a_hps/compressed_283.mp4",
-          "pickscorePath": "videos/dog_pick/compressed_283.mp4",
-          "videocrafterPath": "videos/dog_origin/compressed_283.mp4"
-      },
-      {
-          "caption": "A brown dog eagerly eats from a bowl in a kitchen.",
-          "aestheticPath": "videos/dog_a_hps/compressed_284.mp4",
-          "pickscorePath": "videos/dog_pick/compressed_284.mp4",
-          "videocrafterPath": "videos/dog_origin/compressed_284.mp4"
-      },
-      {
-          "caption": "A brown dog eagerly eats from a bowl in a kitchen.",
-          "aestheticPath": "videos/dog_a_hps/compressed_285.mp4",
-          "pickscorePath": "videos/dog_pick/compressed_285.mp4",
-          "videocrafterPath": "videos/dog_origin/compressed_285.mp4"
-      },
-      {
-          "caption": "A brown dog eagerly eats from a bowl in a kitchen.",
-          "aestheticPath": "videos/dog_a_hps/compressed_286.mp4",
-          "pickscorePath": "videos/dog_pick/compressed_286.mp4",
-          "videocrafterPath": "videos/dog_origin/compressed_286.mp4"
-      },
-      {
-          "caption": "A brown dog eagerly eats from a bowl in a kitchen.",
-          "aestheticPath": "videos/dog_a_hps/compressed_287.mp4",
-          "pickscorePath": "videos/dog_pick/compressed_287.mp4",
-          "videocrafterPath": "videos/dog_origin/compressed_287.mp4"
-      },
-      {
-          "caption": "A brown dog eagerly eats from a bowl in a kitchen.",
-          "aestheticPath": "videos/dog_a_hps/compressed_288.mp4",
-          "pickscorePath": "videos/dog_pick/compressed_288.mp4",
-          "videocrafterPath": "videos/dog_origin/compressed_288.mp4"
-      },
-      {
-          "caption": "A brown dog eagerly eats from a bowl in a kitchen.",
-          "aestheticPath": "videos/dog_a_hps/compressed_289.mp4",
-          "pickscorePath": "videos/dog_pick/compressed_289.mp4",
-          "videocrafterPath": "videos/dog_origin/compressed_289.mp4"
-      },
-      {
-          "caption": "A brown dog eagerly eats from a bowl in a kitchen.",
-          "aestheticPath": "videos/dog_a_hps/compressed_29.mp4",
-          "pickscorePath": "videos/dog_pick/compressed_29.mp4",
-          "videocrafterPath": "videos/dog_origin/compressed_29.mp4"
-      },
-      {
-          "caption": "A brown dog eagerly eats from a bowl in a kitchen.",
-          "aestheticPath": "videos/dog_a_hps/compressed_290.mp4",
-          "pickscorePath": "videos/dog_pick/compressed_290.mp4",
-          "videocrafterPath": "videos/dog_origin/compressed_290.mp4"
-      },
-      {
-          "caption": "A brown dog eagerly eats from a bowl in a kitchen.",
-          "aestheticPath": "videos/dog_a_hps/compressed_291.mp4",
-          "pickscorePath": "videos/dog_pick/compressed_291.mp4",
-          "videocrafterPath": "videos/dog_origin/compressed_291.mp4"
-      },
-      {
-          "caption": "A brown dog eagerly eats from a bowl in a kitchen.",
-          "aestheticPath": "videos/dog_a_hps/compressed_292.mp4",
-          "pickscorePath": "videos/dog_pick/compressed_292.mp4",
-          "videocrafterPath": "videos/dog_origin/compressed_292.mp4"
-      },
-      {
-          "caption": "A brown dog eagerly eats from a bowl in a kitchen.",
-          "aestheticPath": "videos/dog_a_hps/compressed_293.mp4",
-          "pickscorePath": "videos/dog_pick/compressed_293.mp4",
-          "videocrafterPath": "videos/dog_origin/compressed_293.mp4"
-      },
-      {
-          "caption": "A brown dog eagerly eats from a bowl in a kitchen.",
-          "aestheticPath": "videos/dog_a_hps/compressed_294.mp4",
-          "pickscorePath": "videos/dog_pick/compressed_294.mp4",
-          "videocrafterPath": "videos/dog_origin/compressed_294.mp4"
-      },
-      {
-          "caption": "A brown dog eagerly eats from a bowl in a kitchen.",
-          "aestheticPath": "videos/dog_a_hps/compressed_295.mp4",
-          "pickscorePath": "videos/dog_pick/compressed_295.mp4",
-          "videocrafterPath": "videos/dog_origin/compressed_295.mp4"
-      },
-      {
-          "caption": "A brown dog eagerly eats from a bowl in a kitchen.",
-          "aestheticPath": "videos/dog_a_hps/compressed_296.mp4",
-          "pickscorePath": "videos/dog_pick/compressed_296.mp4",
-          "videocrafterPath": "videos/dog_origin/compressed_296.mp4"
-      },
-      {
-          "caption": "A brown dog eagerly eats from a bowl in a kitchen.",
-          "aestheticPath": "videos/dog_a_hps/compressed_297.mp4",
-          "pickscorePath": "videos/dog_pick/compressed_297.mp4",
-          "videocrafterPath": "videos/dog_origin/compressed_297.mp4"
-      },
-      {
-          "caption": "A brown dog eagerly eats from a bowl in a kitchen.",
-          "aestheticPath": "videos/dog_a_hps/compressed_298.mp4",
-          "pickscorePath": "videos/dog_pick/compressed_298.mp4",
-          "videocrafterPath": "videos/dog_origin/compressed_298.mp4"
-      },
-      {
-          "caption": "A brown dog eagerly eats from a bowl in a kitchen.",
-          "aestheticPath": "videos/dog_a_hps/compressed_299.mp4",
-          "pickscorePath": "videos/dog_pick/compressed_299.mp4",
-          "videocrafterPath": "videos/dog_origin/compressed_299.mp4"
-      },
-      {
-          "caption": "A brown dog eagerly eats from a bowl in a kitchen.",
-          "aestheticPath": "videos/dog_a_hps/compressed_3.mp4",
-          "pickscorePath": "videos/dog_pick/compressed_3.mp4",
-          "videocrafterPath": "videos/dog_origin/compressed_3.mp4"
-      },
-      {
-          "caption": "A brown dog eagerly eats from a bowl in a kitchen.",
-          "aestheticPath": "videos/dog_a_hps/compressed_30.mp4",
-          "pickscorePath": "videos/dog_pick/compressed_30.mp4",
-          "videocrafterPath": "videos/dog_origin/compressed_30.mp4"
-      },
-      {
-          "caption": "A brown dog eagerly eats from a bowl in a kitchen.",
-          "aestheticPath": "videos/dog_a_hps/compressed_300.mp4",
-          "pickscorePath": "videos/dog_pick/compressed_300.mp4",
-          "videocrafterPath": "videos/dog_origin/compressed_300.mp4"
-      },
-      {
-          "caption": "A brown dog eagerly eats from a bowl in a kitchen.",
-          "aestheticPath": "videos/dog_a_hps/compressed_301.mp4",
-          "pickscorePath": "videos/dog_pick/compressed_301.mp4",
-          "videocrafterPath": "videos/dog_origin/compressed_301.mp4"
-      },
-      {
-          "caption": "A brown dog eagerly eats from a bowl in a kitchen.",
-          "aestheticPath": "videos/dog_a_hps/compressed_302.mp4",
-          "pickscorePath": "videos/dog_pick/compressed_302.mp4",
-          "videocrafterPath": "videos/dog_origin/compressed_302.mp4"
-      },
-      {
-          "caption": "A brown dog eagerly eats from a bowl in a kitchen.",
-          "aestheticPath": "videos/dog_a_hps/compressed_303.mp4",
-          "pickscorePath": "videos/dog_pick/compressed_303.mp4",
-          "videocrafterPath": "videos/dog_origin/compressed_303.mp4"
-      },
-      {
-          "caption": "A brown dog eagerly eats from a bowl in a kitchen.",
-          "aestheticPath": "videos/dog_a_hps/compressed_304.mp4",
-          "pickscorePath": "videos/dog_pick/compressed_304.mp4",
-          "videocrafterPath": "videos/dog_origin/compressed_304.mp4"
-      },
-      {
-          "caption": "A brown dog eagerly eats from a bowl in a kitchen.",
-          "aestheticPath": "videos/dog_a_hps/compressed_305.mp4",
-          "pickscorePath": "videos/dog_pick/compressed_305.mp4",
-          "videocrafterPath": "videos/dog_origin/compressed_305.mp4"
-      },
-      {
-          "caption": "A brown dog eagerly eats from a bowl in a kitchen.",
-          "aestheticPath": "videos/dog_a_hps/compressed_306.mp4",
-          "pickscorePath": "videos/dog_pick/compressed_306.mp4",
-          "videocrafterPath": "videos/dog_origin/compressed_306.mp4"
-      },
-      {
-          "caption": "A brown dog eagerly eats from a bowl in a kitchen.",
-          "aestheticPath": "videos/dog_a_hps/compressed_307.mp4",
-          "pickscorePath": "videos/dog_pick/compressed_307.mp4",
-          "videocrafterPath": "videos/dog_origin/compressed_307.mp4"
-      },
-      {
-          "caption": "A brown dog eagerly eats from a bowl in a kitchen.",
-          "aestheticPath": "videos/dog_a_hps/compressed_308.mp4",
-          "pickscorePath": "videos/dog_pick/compressed_308.mp4",
-          "videocrafterPath": "videos/dog_origin/compressed_308.mp4"
-      },
-      {
-          "caption": "A brown dog eagerly eats from a bowl in a kitchen.",
-          "aestheticPath": "videos/dog_a_hps/compressed_309.mp4",
-          "pickscorePath": "videos/dog_pick/compressed_309.mp4",
-          "videocrafterPath": "videos/dog_origin/compressed_309.mp4"
-      },
-      {
-          "caption": "A brown dog eagerly eats from a bowl in a kitchen.",
-          "aestheticPath": "videos/dog_a_hps/compressed_31.mp4",
-          "pickscorePath": "videos/dog_pick/compressed_31.mp4",
-          "videocrafterPath": "videos/dog_origin/compressed_31.mp4"
-      },
-      {
-          "caption": "A brown dog eagerly eats from a bowl in a kitchen.",
-          "aestheticPath": "videos/dog_a_hps/compressed_310.mp4",
-          "pickscorePath": "videos/dog_pick/compressed_310.mp4",
-          "videocrafterPath": "videos/dog_origin/compressed_310.mp4"
-      },
-      {
-          "caption": "A brown dog eagerly eats from a bowl in a kitchen.",
-          "aestheticPath": "videos/dog_a_hps/compressed_311.mp4",
-          "pickscorePath": "videos/dog_pick/compressed_311.mp4",
-          "videocrafterPath": "videos/dog_origin/compressed_311.mp4"
-      },
-      {
-          "caption": "A brown dog eagerly eats from a bowl in a kitchen.",
-          "aestheticPath": "videos/dog_a_hps/compressed_312.mp4",
-          "pickscorePath": "videos/dog_pick/compressed_312.mp4",
-          "videocrafterPath": "videos/dog_origin/compressed_312.mp4"
-      },
-      {
-          "caption": "A brown dog eagerly eats from a bowl in a kitchen.",
-          "aestheticPath": "videos/dog_a_hps/compressed_313.mp4",
-          "pickscorePath": "videos/dog_pick/compressed_313.mp4",
-          "videocrafterPath": "videos/dog_origin/compressed_313.mp4"
-      },
-      {
-          "caption": "A brown dog eagerly eats from a bowl in a kitchen.",
-          "aestheticPath": "videos/dog_a_hps/compressed_314.mp4",
-          "pickscorePath": "videos/dog_pick/compressed_314.mp4",
-          "videocrafterPath": "videos/dog_origin/compressed_314.mp4"
-      },
-      {
-          "caption": "A brown dog eagerly eats from a bowl in a kitchen.",
-          "aestheticPath": "videos/dog_a_hps/compressed_315.mp4",
-          "pickscorePath": "videos/dog_pick/compressed_315.mp4",
-          "videocrafterPath": "videos/dog_origin/compressed_315.mp4"
-      },
-      {
-          "caption": "A brown dog eagerly eats from a bowl in a kitchen.",
-          "aestheticPath": "videos/dog_a_hps/compressed_316.mp4",
-          "pickscorePath": "videos/dog_pick/compressed_316.mp4",
-          "videocrafterPath": "videos/dog_origin/compressed_316.mp4"
-      },
-      {
-          "caption": "A brown dog eagerly eats from a bowl in a kitchen.",
-          "aestheticPath": "videos/dog_a_hps/compressed_317.mp4",
-          "pickscorePath": "videos/dog_pick/compressed_317.mp4",
-          "videocrafterPath": "videos/dog_origin/compressed_317.mp4"
-      },
-      {
-          "caption": "A brown dog eagerly eats from a bowl in a kitchen.",
-          "aestheticPath": "videos/dog_a_hps/compressed_318.mp4",
-          "pickscorePath": "videos/dog_pick/compressed_318.mp4",
-          "videocrafterPath": "videos/dog_origin/compressed_318.mp4"
-      },
-      {
-          "caption": "A brown dog eagerly eats from a bowl in a kitchen.",
-          "aestheticPath": "videos/dog_a_hps/compressed_319.mp4",
-          "pickscorePath": "videos/dog_pick/compressed_319.mp4",
-          "videocrafterPath": "videos/dog_origin/compressed_319.mp4"
-      },
-      {
-          "caption": "A brown dog eagerly eats from a bowl in a kitchen.",
-          "aestheticPath": "videos/dog_a_hps/compressed_32.mp4",
-          "pickscorePath": "videos/dog_pick/compressed_32.mp4",
-          "videocrafterPath": "videos/dog_origin/compressed_32.mp4"
-      },
-      {
-          "caption": "A brown dog eagerly eats from a bowl in a kitchen.",
-          "aestheticPath": "videos/dog_a_hps/compressed_320.mp4",
-          "pickscorePath": "videos/dog_pick/compressed_320.mp4",
-          "videocrafterPath": "videos/dog_origin/compressed_320.mp4"
-      },
-      {
-          "caption": "A brown dog eagerly eats from a bowl in a kitchen.",
-          "aestheticPath": "videos/dog_a_hps/compressed_321.mp4",
-          "pickscorePath": "videos/dog_pick/compressed_321.mp4",
-          "videocrafterPath": "videos/dog_origin/compressed_321.mp4"
-      },
-      {
-          "caption": "A brown dog eagerly eats from a bowl in a kitchen.",
-          "aestheticPath": "videos/dog_a_hps/compressed_322.mp4",
-          "pickscorePath": "videos/dog_pick/compressed_322.mp4",
-          "videocrafterPath": "videos/dog_origin/compressed_322.mp4"
-      },
-      {
-          "caption": "A brown dog eagerly eats from a bowl in a kitchen.",
-          "aestheticPath": "videos/dog_a_hps/compressed_323.mp4",
-          "pickscorePath": "videos/dog_pick/compressed_323.mp4",
-          "videocrafterPath": "videos/dog_origin/compressed_323.mp4"
-      },
-      {
-          "caption": "A brown dog eagerly eats from a bowl in a kitchen.",
-          "aestheticPath": "videos/dog_a_hps/compressed_324.mp4",
-          "pickscorePath": "videos/dog_pick/compressed_324.mp4",
-          "videocrafterPath": "videos/dog_origin/compressed_324.mp4"
-      },
-      {
-          "caption": "A brown dog eagerly eats from a bowl in a kitchen.",
-          "aestheticPath": "videos/dog_a_hps/compressed_325.mp4",
-          "pickscorePath": "videos/dog_pick/compressed_325.mp4",
-          "videocrafterPath": "videos/dog_origin/compressed_325.mp4"
-      },
-      {
-          "caption": "A brown dog eagerly eats from a bowl in a kitchen.",
-          "aestheticPath": "videos/dog_a_hps/compressed_326.mp4",
-          "pickscorePath": "videos/dog_pick/compressed_326.mp4",
-          "videocrafterPath": "videos/dog_origin/compressed_326.mp4"
-      },
-      {
-          "caption": "A brown dog eagerly eats from a bowl in a kitchen.",
-          "aestheticPath": "videos/dog_a_hps/compressed_327.mp4",
-          "pickscorePath": "videos/dog_pick/compressed_327.mp4",
-          "videocrafterPath": "videos/dog_origin/compressed_327.mp4"
-      },
-      {
-          "caption": "A brown dog eagerly eats from a bowl in a kitchen.",
-          "aestheticPath": "videos/dog_a_hps/compressed_328.mp4",
-          "pickscorePath": "videos/dog_pick/compressed_328.mp4",
-          "videocrafterPath": "videos/dog_origin/compressed_328.mp4"
-      },
-      {
-          "caption": "A brown dog eagerly eats from a bowl in a kitchen.",
-          "aestheticPath": "videos/dog_a_hps/compressed_329.mp4",
-          "pickscorePath": "videos/dog_pick/compressed_329.mp4",
-          "videocrafterPath": "videos/dog_origin/compressed_329.mp4"
-      },
-      {
-          "caption": "A brown dog eagerly eats from a bowl in a kitchen.",
-          "aestheticPath": "videos/dog_a_hps/compressed_33.mp4",
-          "pickscorePath": "videos/dog_pick/compressed_33.mp4",
-          "videocrafterPath": "videos/dog_origin/compressed_33.mp4"
-      },
-      {
-          "caption": "A brown dog eagerly eats from a bowl in a kitchen.",
-          "aestheticPath": "videos/dog_a_hps/compressed_330.mp4",
-          "pickscorePath": "videos/dog_pick/compressed_330.mp4",
-          "videocrafterPath": "videos/dog_origin/compressed_330.mp4"
-      },
-      {
-          "caption": "A brown dog eagerly eats from a bowl in a kitchen.",
-          "aestheticPath": "videos/dog_a_hps/compressed_331.mp4",
-          "pickscorePath": "videos/dog_pick/compressed_331.mp4",
-          "videocrafterPath": "videos/dog_origin/compressed_331.mp4"
-      },
-      {
-          "caption": "A brown dog eagerly eats from a bowl in a kitchen.",
-          "aestheticPath": "videos/dog_a_hps/compressed_332.mp4",
-          "pickscorePath": "videos/dog_pick/compressed_332.mp4",
-          "videocrafterPath": "videos/dog_origin/compressed_332.mp4"
-      },
-      {
-          "caption": "A brown dog eagerly eats from a bowl in a kitchen.",
-          "aestheticPath": "videos/dog_a_hps/compressed_333.mp4",
-          "pickscorePath": "videos/dog_pick/compressed_333.mp4",
-          "videocrafterPath": "videos/dog_origin/compressed_333.mp4"
-      },
-      {
-          "caption": "A brown dog eagerly eats from a bowl in a kitchen.",
-          "aestheticPath": "videos/dog_a_hps/compressed_334.mp4",
-          "pickscorePath": "videos/dog_pick/compressed_334.mp4",
-          "videocrafterPath": "videos/dog_origin/compressed_334.mp4"
-      },
-      {
-          "caption": "A brown dog eagerly eats from a bowl in a kitchen.",
-          "aestheticPath": "videos/dog_a_hps/compressed_335.mp4",
-          "pickscorePath": "videos/dog_pick/compressed_335.mp4",
-          "videocrafterPath": "videos/dog_origin/compressed_335.mp4"
-      },
-      {
-          "caption": "A brown dog eagerly eats from a bowl in a kitchen.",
-          "aestheticPath": "videos/dog_a_hps/compressed_336.mp4",
-          "pickscorePath": "videos/dog_pick/compressed_336.mp4",
-          "videocrafterPath": "videos/dog_origin/compressed_336.mp4"
-      },
-      {
-          "caption": "A brown dog eagerly eats from a bowl in a kitchen.",
-          "aestheticPath": "videos/dog_a_hps/compressed_337.mp4",
-          "pickscorePath": "videos/dog_pick/compressed_337.mp4",
-          "videocrafterPath": "videos/dog_origin/compressed_337.mp4"
-      },
-      {
-          "caption": "A brown dog eagerly eats from a bowl in a kitchen.",
-          "aestheticPath": "videos/dog_a_hps/compressed_338.mp4",
-          "pickscorePath": "videos/dog_pick/compressed_338.mp4",
-          "videocrafterPath": "videos/dog_origin/compressed_338.mp4"
-      },
-      {
-          "caption": "A brown dog eagerly eats from a bowl in a kitchen.",
-          "aestheticPath": "videos/dog_a_hps/compressed_339.mp4",
-          "pickscorePath": "videos/dog_pick/compressed_339.mp4",
-          "videocrafterPath": "videos/dog_origin/compressed_339.mp4"
-      },
-      {
-          "caption": "A brown dog eagerly eats from a bowl in a kitchen.",
-          "aestheticPath": "videos/dog_a_hps/compressed_34.mp4",
-          "pickscorePath": "videos/dog_pick/compressed_34.mp4",
-          "videocrafterPath": "videos/dog_origin/compressed_34.mp4"
-      },
-      {
-          "caption": "A brown dog eagerly eats from a bowl in a kitchen.",
-          "aestheticPath": "videos/dog_a_hps/compressed_340.mp4",
-          "pickscorePath": "videos/dog_pick/compressed_340.mp4",
-          "videocrafterPath": "videos/dog_origin/compressed_340.mp4"
-      },
-      {
-          "caption": "A brown dog eagerly eats from a bowl in a kitchen.",
-          "aestheticPath": "videos/dog_a_hps/compressed_341.mp4",
-          "pickscorePath": "videos/dog_pick/compressed_341.mp4",
-          "videocrafterPath": "videos/dog_origin/compressed_341.mp4"
-      },
-      {
-          "caption": "A brown dog eagerly eats from a bowl in a kitchen.",
-          "aestheticPath": "videos/dog_a_hps/compressed_342.mp4",
-          "pickscorePath": "videos/dog_pick/compressed_342.mp4",
-          "videocrafterPath": "videos/dog_origin/compressed_342.mp4"
-      },
-      {
-          "caption": "A brown dog eagerly eats from a bowl in a kitchen.",
-          "aestheticPath": "videos/dog_a_hps/compressed_343.mp4",
-          "pickscorePath": "videos/dog_pick/compressed_343.mp4",
-          "videocrafterPath": "videos/dog_origin/compressed_343.mp4"
-      },
-      {
-          "caption": "A brown dog eagerly eats from a bowl in a kitchen.",
-          "aestheticPath": "videos/dog_a_hps/compressed_344.mp4",
-          "pickscorePath": "videos/dog_pick/compressed_344.mp4",
-          "videocrafterPath": "videos/dog_origin/compressed_344.mp4"
-      },
-      {
-          "caption": "A brown dog eagerly eats from a bowl in a kitchen.",
-          "aestheticPath": "videos/dog_a_hps/compressed_345.mp4",
-          "pickscorePath": "videos/dog_pick/compressed_345.mp4",
-          "videocrafterPath": "videos/dog_origin/compressed_345.mp4"
-      },
-      {
-          "caption": "A brown dog eagerly eats from a bowl in a kitchen.",
-          "aestheticPath": "videos/dog_a_hps/compressed_346.mp4",
-          "pickscorePath": "videos/dog_pick/compressed_346.mp4",
-          "videocrafterPath": "videos/dog_origin/compressed_346.mp4"
-      },
-      {
-          "caption": "A brown dog eagerly eats from a bowl in a kitchen.",
-          "aestheticPath": "videos/dog_a_hps/compressed_347.mp4",
-          "pickscorePath": "videos/dog_pick/compressed_347.mp4",
-          "videocrafterPath": "videos/dog_origin/compressed_347.mp4"
-      },
-      {
-          "caption": "A brown dog eagerly eats from a bowl in a kitchen.",
-          "aestheticPath": "videos/dog_a_hps/compressed_348.mp4",
-          "pickscorePath": "videos/dog_pick/compressed_348.mp4",
-          "videocrafterPath": "videos/dog_origin/compressed_348.mp4"
-      },
-      {
-          "caption": "A brown dog eagerly eats from a bowl in a kitchen.",
-          "aestheticPath": "videos/dog_a_hps/compressed_349.mp4",
-          "pickscorePath": "videos/dog_pick/compressed_349.mp4",
-          "videocrafterPath": "videos/dog_origin/compressed_349.mp4"
-      },
-      {
-          "caption": "A brown dog eagerly eats from a bowl in a kitchen.",
-          "aestheticPath": "videos/dog_a_hps/compressed_35.mp4",
-          "pickscorePath": "videos/dog_pick/compressed_35.mp4",
-          "videocrafterPath": "videos/dog_origin/compressed_35.mp4"
-      },
-      {
-          "caption": "A brown dog eagerly eats from a bowl in a kitchen.",
-          "aestheticPath": "videos/dog_a_hps/compressed_350.mp4",
-          "pickscorePath": "videos/dog_pick/compressed_350.mp4",
-          "videocrafterPath": "videos/dog_origin/compressed_350.mp4"
-      },
-      {
-          "caption": "A brown dog eagerly eats from a bowl in a kitchen.",
-          "aestheticPath": "videos/dog_a_hps/compressed_351.mp4",
-          "pickscorePath": "videos/dog_pick/compressed_351.mp4",
-          "videocrafterPath": "videos/dog_origin/compressed_351.mp4"
-      },
-      {
-          "caption": "A brown dog eagerly eats from a bowl in a kitchen.",
-          "aestheticPath": "videos/dog_a_hps/compressed_352.mp4",
-          "pickscorePath": "videos/dog_pick/compressed_352.mp4",
-          "videocrafterPath": "videos/dog_origin/compressed_352.mp4"
-      },
-      {
-          "caption": "A brown dog eagerly eats from a bowl in a kitchen.",
-          "aestheticPath": "videos/dog_a_hps/compressed_353.mp4",
-          "pickscorePath": "videos/dog_pick/compressed_353.mp4",
-          "videocrafterPath": "videos/dog_origin/compressed_353.mp4"
-      },
-      {
-          "caption": "A brown dog eagerly eats from a bowl in a kitchen.",
-          "aestheticPath": "videos/dog_a_hps/compressed_354.mp4",
-          "pickscorePath": "videos/dog_pick/compressed_354.mp4",
-          "videocrafterPath": "videos/dog_origin/compressed_354.mp4"
-      },
-      {
-          "caption": "A brown dog eagerly eats from a bowl in a kitchen.",
-          "aestheticPath": "videos/dog_a_hps/compressed_355.mp4",
-          "pickscorePath": "videos/dog_pick/compressed_355.mp4",
-          "videocrafterPath": "videos/dog_origin/compressed_355.mp4"
-      },
-      {
-          "caption": "A brown dog eagerly eats from a bowl in a kitchen.",
-          "aestheticPath": "videos/dog_a_hps/compressed_356.mp4",
-          "pickscorePath": "videos/dog_pick/compressed_356.mp4",
-          "videocrafterPath": "videos/dog_origin/compressed_356.mp4"
-      },
-      {
-          "caption": "A brown dog eagerly eats from a bowl in a kitchen.",
-          "aestheticPath": "videos/dog_a_hps/compressed_357.mp4",
-          "pickscorePath": "videos/dog_pick/compressed_357.mp4",
-          "videocrafterPath": "videos/dog_origin/compressed_357.mp4"
-      },
-      {
-          "caption": "A brown dog eagerly eats from a bowl in a kitchen.",
-          "aestheticPath": "videos/dog_a_hps/compressed_358.mp4",
-          "pickscorePath": "videos/dog_pick/compressed_358.mp4",
-          "videocrafterPath": "videos/dog_origin/compressed_358.mp4"
-      },
-      {
-          "caption": "A brown dog eagerly eats from a bowl in a kitchen.",
-          "aestheticPath": "videos/dog_a_hps/compressed_359.mp4",
-          "pickscorePath": "videos/dog_pick/compressed_359.mp4",
-          "videocrafterPath": "videos/dog_origin/compressed_359.mp4"
-      },
-      {
-          "caption": "A brown dog eagerly eats from a bowl in a kitchen.",
-          "aestheticPath": "videos/dog_a_hps/compressed_36.mp4",
-          "pickscorePath": "videos/dog_pick/compressed_36.mp4",
-          "videocrafterPath": "videos/dog_origin/compressed_36.mp4"
-      },
-      {
-          "caption": "A brown dog eagerly eats from a bowl in a kitchen.",
-          "aestheticPath": "videos/dog_a_hps/compressed_360.mp4",
-          "pickscorePath": "videos/dog_pick/compressed_360.mp4",
-          "videocrafterPath": "videos/dog_origin/compressed_360.mp4"
-      },
-      {
-          "caption": "A brown dog eagerly eats from a bowl in a kitchen.",
-          "aestheticPath": "videos/dog_a_hps/compressed_361.mp4",
-          "pickscorePath": "videos/dog_pick/compressed_361.mp4",
-          "videocrafterPath": "videos/dog_origin/compressed_361.mp4"
-      },
-      {
-          "caption": "A brown dog eagerly eats from a bowl in a kitchen.",
-          "aestheticPath": "videos/dog_a_hps/compressed_362.mp4",
-          "pickscorePath": "videos/dog_pick/compressed_362.mp4",
-          "videocrafterPath": "videos/dog_origin/compressed_362.mp4"
-      },
-      {
-          "caption": "A brown dog eagerly eats from a bowl in a kitchen.",
-          "aestheticPath": "videos/dog_a_hps/compressed_363.mp4",
-          "pickscorePath": "videos/dog_pick/compressed_363.mp4",
-          "videocrafterPath": "videos/dog_origin/compressed_363.mp4"
-      },
-      {
-          "caption": "A brown dog eagerly eats from a bowl in a kitchen.",
-          "aestheticPath": "videos/dog_a_hps/compressed_364.mp4",
-          "pickscorePath": "videos/dog_pick/compressed_364.mp4",
-          "videocrafterPath": "videos/dog_origin/compressed_364.mp4"
-      },
-      {
-          "caption": "A brown dog eagerly eats from a bowl in a kitchen.",
-          "aestheticPath": "videos/dog_a_hps/compressed_365.mp4",
-          "pickscorePath": "videos/dog_pick/compressed_365.mp4",
-          "videocrafterPath": "videos/dog_origin/compressed_365.mp4"
-      },
-      {
-          "caption": "A brown dog eagerly eats from a bowl in a kitchen.",
-          "aestheticPath": "videos/dog_a_hps/compressed_366.mp4",
-          "pickscorePath": "videos/dog_pick/compressed_366.mp4",
-          "videocrafterPath": "videos/dog_origin/compressed_366.mp4"
-      },
-      {
-          "caption": "A brown dog eagerly eats from a bowl in a kitchen.",
-          "aestheticPath": "videos/dog_a_hps/compressed_367.mp4",
-          "pickscorePath": "videos/dog_pick/compressed_367.mp4",
-          "videocrafterPath": "videos/dog_origin/compressed_367.mp4"
-      },
-      {
-          "caption": "A brown dog eagerly eats from a bowl in a kitchen.",
-          "aestheticPath": "videos/dog_a_hps/compressed_368.mp4",
-          "pickscorePath": "videos/dog_pick/compressed_368.mp4",
-          "videocrafterPath": "videos/dog_origin/compressed_368.mp4"
-      },
-      {
-          "caption": "A brown dog eagerly eats from a bowl in a kitchen.",
-          "aestheticPath": "videos/dog_a_hps/compressed_369.mp4",
-          "pickscorePath": "videos/dog_pick/compressed_369.mp4",
-          "videocrafterPath": "videos/dog_origin/compressed_369.mp4"
-      },
-      {
-          "caption": "A brown dog eagerly eats from a bowl in a kitchen.",
-          "aestheticPath": "videos/dog_a_hps/compressed_37.mp4",
-          "pickscorePath": "videos/dog_pick/compressed_37.mp4",
-          "videocrafterPath": "videos/dog_origin/compressed_37.mp4"
-      },
-      {
-          "caption": "A brown dog eagerly eats from a bowl in a kitchen.",
-          "aestheticPath": "videos/dog_a_hps/compressed_370.mp4",
-          "pickscorePath": "videos/dog_pick/compressed_370.mp4",
-          "videocrafterPath": "videos/dog_origin/compressed_370.mp4"
-      },
-      {
-          "caption": "A brown dog eagerly eats from a bowl in a kitchen.",
-          "aestheticPath": "videos/dog_a_hps/compressed_371.mp4",
-          "pickscorePath": "videos/dog_pick/compressed_371.mp4",
-          "videocrafterPath": "videos/dog_origin/compressed_371.mp4"
-      },
-      {
-          "caption": "A brown dog eagerly eats from a bowl in a kitchen.",
-          "aestheticPath": "videos/dog_a_hps/compressed_372.mp4",
-          "pickscorePath": "videos/dog_pick/compressed_372.mp4",
-          "videocrafterPath": "videos/dog_origin/compressed_372.mp4"
-      },
-      {
-          "caption": "A brown dog eagerly eats from a bowl in a kitchen.",
-          "aestheticPath": "videos/dog_a_hps/compressed_373.mp4",
-          "pickscorePath": "videos/dog_pick/compressed_373.mp4",
-          "videocrafterPath": "videos/dog_origin/compressed_373.mp4"
-      },
-      {
-          "caption": "A brown dog eagerly eats from a bowl in a kitchen.",
-          "aestheticPath": "videos/dog_a_hps/compressed_374.mp4",
-          "pickscorePath": "videos/dog_pick/compressed_374.mp4",
-          "videocrafterPath": "videos/dog_origin/compressed_374.mp4"
-      },
-      {
-          "caption": "A brown dog eagerly eats from a bowl in a kitchen.",
-          "aestheticPath": "videos/dog_a_hps/compressed_375.mp4",
-          "pickscorePath": "videos/dog_pick/compressed_375.mp4",
-          "videocrafterPath": "videos/dog_origin/compressed_375.mp4"
-      },
-      {
-          "caption": "A brown dog eagerly eats from a bowl in a kitchen.",
-          "aestheticPath": "videos/dog_a_hps/compressed_376.mp4",
-          "pickscorePath": "videos/dog_pick/compressed_376.mp4",
-          "videocrafterPath": "videos/dog_origin/compressed_376.mp4"
-      },
-      {
-          "caption": "A brown dog eagerly eats from a bowl in a kitchen.",
-          "aestheticPath": "videos/dog_a_hps/compressed_377.mp4",
-          "pickscorePath": "videos/dog_pick/compressed_377.mp4",
-          "videocrafterPath": "videos/dog_origin/compressed_377.mp4"
-      },
-      {
-          "caption": "A brown dog eagerly eats from a bowl in a kitchen.",
-          "aestheticPath": "videos/dog_a_hps/compressed_378.mp4",
-          "pickscorePath": "videos/dog_pick/compressed_378.mp4",
-          "videocrafterPath": "videos/dog_origin/compressed_378.mp4"
-      },
-      {
-          "caption": "A brown dog eagerly eats from a bowl in a kitchen.",
-          "aestheticPath": "videos/dog_a_hps/compressed_379.mp4",
-          "pickscorePath": "videos/dog_pick/compressed_379.mp4",
-          "videocrafterPath": "videos/dog_origin/compressed_379.mp4"
-      },
-      {
-          "caption": "A brown dog eagerly eats from a bowl in a kitchen.",
-          "aestheticPath": "videos/dog_a_hps/compressed_38.mp4",
-          "pickscorePath": "videos/dog_pick/compressed_38.mp4",
-          "videocrafterPath": "videos/dog_origin/compressed_38.mp4"
-      },
-      {
-          "caption": "A brown dog eagerly eats from a bowl in a kitchen.",
-          "aestheticPath": "videos/dog_a_hps/compressed_380.mp4",
-          "pickscorePath": "videos/dog_pick/compressed_380.mp4",
-          "videocrafterPath": "videos/dog_origin/compressed_380.mp4"
-      },
-      {
-          "caption": "A brown dog eagerly eats from a bowl in a kitchen.",
-          "aestheticPath": "videos/dog_a_hps/compressed_381.mp4",
-          "pickscorePath": "videos/dog_pick/compressed_381.mp4",
-          "videocrafterPath": "videos/dog_origin/compressed_381.mp4"
-      },
-      {
-          "caption": "A brown dog eagerly eats from a bowl in a kitchen.",
-          "aestheticPath": "videos/dog_a_hps/compressed_382.mp4",
-          "pickscorePath": "videos/dog_pick/compressed_382.mp4",
-          "videocrafterPath": "videos/dog_origin/compressed_382.mp4"
-      },
-      {
-          "caption": "A brown dog eagerly eats from a bowl in a kitchen.",
-          "aestheticPath": "videos/dog_a_hps/compressed_383.mp4",
-          "pickscorePath": "videos/dog_pick/compressed_383.mp4",
-          "videocrafterPath": "videos/dog_origin/compressed_383.mp4"
-      },
-      {
-          "caption": "A brown dog eagerly eats from a bowl in a kitchen.",
-          "aestheticPath": "videos/dog_a_hps/compressed_384.mp4",
-          "pickscorePath": "videos/dog_pick/compressed_384.mp4",
-          "videocrafterPath": "videos/dog_origin/compressed_384.mp4"
-      },
-      {
-          "caption": "A brown dog eagerly eats from a bowl in a kitchen.",
-          "aestheticPath": "videos/dog_a_hps/compressed_385.mp4",
-          "pickscorePath": "videos/dog_pick/compressed_385.mp4",
-          "videocrafterPath": "videos/dog_origin/compressed_385.mp4"
-      },
-      {
-          "caption": "A brown dog eagerly eats from a bowl in a kitchen.",
-          "aestheticPath": "videos/dog_a_hps/compressed_386.mp4",
-          "pickscorePath": "videos/dog_pick/compressed_386.mp4",
-          "videocrafterPath": "videos/dog_origin/compressed_386.mp4"
-      },
-      {
-          "caption": "A brown dog eagerly eats from a bowl in a kitchen.",
-          "aestheticPath": "videos/dog_a_hps/compressed_387.mp4",
-          "pickscorePath": "videos/dog_pick/compressed_387.mp4",
-          "videocrafterPath": "videos/dog_origin/compressed_387.mp4"
-      },
-      {
-          "caption": "A brown dog eagerly eats from a bowl in a kitchen.",
-          "aestheticPath": "videos/dog_a_hps/compressed_388.mp4",
-          "pickscorePath": "videos/dog_pick/compressed_388.mp4",
-          "videocrafterPath": "videos/dog_origin/compressed_388.mp4"
-      },
-      {
-          "caption": "A brown dog eagerly eats from a bowl in a kitchen.",
-          "aestheticPath": "videos/dog_a_hps/compressed_389.mp4",
-          "pickscorePath": "videos/dog_pick/compressed_389.mp4",
-          "videocrafterPath": "videos/dog_origin/compressed_389.mp4"
-      },
-      {
-          "caption": "A brown dog eagerly eats from a bowl in a kitchen.",
-          "aestheticPath": "videos/dog_a_hps/compressed_39.mp4",
-          "pickscorePath": "videos/dog_pick/compressed_39.mp4",
-          "videocrafterPath": "videos/dog_origin/compressed_39.mp4"
-      },
-      {
-          "caption": "A brown dog eagerly eats from a bowl in a kitchen.",
-          "aestheticPath": "videos/dog_a_hps/compressed_390.mp4",
-          "pickscorePath": "videos/dog_pick/compressed_390.mp4",
-          "videocrafterPath": "videos/dog_origin/compressed_390.mp4"
-      },
-      {
-          "caption": "A brown dog eagerly eats from a bowl in a kitchen.",
-          "aestheticPath": "videos/dog_a_hps/compressed_391.mp4",
-          "pickscorePath": "videos/dog_pick/compressed_391.mp4",
-          "videocrafterPath": "videos/dog_origin/compressed_391.mp4"
-      },
-      {
-          "caption": "A brown dog eagerly eats from a bowl in a kitchen.",
-          "aestheticPath": "videos/dog_a_hps/compressed_392.mp4",
-          "pickscorePath": "videos/dog_pick/compressed_392.mp4",
-          "videocrafterPath": "videos/dog_origin/compressed_392.mp4"
-      },
-      {
-          "caption": "A brown dog eagerly eats from a bowl in a kitchen.",
-          "aestheticPath": "videos/dog_a_hps/compressed_393.mp4",
-          "pickscorePath": "videos/dog_pick/compressed_393.mp4",
-          "videocrafterPath": "videos/dog_origin/compressed_393.mp4"
-      },
-      {
-          "caption": "A brown dog eagerly eats from a bowl in a kitchen.",
-          "aestheticPath": "videos/dog_a_hps/compressed_394.mp4",
-          "pickscorePath": "videos/dog_pick/compressed_394.mp4",
-          "videocrafterPath": "videos/dog_origin/compressed_394.mp4"
-      },
-      {
-          "caption": "A brown dog eagerly eats from a bowl in a kitchen.",
-          "aestheticPath": "videos/dog_a_hps/compressed_395.mp4",
-          "pickscorePath": "videos/dog_pick/compressed_395.mp4",
-          "videocrafterPath": "videos/dog_origin/compressed_395.mp4"
-      },
-      {
-          "caption": "A brown dog eagerly eats from a bowl in a kitchen.",
-          "aestheticPath": "videos/dog_a_hps/compressed_396.mp4",
-          "pickscorePath": "videos/dog_pick/compressed_396.mp4",
-          "videocrafterPath": "videos/dog_origin/compressed_396.mp4"
-      },
-      {
-          "caption": "A brown dog eagerly eats from a bowl in a kitchen.",
-          "aestheticPath": "videos/dog_a_hps/compressed_397.mp4",
-          "pickscorePath": "videos/dog_pick/compressed_397.mp4",
-          "videocrafterPath": "videos/dog_origin/compressed_397.mp4"
-      },
-      {
-          "caption": "A brown dog eagerly eats from a bowl in a kitchen.",
-          "aestheticPath": "videos/dog_a_hps/compressed_398.mp4",
-          "pickscorePath": "videos/dog_pick/compressed_398.mp4",
-          "videocrafterPath": "videos/dog_origin/compressed_398.mp4"
-      },
-      {
-          "caption": "A brown dog eagerly eats from a bowl in a kitchen.",
-          "aestheticPath": "videos/dog_a_hps/compressed_399.mp4",
-          "pickscorePath": "videos/dog_pick/compressed_399.mp4",
-          "videocrafterPath": "videos/dog_origin/compressed_399.mp4"
-      },
-      {
-          "caption": "A brown dog eagerly eats from a bowl in a kitchen.",
-          "aestheticPath": "videos/dog_a_hps/compressed_4.mp4",
-          "pickscorePath": "videos/dog_pick/compressed_4.mp4",
-          "videocrafterPath": "videos/dog_origin/compressed_4.mp4"
-      },
-      {
-          "caption": "A brown dog eagerly eats from a bowl in a kitchen.",
-          "aestheticPath": "videos/dog_a_hps/compressed_40.mp4",
-          "pickscorePath": "videos/dog_pick/compressed_40.mp4",
-          "videocrafterPath": "videos/dog_origin/compressed_40.mp4"
-      },
-      {
-          "caption": "A brown dog eagerly eats from a bowl in a kitchen.",
-          "aestheticPath": "videos/dog_a_hps/compressed_400.mp4",
-          "pickscorePath": "videos/dog_pick/compressed_400.mp4",
-          "videocrafterPath": "videos/dog_origin/compressed_400.mp4"
-      },
-      {
-          "caption": "A brown dog eagerly eats from a bowl in a kitchen.",
-          "aestheticPath": "videos/dog_a_hps/compressed_401.mp4",
-          "pickscorePath": "videos/dog_pick/compressed_401.mp4",
-          "videocrafterPath": "videos/dog_origin/compressed_401.mp4"
-      },
-      {
-          "caption": "A brown dog eagerly eats from a bowl in a kitchen.",
-          "aestheticPath": "videos/dog_a_hps/compressed_402.mp4",
-          "pickscorePath": "videos/dog_pick/compressed_402.mp4",
-          "videocrafterPath": "videos/dog_origin/compressed_402.mp4"
-      },
-      {
-          "caption": "A brown dog eagerly eats from a bowl in a kitchen.",
-          "aestheticPath": "videos/dog_a_hps/compressed_403.mp4",
-          "pickscorePath": "videos/dog_pick/compressed_403.mp4",
-          "videocrafterPath": "videos/dog_origin/compressed_403.mp4"
-      },
-      {
-          "caption": "A brown dog eagerly eats from a bowl in a kitchen.",
-          "aestheticPath": "videos/dog_a_hps/compressed_404.mp4",
-          "pickscorePath": "videos/dog_pick/compressed_404.mp4",
-          "videocrafterPath": "videos/dog_origin/compressed_404.mp4"
-      },
-      {
-          "caption": "A brown dog eagerly eats from a bowl in a kitchen.",
-          "aestheticPath": "videos/dog_a_hps/compressed_405.mp4",
-          "pickscorePath": "videos/dog_pick/compressed_405.mp4",
-          "videocrafterPath": "videos/dog_origin/compressed_405.mp4"
-      },
-      {
-          "caption": "A brown dog eagerly eats from a bowl in a kitchen.",
-          "aestheticPath": "videos/dog_a_hps/compressed_406.mp4",
-          "pickscorePath": "videos/dog_pick/compressed_406.mp4",
-          "videocrafterPath": "videos/dog_origin/compressed_406.mp4"
-      },
-      {
-          "caption": "A brown dog eagerly eats from a bowl in a kitchen.",
-          "aestheticPath": "videos/dog_a_hps/compressed_407.mp4",
-          "pickscorePath": "videos/dog_pick/compressed_407.mp4",
-          "videocrafterPath": "videos/dog_origin/compressed_407.mp4"
-      },
-      {
-          "caption": "A brown dog eagerly eats from a bowl in a kitchen.",
-          "aestheticPath": "videos/dog_a_hps/compressed_408.mp4",
-          "pickscorePath": "videos/dog_pick/compressed_408.mp4",
-          "videocrafterPath": "videos/dog_origin/compressed_408.mp4"
-      },
-      {
-          "caption": "A brown dog eagerly eats from a bowl in a kitchen.",
-          "aestheticPath": "videos/dog_a_hps/compressed_409.mp4",
-          "pickscorePath": "videos/dog_pick/compressed_409.mp4",
-          "videocrafterPath": "videos/dog_origin/compressed_409.mp4"
-      },
-      {
-          "caption": "A brown dog eagerly eats from a bowl in a kitchen.",
-          "aestheticPath": "videos/dog_a_hps/compressed_41.mp4",
-          "pickscorePath": "videos/dog_pick/compressed_41.mp4",
-          "videocrafterPath": "videos/dog_origin/compressed_41.mp4"
-      },
-      {
-          "caption": "A brown dog eagerly eats from a bowl in a kitchen.",
-          "aestheticPath": "videos/dog_a_hps/compressed_410.mp4",
-          "pickscorePath": "videos/dog_pick/compressed_410.mp4",
-          "videocrafterPath": "videos/dog_origin/compressed_410.mp4"
-      },
-      {
-          "caption": "A brown dog eagerly eats from a bowl in a kitchen.",
-          "aestheticPath": "videos/dog_a_hps/compressed_411.mp4",
-          "pickscorePath": "videos/dog_pick/compressed_411.mp4",
-          "videocrafterPath": "videos/dog_origin/compressed_411.mp4"
-      },
-      {
-          "caption": "A brown dog eagerly eats from a bowl in a kitchen.",
-          "aestheticPath": "videos/dog_a_hps/compressed_412.mp4",
-          "pickscorePath": "videos/dog_pick/compressed_412.mp4",
-          "videocrafterPath": "videos/dog_origin/compressed_412.mp4"
-      },
-      {
-          "caption": "A brown dog eagerly eats from a bowl in a kitchen.",
-          "aestheticPath": "videos/dog_a_hps/compressed_413.mp4",
-          "pickscorePath": "videos/dog_pick/compressed_413.mp4",
-          "videocrafterPath": "videos/dog_origin/compressed_413.mp4"
-      },
-      {
-          "caption": "A brown dog eagerly eats from a bowl in a kitchen.",
-          "aestheticPath": "videos/dog_a_hps/compressed_414.mp4",
-          "pickscorePath": "videos/dog_pick/compressed_414.mp4",
-          "videocrafterPath": "videos/dog_origin/compressed_414.mp4"
-      },
-      {
-          "caption": "A brown dog eagerly eats from a bowl in a kitchen.",
-          "aestheticPath": "videos/dog_a_hps/compressed_415.mp4",
-          "pickscorePath": "videos/dog_pick/compressed_415.mp4",
-          "videocrafterPath": "videos/dog_origin/compressed_415.mp4"
-      },
-      {
-          "caption": "A brown dog eagerly eats from a bowl in a kitchen.",
-          "aestheticPath": "videos/dog_a_hps/compressed_416.mp4",
-          "pickscorePath": "videos/dog_pick/compressed_416.mp4",
-          "videocrafterPath": "videos/dog_origin/compressed_416.mp4"
-      },
-      {
-          "caption": "A brown dog eagerly eats from a bowl in a kitchen.",
-          "aestheticPath": "videos/dog_a_hps/compressed_417.mp4",
-          "pickscorePath": "videos/dog_pick/compressed_417.mp4",
-          "videocrafterPath": "videos/dog_origin/compressed_417.mp4"
-      },
-      {
-          "caption": "A brown dog eagerly eats from a bowl in a kitchen.",
-          "aestheticPath": "videos/dog_a_hps/compressed_418.mp4",
-          "pickscorePath": "videos/dog_pick/compressed_418.mp4",
-          "videocrafterPath": "videos/dog_origin/compressed_418.mp4"
-      },
-      {
-          "caption": "A brown dog eagerly eats from a bowl in a kitchen.",
-          "aestheticPath": "videos/dog_a_hps/compressed_419.mp4",
-          "pickscorePath": "videos/dog_pick/compressed_419.mp4",
-          "videocrafterPath": "videos/dog_origin/compressed_419.mp4"
-      },
-      {
-          "caption": "A brown dog eagerly eats from a bowl in a kitchen.",
-          "aestheticPath": "videos/dog_a_hps/compressed_42.mp4",
-          "pickscorePath": "videos/dog_pick/compressed_42.mp4",
-          "videocrafterPath": "videos/dog_origin/compressed_42.mp4"
-      },
-      {
-          "caption": "A brown dog eagerly eats from a bowl in a kitchen.",
-          "aestheticPath": "videos/dog_a_hps/compressed_420.mp4",
-          "pickscorePath": "videos/dog_pick/compressed_420.mp4",
-          "videocrafterPath": "videos/dog_origin/compressed_420.mp4"
-      },
-      {
-          "caption": "A brown dog eagerly eats from a bowl in a kitchen.",
-          "aestheticPath": "videos/dog_a_hps/compressed_421.mp4",
-          "pickscorePath": "videos/dog_pick/compressed_421.mp4",
-          "videocrafterPath": "videos/dog_origin/compressed_421.mp4"
-      },
-      {
-          "caption": "A brown dog eagerly eats from a bowl in a kitchen.",
-          "aestheticPath": "videos/dog_a_hps/compressed_422.mp4",
-          "pickscorePath": "videos/dog_pick/compressed_422.mp4",
-          "videocrafterPath": "videos/dog_origin/compressed_422.mp4"
-      },
-      {
-          "caption": "A brown dog eagerly eats from a bowl in a kitchen.",
-          "aestheticPath": "videos/dog_a_hps/compressed_423.mp4",
-          "pickscorePath": "videos/dog_pick/compressed_423.mp4",
-          "videocrafterPath": "videos/dog_origin/compressed_423.mp4"
-      },
-      {
-          "caption": "A brown dog eagerly eats from a bowl in a kitchen.",
-          "aestheticPath": "videos/dog_a_hps/compressed_424.mp4",
-          "pickscorePath": "videos/dog_pick/compressed_424.mp4",
-          "videocrafterPath": "videos/dog_origin/compressed_424.mp4"
-      },
-      {
-          "caption": "A brown dog eagerly eats from a bowl in a kitchen.",
-          "aestheticPath": "videos/dog_a_hps/compressed_425.mp4",
-          "pickscorePath": "videos/dog_pick/compressed_425.mp4",
-          "videocrafterPath": "videos/dog_origin/compressed_425.mp4"
-      },
-      {
-          "caption": "A brown dog eagerly eats from a bowl in a kitchen.",
-          "aestheticPath": "videos/dog_a_hps/compressed_426.mp4",
-          "pickscorePath": "videos/dog_pick/compressed_426.mp4",
-          "videocrafterPath": "videos/dog_origin/compressed_426.mp4"
-      },
-      {
-          "caption": "A brown dog eagerly eats from a bowl in a kitchen.",
-          "aestheticPath": "videos/dog_a_hps/compressed_427.mp4",
-          "pickscorePath": "videos/dog_pick/compressed_427.mp4",
-          "videocrafterPath": "videos/dog_origin/compressed_427.mp4"
-      },
-      {
-          "caption": "A brown dog eagerly eats from a bowl in a kitchen.",
-          "aestheticPath": "videos/dog_a_hps/compressed_428.mp4",
-          "pickscorePath": "videos/dog_pick/compressed_428.mp4",
-          "videocrafterPath": "videos/dog_origin/compressed_428.mp4"
-      },
-      {
-          "caption": "A brown dog eagerly eats from a bowl in a kitchen.",
-          "aestheticPath": "videos/dog_a_hps/compressed_429.mp4",
-          "pickscorePath": "videos/dog_pick/compressed_429.mp4",
-          "videocrafterPath": "videos/dog_origin/compressed_429.mp4"
-      },
-      {
-          "caption": "A brown dog eagerly eats from a bowl in a kitchen.",
-          "aestheticPath": "videos/dog_a_hps/compressed_43.mp4",
-          "pickscorePath": "videos/dog_pick/compressed_43.mp4",
-          "videocrafterPath": "videos/dog_origin/compressed_43.mp4"
-      },
-      {
-          "caption": "A brown dog eagerly eats from a bowl in a kitchen.",
-          "aestheticPath": "videos/dog_a_hps/compressed_430.mp4",
-          "pickscorePath": "videos/dog_pick/compressed_430.mp4",
-          "videocrafterPath": "videos/dog_origin/compressed_430.mp4"
-      },
-      {
-          "caption": "A brown dog eagerly eats from a bowl in a kitchen.",
-          "aestheticPath": "videos/dog_a_hps/compressed_431.mp4",
-          "pickscorePath": "videos/dog_pick/compressed_431.mp4",
-          "videocrafterPath": "videos/dog_origin/compressed_431.mp4"
-      },
-      {
-          "caption": "A brown dog eagerly eats from a bowl in a kitchen.",
-          "aestheticPath": "videos/dog_a_hps/compressed_432.mp4",
-          "pickscorePath": "videos/dog_pick/compressed_432.mp4",
-          "videocrafterPath": "videos/dog_origin/compressed_432.mp4"
-      },
-      {
-          "caption": "A brown dog eagerly eats from a bowl in a kitchen.",
-          "aestheticPath": "videos/dog_a_hps/compressed_433.mp4",
-          "pickscorePath": "videos/dog_pick/compressed_433.mp4",
-          "videocrafterPath": "videos/dog_origin/compressed_433.mp4"
-      },
-      {
-          "caption": "A brown dog eagerly eats from a bowl in a kitchen.",
-          "aestheticPath": "videos/dog_a_hps/compressed_434.mp4",
-          "pickscorePath": "videos/dog_pick/compressed_434.mp4",
-          "videocrafterPath": "videos/dog_origin/compressed_434.mp4"
-      },
-      {
-          "caption": "A brown dog eagerly eats from a bowl in a kitchen.",
-          "aestheticPath": "videos/dog_a_hps/compressed_435.mp4",
-          "pickscorePath": "videos/dog_pick/compressed_435.mp4",
-          "videocrafterPath": "videos/dog_origin/compressed_435.mp4"
-      },
-      {
-          "caption": "A brown dog eagerly eats from a bowl in a kitchen.",
-          "aestheticPath": "videos/dog_a_hps/compressed_436.mp4",
-          "pickscorePath": "videos/dog_pick/compressed_436.mp4",
-          "videocrafterPath": "videos/dog_origin/compressed_436.mp4"
-      },
-      {
-          "caption": "A brown dog eagerly eats from a bowl in a kitchen.",
-          "aestheticPath": "videos/dog_a_hps/compressed_437.mp4",
-          "pickscorePath": "videos/dog_pick/compressed_437.mp4",
-          "videocrafterPath": "videos/dog_origin/compressed_437.mp4"
-      },
-      {
-          "caption": "A brown dog eagerly eats from a bowl in a kitchen.",
-          "aestheticPath": "videos/dog_a_hps/compressed_438.mp4",
-          "pickscorePath": "videos/dog_pick/compressed_438.mp4",
-          "videocrafterPath": "videos/dog_origin/compressed_438.mp4"
-      },
-      {
-          "caption": "A brown dog eagerly eats from a bowl in a kitchen.",
-          "aestheticPath": "videos/dog_a_hps/compressed_439.mp4",
-          "pickscorePath": "videos/dog_pick/compressed_439.mp4",
-          "videocrafterPath": "videos/dog_origin/compressed_439.mp4"
-      },
-      {
-          "caption": "A brown dog eagerly eats from a bowl in a kitchen.",
-          "aestheticPath": "videos/dog_a_hps/compressed_44.mp4",
-          "pickscorePath": "videos/dog_pick/compressed_44.mp4",
-          "videocrafterPath": "videos/dog_origin/compressed_44.mp4"
-      },
-      {
-          "caption": "A brown dog eagerly eats from a bowl in a kitchen.",
-          "aestheticPath": "videos/dog_a_hps/compressed_440.mp4",
-          "pickscorePath": "videos/dog_pick/compressed_440.mp4",
-          "videocrafterPath": "videos/dog_origin/compressed_440.mp4"
-      },
-      {
-          "caption": "A brown dog eagerly eats from a bowl in a kitchen.",
-          "aestheticPath": "videos/dog_a_hps/compressed_441.mp4",
-          "pickscorePath": "videos/dog_pick/compressed_441.mp4",
-          "videocrafterPath": "videos/dog_origin/compressed_441.mp4"
-      },
-      {
-          "caption": "A brown dog eagerly eats from a bowl in a kitchen.",
-          "aestheticPath": "videos/dog_a_hps/compressed_442.mp4",
-          "pickscorePath": "videos/dog_pick/compressed_442.mp4",
-          "videocrafterPath": "videos/dog_origin/compressed_442.mp4"
-      },
-      {
-          "caption": "A brown dog eagerly eats from a bowl in a kitchen.",
-          "aestheticPath": "videos/dog_a_hps/compressed_443.mp4",
-          "pickscorePath": "videos/dog_pick/compressed_443.mp4",
-          "videocrafterPath": "videos/dog_origin/compressed_443.mp4"
-      },
-      {
-          "caption": "A brown dog eagerly eats from a bowl in a kitchen.",
-          "aestheticPath": "videos/dog_a_hps/compressed_444.mp4",
-          "pickscorePath": "videos/dog_pick/compressed_444.mp4",
-          "videocrafterPath": "videos/dog_origin/compressed_444.mp4"
-      },
-      {
-          "caption": "A brown dog eagerly eats from a bowl in a kitchen.",
-          "aestheticPath": "videos/dog_a_hps/compressed_445.mp4",
-          "pickscorePath": "videos/dog_pick/compressed_445.mp4",
-          "videocrafterPath": "videos/dog_origin/compressed_445.mp4"
-      },
-      {
-          "caption": "A brown dog eagerly eats from a bowl in a kitchen.",
-          "aestheticPath": "videos/dog_a_hps/compressed_446.mp4",
-          "pickscorePath": "videos/dog_pick/compressed_446.mp4",
-          "videocrafterPath": "videos/dog_origin/compressed_446.mp4"
-      },
-      {
-          "caption": "A brown dog eagerly eats from a bowl in a kitchen.",
-          "aestheticPath": "videos/dog_a_hps/compressed_447.mp4",
-          "pickscorePath": "videos/dog_pick/compressed_447.mp4",
-          "videocrafterPath": "videos/dog_origin/compressed_447.mp4"
-      },
-      {
-          "caption": "A brown dog eagerly eats from a bowl in a kitchen.",
-          "aestheticPath": "videos/dog_a_hps/compressed_448.mp4",
-          "pickscorePath": "videos/dog_pick/compressed_448.mp4",
-          "videocrafterPath": "videos/dog_origin/compressed_448.mp4"
-      },
-      {
-          "caption": "A brown dog eagerly eats from a bowl in a kitchen.",
-          "aestheticPath": "videos/dog_a_hps/compressed_449.mp4",
-          "pickscorePath": "videos/dog_pick/compressed_449.mp4",
-          "videocrafterPath": "videos/dog_origin/compressed_449.mp4"
-      },
-      {
-          "caption": "A brown dog eagerly eats from a bowl in a kitchen.",
-          "aestheticPath": "videos/dog_a_hps/compressed_45.mp4",
-          "pickscorePath": "videos/dog_pick/compressed_45.mp4",
-          "videocrafterPath": "videos/dog_origin/compressed_45.mp4"
-      },
-      {
-          "caption": "A brown dog eagerly eats from a bowl in a kitchen.",
-          "aestheticPath": "videos/dog_a_hps/compressed_450.mp4",
-          "pickscorePath": "videos/dog_pick/compressed_450.mp4",
-          "videocrafterPath": "videos/dog_origin/compressed_450.mp4"
-      },
-      {
-          "caption": "A brown dog eagerly eats from a bowl in a kitchen.",
-          "aestheticPath": "videos/dog_a_hps/compressed_451.mp4",
-          "pickscorePath": "videos/dog_pick/compressed_451.mp4",
-          "videocrafterPath": "videos/dog_origin/compressed_451.mp4"
-      },
-      {
-          "caption": "A brown dog eagerly eats from a bowl in a kitchen.",
-          "aestheticPath": "videos/dog_a_hps/compressed_452.mp4",
-          "pickscorePath": "videos/dog_pick/compressed_452.mp4",
-          "videocrafterPath": "videos/dog_origin/compressed_452.mp4"
-      },
-      {
-          "caption": "A brown dog eagerly eats from a bowl in a kitchen.",
-          "aestheticPath": "videos/dog_a_hps/compressed_453.mp4",
-          "pickscorePath": "videos/dog_pick/compressed_453.mp4",
-          "videocrafterPath": "videos/dog_origin/compressed_453.mp4"
-      },
-      {
-          "caption": "A brown dog eagerly eats from a bowl in a kitchen.",
-          "aestheticPath": "videos/dog_a_hps/compressed_454.mp4",
-          "pickscorePath": "videos/dog_pick/compressed_454.mp4",
-          "videocrafterPath": "videos/dog_origin/compressed_454.mp4"
-      },
-      {
-          "caption": "A brown dog eagerly eats from a bowl in a kitchen.",
-          "aestheticPath": "videos/dog_a_hps/compressed_455.mp4",
-          "pickscorePath": "videos/dog_pick/compressed_455.mp4",
-          "videocrafterPath": "videos/dog_origin/compressed_455.mp4"
-      },
-      {
-          "caption": "A brown dog eagerly eats from a bowl in a kitchen.",
-          "aestheticPath": "videos/dog_a_hps/compressed_456.mp4",
-          "pickscorePath": "videos/dog_pick/compressed_456.mp4",
-          "videocrafterPath": "videos/dog_origin/compressed_456.mp4"
-      },
-      {
-          "caption": "A brown dog eagerly eats from a bowl in a kitchen.",
-          "aestheticPath": "videos/dog_a_hps/compressed_457.mp4",
-          "pickscorePath": "videos/dog_pick/compressed_457.mp4",
-          "videocrafterPath": "videos/dog_origin/compressed_457.mp4"
-      },
-      {
-          "caption": "A brown dog eagerly eats from a bowl in a kitchen.",
-          "aestheticPath": "videos/dog_a_hps/compressed_458.mp4",
-          "pickscorePath": "videos/dog_pick/compressed_458.mp4",
-          "videocrafterPath": "videos/dog_origin/compressed_458.mp4"
-      },
-      {
-          "caption": "A brown dog eagerly eats from a bowl in a kitchen.",
-          "aestheticPath": "videos/dog_a_hps/compressed_459.mp4",
-          "pickscorePath": "videos/dog_pick/compressed_459.mp4",
-          "videocrafterPath": "videos/dog_origin/compressed_459.mp4"
-      },
-      {
-          "caption": "A brown dog eagerly eats from a bowl in a kitchen.",
-          "aestheticPath": "videos/dog_a_hps/compressed_46.mp4",
-          "pickscorePath": "videos/dog_pick/compressed_46.mp4",
-          "videocrafterPath": "videos/dog_origin/compressed_46.mp4"
-      },
-      {
-          "caption": "A brown dog eagerly eats from a bowl in a kitchen.",
-          "aestheticPath": "videos/dog_a_hps/compressed_460.mp4",
-          "pickscorePath": "videos/dog_pick/compressed_460.mp4",
-          "videocrafterPath": "videos/dog_origin/compressed_460.mp4"
-      },
-      {
-          "caption": "A brown dog eagerly eats from a bowl in a kitchen.",
-          "aestheticPath": "videos/dog_a_hps/compressed_461.mp4",
-          "pickscorePath": "videos/dog_pick/compressed_461.mp4",
-          "videocrafterPath": "videos/dog_origin/compressed_461.mp4"
-      },
-      {
-          "caption": "A brown dog eagerly eats from a bowl in a kitchen.",
-          "aestheticPath": "videos/dog_a_hps/compressed_462.mp4",
-          "pickscorePath": "videos/dog_pick/compressed_462.mp4",
-          "videocrafterPath": "videos/dog_origin/compressed_462.mp4"
-      },
-      {
-          "caption": "A brown dog eagerly eats from a bowl in a kitchen.",
-          "aestheticPath": "videos/dog_a_hps/compressed_463.mp4",
-          "pickscorePath": "videos/dog_pick/compressed_463.mp4",
-          "videocrafterPath": "videos/dog_origin/compressed_463.mp4"
-      },
-      {
-          "caption": "A brown dog eagerly eats from a bowl in a kitchen.",
-          "aestheticPath": "videos/dog_a_hps/compressed_464.mp4",
-          "pickscorePath": "videos/dog_pick/compressed_464.mp4",
-          "videocrafterPath": "videos/dog_origin/compressed_464.mp4"
-      },
-      {
-          "caption": "A brown dog eagerly eats from a bowl in a kitchen.",
-          "aestheticPath": "videos/dog_a_hps/compressed_465.mp4",
-          "pickscorePath": "videos/dog_pick/compressed_465.mp4",
-          "videocrafterPath": "videos/dog_origin/compressed_465.mp4"
-      },
-      {
-          "caption": "A brown dog eagerly eats from a bowl in a kitchen.",
-          "aestheticPath": "videos/dog_a_hps/compressed_466.mp4",
-          "pickscorePath": "videos/dog_pick/compressed_466.mp4",
-          "videocrafterPath": "videos/dog_origin/compressed_466.mp4"
-      },
-      {
-          "caption": "A brown dog eagerly eats from a bowl in a kitchen.",
-          "aestheticPath": "videos/dog_a_hps/compressed_467.mp4",
-          "pickscorePath": "videos/dog_pick/compressed_467.mp4",
-          "videocrafterPath": "videos/dog_origin/compressed_467.mp4"
-      },
-      {
-          "caption": "A brown dog eagerly eats from a bowl in a kitchen.",
-          "aestheticPath": "videos/dog_a_hps/compressed_468.mp4",
-          "pickscorePath": "videos/dog_pick/compressed_468.mp4",
-          "videocrafterPath": "videos/dog_origin/compressed_468.mp4"
-      },
-      {
-          "caption": "A brown dog eagerly eats from a bowl in a kitchen.",
-          "aestheticPath": "videos/dog_a_hps/compressed_469.mp4",
-          "pickscorePath": "videos/dog_pick/compressed_469.mp4",
-          "videocrafterPath": "videos/dog_origin/compressed_469.mp4"
-      },
-      {
-          "caption": "A brown dog eagerly eats from a bowl in a kitchen.",
-          "aestheticPath": "videos/dog_a_hps/compressed_47.mp4",
-          "pickscorePath": "videos/dog_pick/compressed_47.mp4",
-          "videocrafterPath": "videos/dog_origin/compressed_47.mp4"
-      },
-      {
-          "caption": "A brown dog eagerly eats from a bowl in a kitchen.",
-          "aestheticPath": "videos/dog_a_hps/compressed_470.mp4",
-          "pickscorePath": "videos/dog_pick/compressed_470.mp4",
-          "videocrafterPath": "videos/dog_origin/compressed_470.mp4"
-      },
-      {
-          "caption": "A brown dog eagerly eats from a bowl in a kitchen.",
-          "aestheticPath": "videos/dog_a_hps/compressed_471.mp4",
-          "pickscorePath": "videos/dog_pick/compressed_471.mp4",
-          "videocrafterPath": "videos/dog_origin/compressed_471.mp4"
-      },
-      {
-          "caption": "A brown dog eagerly eats from a bowl in a kitchen.",
-          "aestheticPath": "videos/dog_a_hps/compressed_472.mp4",
-          "pickscorePath": "videos/dog_pick/compressed_472.mp4",
-          "videocrafterPath": "videos/dog_origin/compressed_472.mp4"
-      },
-      {
-          "caption": "A brown dog eagerly eats from a bowl in a kitchen.",
-          "aestheticPath": "videos/dog_a_hps/compressed_473.mp4",
-          "pickscorePath": "videos/dog_pick/compressed_473.mp4",
-          "videocrafterPath": "videos/dog_origin/compressed_473.mp4"
-      },
-      {
-          "caption": "A brown dog eagerly eats from a bowl in a kitchen.",
-          "aestheticPath": "videos/dog_a_hps/compressed_474.mp4",
-          "pickscorePath": "videos/dog_pick/compressed_474.mp4",
-          "videocrafterPath": "videos/dog_origin/compressed_474.mp4"
-      },
-      {
-          "caption": "A brown dog eagerly eats from a bowl in a kitchen.",
-          "aestheticPath": "videos/dog_a_hps/compressed_475.mp4",
-          "pickscorePath": "videos/dog_pick/compressed_475.mp4",
-          "videocrafterPath": "videos/dog_origin/compressed_475.mp4"
-      },
-      {
-          "caption": "A brown dog eagerly eats from a bowl in a kitchen.",
-          "aestheticPath": "videos/dog_a_hps/compressed_476.mp4",
-          "pickscorePath": "videos/dog_pick/compressed_476.mp4",
-          "videocrafterPath": "videos/dog_origin/compressed_476.mp4"
-      },
-      {
-          "caption": "A brown dog eagerly eats from a bowl in a kitchen.",
-          "aestheticPath": "videos/dog_a_hps/compressed_477.mp4",
-          "pickscorePath": "videos/dog_pick/compressed_477.mp4",
-          "videocrafterPath": "videos/dog_origin/compressed_477.mp4"
-      },
-      {
-          "caption": "A brown dog eagerly eats from a bowl in a kitchen.",
-          "aestheticPath": "videos/dog_a_hps/compressed_478.mp4",
-          "pickscorePath": "videos/dog_pick/compressed_478.mp4",
-          "videocrafterPath": "videos/dog_origin/compressed_478.mp4"
-      },
-      {
-          "caption": "A brown dog eagerly eats from a bowl in a kitchen.",
-          "aestheticPath": "videos/dog_a_hps/compressed_479.mp4",
-          "pickscorePath": "videos/dog_pick/compressed_479.mp4",
-          "videocrafterPath": "videos/dog_origin/compressed_479.mp4"
-      },
-      {
-          "caption": "A brown dog eagerly eats from a bowl in a kitchen.",
-          "aestheticPath": "videos/dog_a_hps/compressed_48.mp4",
-          "pickscorePath": "videos/dog_pick/compressed_48.mp4",
-          "videocrafterPath": "videos/dog_origin/compressed_48.mp4"
-      },
-      {
-          "caption": "A brown dog eagerly eats from a bowl in a kitchen.",
-          "aestheticPath": "videos/dog_a_hps/compressed_480.mp4",
-          "pickscorePath": "videos/dog_pick/compressed_480.mp4",
-          "videocrafterPath": "videos/dog_origin/compressed_480.mp4"
-      },
-      {
-          "caption": "A brown dog eagerly eats from a bowl in a kitchen.",
-          "aestheticPath": "videos/dog_a_hps/compressed_481.mp4",
-          "pickscorePath": "videos/dog_pick/compressed_481.mp4",
-          "videocrafterPath": "videos/dog_origin/compressed_481.mp4"
-      },
-      {
-          "caption": "A brown dog eagerly eats from a bowl in a kitchen.",
-          "aestheticPath": "videos/dog_a_hps/compressed_482.mp4",
-          "pickscorePath": "videos/dog_pick/compressed_482.mp4",
-          "videocrafterPath": "videos/dog_origin/compressed_482.mp4"
-      },
-      {
-          "caption": "A brown dog eagerly eats from a bowl in a kitchen.",
-          "aestheticPath": "videos/dog_a_hps/compressed_483.mp4",
-          "pickscorePath": "videos/dog_pick/compressed_483.mp4",
-          "videocrafterPath": "videos/dog_origin/compressed_483.mp4"
-      },
-      {
-          "caption": "A brown dog eagerly eats from a bowl in a kitchen.",
-          "aestheticPath": "videos/dog_a_hps/compressed_484.mp4",
-          "pickscorePath": "videos/dog_pick/compressed_484.mp4",
-          "videocrafterPath": "videos/dog_origin/compressed_484.mp4"
-      },
-      {
-          "caption": "A brown dog eagerly eats from a bowl in a kitchen.",
-          "aestheticPath": "videos/dog_a_hps/compressed_485.mp4",
-          "pickscorePath": "videos/dog_pick/compressed_485.mp4",
-          "videocrafterPath": "videos/dog_origin/compressed_485.mp4"
-      },
-      {
-          "caption": "A brown dog eagerly eats from a bowl in a kitchen.",
-          "aestheticPath": "videos/dog_a_hps/compressed_486.mp4",
-          "pickscorePath": "videos/dog_pick/compressed_486.mp4",
-          "videocrafterPath": "videos/dog_origin/compressed_486.mp4"
-      },
-      {
-          "caption": "A brown dog eagerly eats from a bowl in a kitchen.",
-          "aestheticPath": "videos/dog_a_hps/compressed_487.mp4",
-          "pickscorePath": "videos/dog_pick/compressed_487.mp4",
-          "videocrafterPath": "videos/dog_origin/compressed_487.mp4"
-      },
-      {
-          "caption": "A brown dog eagerly eats from a bowl in a kitchen.",
-          "aestheticPath": "videos/dog_a_hps/compressed_488.mp4",
-          "pickscorePath": "videos/dog_pick/compressed_488.mp4",
-          "videocrafterPath": "videos/dog_origin/compressed_488.mp4"
-      },
-      {
-          "caption": "A brown dog eagerly eats from a bowl in a kitchen.",
-          "aestheticPath": "videos/dog_a_hps/compressed_489.mp4",
-          "pickscorePath": "videos/dog_pick/compressed_489.mp4",
-          "videocrafterPath": "videos/dog_origin/compressed_489.mp4"
-      },
-      {
-          "caption": "A brown dog eagerly eats from a bowl in a kitchen.",
-          "aestheticPath": "videos/dog_a_hps/compressed_49.mp4",
-          "pickscorePath": "videos/dog_pick/compressed_49.mp4",
-          "videocrafterPath": "videos/dog_origin/compressed_49.mp4"
-      },
-      {
-          "caption": "A brown dog eagerly eats from a bowl in a kitchen.",
-          "aestheticPath": "videos/dog_a_hps/compressed_490.mp4",
-          "pickscorePath": "videos/dog_pick/compressed_490.mp4",
-          "videocrafterPath": "videos/dog_origin/compressed_490.mp4"
-      },
-      {
-          "caption": "A brown dog eagerly eats from a bowl in a kitchen.",
-          "aestheticPath": "videos/dog_a_hps/compressed_491.mp4",
-          "pickscorePath": "videos/dog_pick/compressed_491.mp4",
-          "videocrafterPath": "videos/dog_origin/compressed_491.mp4"
-      },
-      {
-          "caption": "A brown dog eagerly eats from a bowl in a kitchen.",
-          "aestheticPath": "videos/dog_a_hps/compressed_492.mp4",
-          "pickscorePath": "videos/dog_pick/compressed_492.mp4",
-          "videocrafterPath": "videos/dog_origin/compressed_492.mp4"
-      },
-      {
-          "caption": "A brown dog eagerly eats from a bowl in a kitchen.",
-          "aestheticPath": "videos/dog_a_hps/compressed_493.mp4",
-          "pickscorePath": "videos/dog_pick/compressed_493.mp4",
-          "videocrafterPath": "videos/dog_origin/compressed_493.mp4"
-      },
-      {
-          "caption": "A brown dog eagerly eats from a bowl in a kitchen.",
-          "aestheticPath": "videos/dog_a_hps/compressed_494.mp4",
-          "pickscorePath": "videos/dog_pick/compressed_494.mp4",
-          "videocrafterPath": "videos/dog_origin/compressed_494.mp4"
-      },
-      {
-          "caption": "A brown dog eagerly eats from a bowl in a kitchen.",
-          "aestheticPath": "videos/dog_a_hps/compressed_495.mp4",
-          "pickscorePath": "videos/dog_pick/compressed_495.mp4",
-          "videocrafterPath": "videos/dog_origin/compressed_495.mp4"
-      },
-      {
-          "caption": "A brown dog eagerly eats from a bowl in a kitchen.",
-          "aestheticPath": "videos/dog_a_hps/compressed_496.mp4",
-          "pickscorePath": "videos/dog_pick/compressed_496.mp4",
-          "videocrafterPath": "videos/dog_origin/compressed_496.mp4"
-      },
-      {
-          "caption": "A brown dog eagerly eats from a bowl in a kitchen.",
-          "aestheticPath": "videos/dog_a_hps/compressed_497.mp4",
-          "pickscorePath": "videos/dog_pick/compressed_497.mp4",
-          "videocrafterPath": "videos/dog_origin/compressed_497.mp4"
-      },
-      {
-          "caption": "A brown dog eagerly eats from a bowl in a kitchen.",
-          "aestheticPath": "videos/dog_a_hps/compressed_5.mp4",
-          "pickscorePath": "videos/dog_pick/compressed_5.mp4",
-          "videocrafterPath": "videos/dog_origin/compressed_5.mp4"
-      },
-      {
-          "caption": "A brown dog eagerly eats from a bowl in a kitchen.",
-          "aestheticPath": "videos/dog_a_hps/compressed_50.mp4",
-          "pickscorePath": "videos/dog_pick/compressed_50.mp4",
-          "videocrafterPath": "videos/dog_origin/compressed_50.mp4"
-      },
-      {
-          "caption": "A brown dog eagerly eats from a bowl in a kitchen.",
-          "aestheticPath": "videos/dog_a_hps/compressed_51.mp4",
-          "pickscorePath": "videos/dog_pick/compressed_51.mp4",
-          "videocrafterPath": "videos/dog_origin/compressed_51.mp4"
-      },
-      {
-          "caption": "A brown dog eagerly eats from a bowl in a kitchen.",
-          "aestheticPath": "videos/dog_a_hps/compressed_52.mp4",
-          "pickscorePath": "videos/dog_pick/compressed_52.mp4",
-          "videocrafterPath": "videos/dog_origin/compressed_52.mp4"
-      },
-      {
-          "caption": "A brown dog eagerly eats from a bowl in a kitchen.",
-          "aestheticPath": "videos/dog_a_hps/compressed_53.mp4",
-          "pickscorePath": "videos/dog_pick/compressed_53.mp4",
-          "videocrafterPath": "videos/dog_origin/compressed_53.mp4"
-      },
-      {
-          "caption": "A brown dog eagerly eats from a bowl in a kitchen.",
-          "aestheticPath": "videos/dog_a_hps/compressed_54.mp4",
-          "pickscorePath": "videos/dog_pick/compressed_54.mp4",
-          "videocrafterPath": "videos/dog_origin/compressed_54.mp4"
-      },
-      {
-          "caption": "A brown dog eagerly eats from a bowl in a kitchen.",
-          "aestheticPath": "videos/dog_a_hps/compressed_55.mp4",
-          "pickscorePath": "videos/dog_pick/compressed_55.mp4",
-          "videocrafterPath": "videos/dog_origin/compressed_55.mp4"
-      },
-      {
-          "caption": "A brown dog eagerly eats from a bowl in a kitchen.",
-          "aestheticPath": "videos/dog_a_hps/compressed_56.mp4",
-          "pickscorePath": "videos/dog_pick/compressed_56.mp4",
-          "videocrafterPath": "videos/dog_origin/compressed_56.mp4"
-      },
-      {
-          "caption": "A brown dog eagerly eats from a bowl in a kitchen.",
-          "aestheticPath": "videos/dog_a_hps/compressed_57.mp4",
-          "pickscorePath": "videos/dog_pick/compressed_57.mp4",
-          "videocrafterPath": "videos/dog_origin/compressed_57.mp4"
-      },
-      {
-          "caption": "A brown dog eagerly eats from a bowl in a kitchen.",
-          "aestheticPath": "videos/dog_a_hps/compressed_58.mp4",
-          "pickscorePath": "videos/dog_pick/compressed_58.mp4",
-          "videocrafterPath": "videos/dog_origin/compressed_58.mp4"
-      },
-      {
-          "caption": "A brown dog eagerly eats from a bowl in a kitchen.",
-          "aestheticPath": "videos/dog_a_hps/compressed_59.mp4",
-          "pickscorePath": "videos/dog_pick/compressed_59.mp4",
-          "videocrafterPath": "videos/dog_origin/compressed_59.mp4"
-      },
-      {
-          "caption": "A brown dog eagerly eats from a bowl in a kitchen.",
-          "aestheticPath": "videos/dog_a_hps/compressed_6.mp4",
-          "pickscorePath": "videos/dog_pick/compressed_6.mp4",
-          "videocrafterPath": "videos/dog_origin/compressed_6.mp4"
-      },
-      {
-          "caption": "A brown dog eagerly eats from a bowl in a kitchen.",
-          "aestheticPath": "videos/dog_a_hps/compressed_60.mp4",
-          "pickscorePath": "videos/dog_pick/compressed_60.mp4",
-          "videocrafterPath": "videos/dog_origin/compressed_60.mp4"
-      },
-      {
-          "caption": "A brown dog eagerly eats from a bowl in a kitchen.",
-          "aestheticPath": "videos/dog_a_hps/compressed_61.mp4",
-          "pickscorePath": "videos/dog_pick/compressed_61.mp4",
-          "videocrafterPath": "videos/dog_origin/compressed_61.mp4"
-      },
-      {
-          "caption": "A brown dog eagerly eats from a bowl in a kitchen.",
-          "aestheticPath": "videos/dog_a_hps/compressed_62.mp4",
-          "pickscorePath": "videos/dog_pick/compressed_62.mp4",
-          "videocrafterPath": "videos/dog_origin/compressed_62.mp4"
-      },
-      {
-          "caption": "A brown dog eagerly eats from a bowl in a kitchen.",
-          "aestheticPath": "videos/dog_a_hps/compressed_63.mp4",
-          "pickscorePath": "videos/dog_pick/compressed_63.mp4",
-          "videocrafterPath": "videos/dog_origin/compressed_63.mp4"
-      },
-      {
-          "caption": "A brown dog eagerly eats from a bowl in a kitchen.",
-          "aestheticPath": "videos/dog_a_hps/compressed_64.mp4",
-          "pickscorePath": "videos/dog_pick/compressed_64.mp4",
-          "videocrafterPath": "videos/dog_origin/compressed_64.mp4"
-      },
-      {
-          "caption": "A brown dog eagerly eats from a bowl in a kitchen.",
-          "aestheticPath": "videos/dog_a_hps/compressed_65.mp4",
-          "pickscorePath": "videos/dog_pick/compressed_65.mp4",
-          "videocrafterPath": "videos/dog_origin/compressed_65.mp4"
-      },
-      {
-          "caption": "A brown dog eagerly eats from a bowl in a kitchen.",
-          "aestheticPath": "videos/dog_a_hps/compressed_66.mp4",
-          "pickscorePath": "videos/dog_pick/compressed_66.mp4",
-          "videocrafterPath": "videos/dog_origin/compressed_66.mp4"
-      },
-      {
-          "caption": "A brown dog eagerly eats from a bowl in a kitchen.",
-          "aestheticPath": "videos/dog_a_hps/compressed_67.mp4",
-          "pickscorePath": "videos/dog_pick/compressed_67.mp4",
-          "videocrafterPath": "videos/dog_origin/compressed_67.mp4"
-      },
-      {
-          "caption": "A brown dog eagerly eats from a bowl in a kitchen.",
-          "aestheticPath": "videos/dog_a_hps/compressed_68.mp4",
-          "pickscorePath": "videos/dog_pick/compressed_68.mp4",
-          "videocrafterPath": "videos/dog_origin/compressed_68.mp4"
-      },
-      {
-          "caption": "A brown dog eagerly eats from a bowl in a kitchen.",
-          "aestheticPath": "videos/dog_a_hps/compressed_69.mp4",
-          "pickscorePath": "videos/dog_pick/compressed_69.mp4",
-          "videocrafterPath": "videos/dog_origin/compressed_69.mp4"
-      },
-      {
-          "caption": "A brown dog eagerly eats from a bowl in a kitchen.",
-          "aestheticPath": "videos/dog_a_hps/compressed_7.mp4",
-          "pickscorePath": "videos/dog_pick/compressed_7.mp4",
-          "videocrafterPath": "videos/dog_origin/compressed_7.mp4"
-      },
-      {
-          "caption": "A brown dog eagerly eats from a bowl in a kitchen.",
-          "aestheticPath": "videos/dog_a_hps/compressed_70.mp4",
-          "pickscorePath": "videos/dog_pick/compressed_70.mp4",
-          "videocrafterPath": "videos/dog_origin/compressed_70.mp4"
-      },
-      {
-          "caption": "A brown dog eagerly eats from a bowl in a kitchen.",
-          "aestheticPath": "videos/dog_a_hps/compressed_71.mp4",
-          "pickscorePath": "videos/dog_pick/compressed_71.mp4",
-          "videocrafterPath": "videos/dog_origin/compressed_71.mp4"
-      },
-      {
-          "caption": "A brown dog eagerly eats from a bowl in a kitchen.",
-          "aestheticPath": "videos/dog_a_hps/compressed_72.mp4",
-          "pickscorePath": "videos/dog_pick/compressed_72.mp4",
-          "videocrafterPath": "videos/dog_origin/compressed_72.mp4"
-      },
-      {
-          "caption": "A brown dog eagerly eats from a bowl in a kitchen.",
-          "aestheticPath": "videos/dog_a_hps/compressed_73.mp4",
-          "pickscorePath": "videos/dog_pick/compressed_73.mp4",
-          "videocrafterPath": "videos/dog_origin/compressed_73.mp4"
-      },
-      {
-          "caption": "A brown dog eagerly eats from a bowl in a kitchen.",
-          "aestheticPath": "videos/dog_a_hps/compressed_74.mp4",
-          "pickscorePath": "videos/dog_pick/compressed_74.mp4",
-          "videocrafterPath": "videos/dog_origin/compressed_74.mp4"
-      },
-      {
-          "caption": "A brown dog eagerly eats from a bowl in a kitchen.",
-          "aestheticPath": "videos/dog_a_hps/compressed_75.mp4",
-          "pickscorePath": "videos/dog_pick/compressed_75.mp4",
-          "videocrafterPath": "videos/dog_origin/compressed_75.mp4"
-      },
-      {
-          "caption": "A brown dog eagerly eats from a bowl in a kitchen.",
-          "aestheticPath": "videos/dog_a_hps/compressed_76.mp4",
-          "pickscorePath": "videos/dog_pick/compressed_76.mp4",
-          "videocrafterPath": "videos/dog_origin/compressed_76.mp4"
-      },
-      {
-          "caption": "A brown dog eagerly eats from a bowl in a kitchen.",
-          "aestheticPath": "videos/dog_a_hps/compressed_77.mp4",
-          "pickscorePath": "videos/dog_pick/compressed_77.mp4",
-          "videocrafterPath": "videos/dog_origin/compressed_77.mp4"
-      },
-      {
-          "caption": "A brown dog eagerly eats from a bowl in a kitchen.",
-          "aestheticPath": "videos/dog_a_hps/compressed_78.mp4",
-          "pickscorePath": "videos/dog_pick/compressed_78.mp4",
-          "videocrafterPath": "videos/dog_origin/compressed_78.mp4"
-      },
-      {
-          "caption": "A brown dog eagerly eats from a bowl in a kitchen.",
-          "aestheticPath": "videos/dog_a_hps/compressed_79.mp4",
-          "pickscorePath": "videos/dog_pick/compressed_79.mp4",
-          "videocrafterPath": "videos/dog_origin/compressed_79.mp4"
-      },
-      {
-          "caption": "A brown dog eagerly eats from a bowl in a kitchen.",
-          "aestheticPath": "videos/dog_a_hps/compressed_8.mp4",
-          "pickscorePath": "videos/dog_pick/compressed_8.mp4",
-          "videocrafterPath": "videos/dog_origin/compressed_8.mp4"
-      },
-      {
-          "caption": "A brown dog eagerly eats from a bowl in a kitchen.",
-          "aestheticPath": "videos/dog_a_hps/compressed_80.mp4",
-          "pickscorePath": "videos/dog_pick/compressed_80.mp4",
-          "videocrafterPath": "videos/dog_origin/compressed_80.mp4"
-      },
-      {
-          "caption": "A brown dog eagerly eats from a bowl in a kitchen.",
-          "aestheticPath": "videos/dog_a_hps/compressed_81.mp4",
-          "pickscorePath": "videos/dog_pick/compressed_81.mp4",
-          "videocrafterPath": "videos/dog_origin/compressed_81.mp4"
-      },
-      {
-          "caption": "A brown dog eagerly eats from a bowl in a kitchen.",
-          "aestheticPath": "videos/dog_a_hps/compressed_82.mp4",
-          "pickscorePath": "videos/dog_pick/compressed_82.mp4",
-          "videocrafterPath": "videos/dog_origin/compressed_82.mp4"
-      },
-      {
-          "caption": "A brown dog eagerly eats from a bowl in a kitchen.",
-          "aestheticPath": "videos/dog_a_hps/compressed_83.mp4",
-          "pickscorePath": "videos/dog_pick/compressed_83.mp4",
-          "videocrafterPath": "videos/dog_origin/compressed_83.mp4"
-      },
-      {
-          "caption": "A brown dog eagerly eats from a bowl in a kitchen.",
-          "aestheticPath": "videos/dog_a_hps/compressed_84.mp4",
-          "pickscorePath": "videos/dog_pick/compressed_84.mp4",
-          "videocrafterPath": "videos/dog_origin/compressed_84.mp4"
-      },
-      {
-          "caption": "A brown dog eagerly eats from a bowl in a kitchen.",
-          "aestheticPath": "videos/dog_a_hps/compressed_85.mp4",
-          "pickscorePath": "videos/dog_pick/compressed_85.mp4",
-          "videocrafterPath": "videos/dog_origin/compressed_85.mp4"
-      },
-      {
-          "caption": "A brown dog eagerly eats from a bowl in a kitchen.",
-          "aestheticPath": "videos/dog_a_hps/compressed_86.mp4",
-          "pickscorePath": "videos/dog_pick/compressed_86.mp4",
-          "videocrafterPath": "videos/dog_origin/compressed_86.mp4"
-      },
-      {
-          "caption": "A brown dog eagerly eats from a bowl in a kitchen.",
-          "aestheticPath": "videos/dog_a_hps/compressed_87.mp4",
-          "pickscorePath": "videos/dog_pick/compressed_87.mp4",
-          "videocrafterPath": "videos/dog_origin/compressed_87.mp4"
-      },
-      {
-          "caption": "A brown dog eagerly eats from a bowl in a kitchen.",
-          "aestheticPath": "videos/dog_a_hps/compressed_88.mp4",
-          "pickscorePath": "videos/dog_pick/compressed_88.mp4",
-          "videocrafterPath": "videos/dog_origin/compressed_88.mp4"
-      },
-      {
-          "caption": "A brown dog eagerly eats from a bowl in a kitchen.",
-          "aestheticPath": "videos/dog_a_hps/compressed_89.mp4",
-          "pickscorePath": "videos/dog_pick/compressed_89.mp4",
-          "videocrafterPath": "videos/dog_origin/compressed_89.mp4"
-      },
-      {
-          "caption": "A brown dog eagerly eats from a bowl in a kitchen.",
-          "aestheticPath": "videos/dog_a_hps/compressed_9.mp4",
-          "pickscorePath": "videos/dog_pick/compressed_9.mp4",
-          "videocrafterPath": "videos/dog_origin/compressed_9.mp4"
-      },
-      {
-          "caption": "A brown dog eagerly eats from a bowl in a kitchen.",
-          "aestheticPath": "videos/dog_a_hps/compressed_90.mp4",
-          "pickscorePath": "videos/dog_pick/compressed_90.mp4",
-          "videocrafterPath": "videos/dog_origin/compressed_90.mp4"
-      },
-      {
-          "caption": "A brown dog eagerly eats from a bowl in a kitchen.",
-          "aestheticPath": "videos/dog_a_hps/compressed_91.mp4",
-          "pickscorePath": "videos/dog_pick/compressed_91.mp4",
-          "videocrafterPath": "videos/dog_origin/compressed_91.mp4"
-      },
-      {
-          "caption": "A brown dog eagerly eats from a bowl in a kitchen.",
-          "aestheticPath": "videos/dog_a_hps/compressed_92.mp4",
-          "pickscorePath": "videos/dog_pick/compressed_92.mp4",
-          "videocrafterPath": "videos/dog_origin/compressed_92.mp4"
-      },
-      {
-          "caption": "A brown dog eagerly eats from a bowl in a kitchen.",
-          "aestheticPath": "videos/dog_a_hps/compressed_93.mp4",
-          "pickscorePath": "videos/dog_pick/compressed_93.mp4",
-          "videocrafterPath": "videos/dog_origin/compressed_93.mp4"
-      },
-      {
-          "caption": "A brown dog eagerly eats from a bowl in a kitchen.",
-          "aestheticPath": "videos/dog_a_hps/compressed_94.mp4",
-          "pickscorePath": "videos/dog_pick/compressed_94.mp4",
-          "videocrafterPath": "videos/dog_origin/compressed_94.mp4"
-      },
-      {
-          "caption": "A brown dog eagerly eats from a bowl in a kitchen.",
-          "aestheticPath": "videos/dog_a_hps/compressed_95.mp4",
-          "pickscorePath": "videos/dog_pick/compressed_95.mp4",
-          "videocrafterPath": "videos/dog_origin/compressed_95.mp4"
-      },
-      {
-          "caption": "A brown dog eagerly eats from a bowl in a kitchen.",
-          "aestheticPath": "videos/dog_a_hps/compressed_96.mp4",
-          "pickscorePath": "videos/dog_pick/compressed_96.mp4",
-          "videocrafterPath": "videos/dog_origin/compressed_96.mp4"
-      },
-      {
-          "caption": "A brown dog eagerly eats from a bowl in a kitchen.",
-          "aestheticPath": "videos/dog_a_hps/compressed_97.mp4",
-          "pickscorePath": "videos/dog_pick/compressed_97.mp4",
-          "videocrafterPath": "videos/dog_origin/compressed_97.mp4"
-      },
-      {
-          "caption": "A brown dog eagerly eats from a bowl in a kitchen.",
-          "aestheticPath": "videos/dog_a_hps/compressed_98.mp4",
-          "pickscorePath": "videos/dog_pick/compressed_98.mp4",
-          "videocrafterPath": "videos/dog_origin/compressed_98.mp4"
-      },
-      {
-          "caption": "A brown dog eagerly eats from a bowl in a kitchen.",
-          "aestheticPath": "videos/dog_a_hps/compressed_99.mp4",
-          "pickscorePath": "videos/dog_pick/compressed_99.mp4",
-          "videocrafterPath": "videos/dog_origin/compressed_99.mp4"
-      }
-  ];
+    const videoDatas = [
+    [
+    {
+        "caption": "A fairy tends to enchanted, glowing flowers.",
+        "aestheticPath": "videos/flower_a_hps/compressed_0.mp4",
+        "pickscorePath": "videos/flower_pick/compressed_0.mp4",
+        "videocrafterPath": "videos/flower_origin/compressed_0.mp4"
+    },
+    {
+        "caption": "A fairy tends to enchanted, glowing flowers.",
+        "aestheticPath": "videos/flower_a_hps/compressed_1.mp4",
+        "pickscorePath": "videos/flower_pick/compressed_1.mp4",
+        "videocrafterPath": "videos/flower_origin/compressed_1.mp4"
+    },
+    {
+        "caption": "A fairy tends to enchanted, glowing flowers.",
+        "aestheticPath": "videos/flower_a_hps/compressed_10.mp4",
+        "pickscorePath": "videos/flower_pick/compressed_10.mp4",
+        "videocrafterPath": "videos/flower_origin/compressed_10.mp4"
+    },
+    {
+        "caption": "A fairy tends to enchanted, glowing flowers.",
+        "aestheticPath": "videos/flower_a_hps/compressed_100.mp4",
+        "pickscorePath": "videos/flower_pick/compressed_100.mp4",
+        "videocrafterPath": "videos/flower_origin/compressed_100.mp4"
+    },
+    {
+        "caption": "A fairy tends to enchanted, glowing flowers.",
+        "aestheticPath": "videos/flower_a_hps/compressed_102.mp4",
+        "pickscorePath": "videos/flower_pick/compressed_102.mp4",
+        "videocrafterPath": "videos/flower_origin/compressed_102.mp4"
+    },
+    {
+        "caption": "A fairy tends to enchanted, glowing flowers.",
+        "aestheticPath": "videos/flower_a_hps/compressed_103.mp4",
+        "pickscorePath": "videos/flower_pick/compressed_103.mp4",
+        "videocrafterPath": "videos/flower_origin/compressed_103.mp4"
+    },
+    {
+        "caption": "A fairy tends to enchanted, glowing flowers.",
+        "aestheticPath": "videos/flower_a_hps/compressed_104.mp4",
+        "pickscorePath": "videos/flower_pick/compressed_104.mp4",
+        "videocrafterPath": "videos/flower_origin/compressed_104.mp4"
+    },
+    {
+        "caption": "A fairy tends to enchanted, glowing flowers.",
+        "aestheticPath": "videos/flower_a_hps/compressed_105.mp4",
+        "pickscorePath": "videos/flower_pick/compressed_105.mp4",
+        "videocrafterPath": "videos/flower_origin/compressed_105.mp4"
+    },
+    {
+        "caption": "A fairy tends to enchanted, glowing flowers.",
+        "aestheticPath": "videos/flower_a_hps/compressed_106.mp4",
+        "pickscorePath": "videos/flower_pick/compressed_106.mp4",
+        "videocrafterPath": "videos/flower_origin/compressed_106.mp4"
+    },
+    {
+        "caption": "A fairy tends to enchanted, glowing flowers.",
+        "aestheticPath": "videos/flower_a_hps/compressed_107.mp4",
+        "pickscorePath": "videos/flower_pick/compressed_107.mp4",
+        "videocrafterPath": "videos/flower_origin/compressed_107.mp4"
+    },
+    {
+        "caption": "A fairy tends to enchanted, glowing flowers.",
+        "aestheticPath": "videos/flower_a_hps/compressed_108.mp4",
+        "pickscorePath": "videos/flower_pick/compressed_108.mp4",
+        "videocrafterPath": "videos/flower_origin/compressed_108.mp4"
+    },
+    {
+        "caption": "A fairy tends to enchanted, glowing flowers.",
+        "aestheticPath": "videos/flower_a_hps/compressed_109.mp4",
+        "pickscorePath": "videos/flower_pick/compressed_109.mp4",
+        "videocrafterPath": "videos/flower_origin/compressed_109.mp4"
+    },
+    {
+        "caption": "A fairy tends to enchanted, glowing flowers.",
+        "aestheticPath": "videos/flower_a_hps/compressed_11.mp4",
+        "pickscorePath": "videos/flower_pick/compressed_11.mp4",
+        "videocrafterPath": "videos/flower_origin/compressed_11.mp4"
+    },
+    {
+        "caption": "A fairy tends to enchanted, glowing flowers.",
+        "aestheticPath": "videos/flower_a_hps/compressed_110.mp4",
+        "pickscorePath": "videos/flower_pick/compressed_110.mp4",
+        "videocrafterPath": "videos/flower_origin/compressed_110.mp4"
+    },
+    {
+        "caption": "A fairy tends to enchanted, glowing flowers.",
+        "aestheticPath": "videos/flower_a_hps/compressed_111.mp4",
+        "pickscorePath": "videos/flower_pick/compressed_111.mp4",
+        "videocrafterPath": "videos/flower_origin/compressed_111.mp4"
+    },
+    {
+        "caption": "A fairy tends to enchanted, glowing flowers.",
+        "aestheticPath": "videos/flower_a_hps/compressed_112.mp4",
+        "pickscorePath": "videos/flower_pick/compressed_112.mp4",
+        "videocrafterPath": "videos/flower_origin/compressed_112.mp4"
+    },
+    {
+        "caption": "A fairy tends to enchanted, glowing flowers.",
+        "aestheticPath": "videos/flower_a_hps/compressed_113.mp4",
+        "pickscorePath": "videos/flower_pick/compressed_113.mp4",
+        "videocrafterPath": "videos/flower_origin/compressed_113.mp4"
+    },
+    {
+        "caption": "A fairy tends to enchanted, glowing flowers.",
+        "aestheticPath": "videos/flower_a_hps/compressed_114.mp4",
+        "pickscorePath": "videos/flower_pick/compressed_114.mp4",
+        "videocrafterPath": "videos/flower_origin/compressed_114.mp4"
+    },
+    {
+        "caption": "A fairy tends to enchanted, glowing flowers.",
+        "aestheticPath": "videos/flower_a_hps/compressed_115.mp4",
+        "pickscorePath": "videos/flower_pick/compressed_115.mp4",
+        "videocrafterPath": "videos/flower_origin/compressed_115.mp4"
+    },
+    {
+        "caption": "A fairy tends to enchanted, glowing flowers.",
+        "aestheticPath": "videos/flower_a_hps/compressed_116.mp4",
+        "pickscorePath": "videos/flower_pick/compressed_116.mp4",
+        "videocrafterPath": "videos/flower_origin/compressed_116.mp4"
+    },
+    {
+        "caption": "A fairy tends to enchanted, glowing flowers.",
+        "aestheticPath": "videos/flower_a_hps/compressed_117.mp4",
+        "pickscorePath": "videos/flower_pick/compressed_117.mp4",
+        "videocrafterPath": "videos/flower_origin/compressed_117.mp4"
+    },
+    {
+        "caption": "A fairy tends to enchanted, glowing flowers.",
+        "aestheticPath": "videos/flower_a_hps/compressed_118.mp4",
+        "pickscorePath": "videos/flower_pick/compressed_118.mp4",
+        "videocrafterPath": "videos/flower_origin/compressed_118.mp4"
+    },
+    {
+        "caption": "A fairy tends to enchanted, glowing flowers.",
+        "aestheticPath": "videos/flower_a_hps/compressed_119.mp4",
+        "pickscorePath": "videos/flower_pick/compressed_119.mp4",
+        "videocrafterPath": "videos/flower_origin/compressed_119.mp4"
+    },
+    {
+        "caption": "A fairy tends to enchanted, glowing flowers.",
+        "aestheticPath": "videos/flower_a_hps/compressed_12.mp4",
+        "pickscorePath": "videos/flower_pick/compressed_12.mp4",
+        "videocrafterPath": "videos/flower_origin/compressed_12.mp4"
+    },
+    {
+        "caption": "A fairy tends to enchanted, glowing flowers.",
+        "aestheticPath": "videos/flower_a_hps/compressed_120.mp4",
+        "pickscorePath": "videos/flower_pick/compressed_120.mp4",
+        "videocrafterPath": "videos/flower_origin/compressed_120.mp4"
+    },
+    {
+        "caption": "A fairy tends to enchanted, glowing flowers.",
+        "aestheticPath": "videos/flower_a_hps/compressed_121.mp4",
+        "pickscorePath": "videos/flower_pick/compressed_121.mp4",
+        "videocrafterPath": "videos/flower_origin/compressed_121.mp4"
+    },
+    {
+        "caption": "A fairy tends to enchanted, glowing flowers.",
+        "aestheticPath": "videos/flower_a_hps/compressed_122.mp4",
+        "pickscorePath": "videos/flower_pick/compressed_122.mp4",
+        "videocrafterPath": "videos/flower_origin/compressed_122.mp4"
+    },
+    {
+        "caption": "A fairy tends to enchanted, glowing flowers.",
+        "aestheticPath": "videos/flower_a_hps/compressed_123.mp4",
+        "pickscorePath": "videos/flower_pick/compressed_123.mp4",
+        "videocrafterPath": "videos/flower_origin/compressed_123.mp4"
+    },
+    {
+        "caption": "A fairy tends to enchanted, glowing flowers.",
+        "aestheticPath": "videos/flower_a_hps/compressed_124.mp4",
+        "pickscorePath": "videos/flower_pick/compressed_124.mp4",
+        "videocrafterPath": "videos/flower_origin/compressed_124.mp4"
+    },
+    {
+        "caption": "A fairy tends to enchanted, glowing flowers.",
+        "aestheticPath": "videos/flower_a_hps/compressed_125.mp4",
+        "pickscorePath": "videos/flower_pick/compressed_125.mp4",
+        "videocrafterPath": "videos/flower_origin/compressed_125.mp4"
+    },
+    {
+        "caption": "A fairy tends to enchanted, glowing flowers.",
+        "aestheticPath": "videos/flower_a_hps/compressed_126.mp4",
+        "pickscorePath": "videos/flower_pick/compressed_126.mp4",
+        "videocrafterPath": "videos/flower_origin/compressed_126.mp4"
+    },
+    {
+        "caption": "A fairy tends to enchanted, glowing flowers.",
+        "aestheticPath": "videos/flower_a_hps/compressed_127.mp4",
+        "pickscorePath": "videos/flower_pick/compressed_127.mp4",
+        "videocrafterPath": "videos/flower_origin/compressed_127.mp4"
+    },
+    {
+        "caption": "A fairy tends to enchanted, glowing flowers.",
+        "aestheticPath": "videos/flower_a_hps/compressed_128.mp4",
+        "pickscorePath": "videos/flower_pick/compressed_128.mp4",
+        "videocrafterPath": "videos/flower_origin/compressed_128.mp4"
+    },
+    {
+        "caption": "A fairy tends to enchanted, glowing flowers.",
+        "aestheticPath": "videos/flower_a_hps/compressed_129.mp4",
+        "pickscorePath": "videos/flower_pick/compressed_129.mp4",
+        "videocrafterPath": "videos/flower_origin/compressed_129.mp4"
+    },
+    {
+        "caption": "A fairy tends to enchanted, glowing flowers.",
+        "aestheticPath": "videos/flower_a_hps/compressed_13.mp4",
+        "pickscorePath": "videos/flower_pick/compressed_13.mp4",
+        "videocrafterPath": "videos/flower_origin/compressed_13.mp4"
+    },
+    {
+        "caption": "A fairy tends to enchanted, glowing flowers.",
+        "aestheticPath": "videos/flower_a_hps/compressed_130.mp4",
+        "pickscorePath": "videos/flower_pick/compressed_130.mp4",
+        "videocrafterPath": "videos/flower_origin/compressed_130.mp4"
+    },
+    {
+        "caption": "A fairy tends to enchanted, glowing flowers.",
+        "aestheticPath": "videos/flower_a_hps/compressed_131.mp4",
+        "pickscorePath": "videos/flower_pick/compressed_131.mp4",
+        "videocrafterPath": "videos/flower_origin/compressed_131.mp4"
+    },
+    {
+        "caption": "A fairy tends to enchanted, glowing flowers.",
+        "aestheticPath": "videos/flower_a_hps/compressed_132.mp4",
+        "pickscorePath": "videos/flower_pick/compressed_132.mp4",
+        "videocrafterPath": "videos/flower_origin/compressed_132.mp4"
+    },
+    {
+        "caption": "A fairy tends to enchanted, glowing flowers.",
+        "aestheticPath": "videos/flower_a_hps/compressed_133.mp4",
+        "pickscorePath": "videos/flower_pick/compressed_133.mp4",
+        "videocrafterPath": "videos/flower_origin/compressed_133.mp4"
+    },
+    {
+        "caption": "A fairy tends to enchanted, glowing flowers.",
+        "aestheticPath": "videos/flower_a_hps/compressed_134.mp4",
+        "pickscorePath": "videos/flower_pick/compressed_134.mp4",
+        "videocrafterPath": "videos/flower_origin/compressed_134.mp4"
+    },
+    {
+        "caption": "A fairy tends to enchanted, glowing flowers.",
+        "aestheticPath": "videos/flower_a_hps/compressed_135.mp4",
+        "pickscorePath": "videos/flower_pick/compressed_135.mp4",
+        "videocrafterPath": "videos/flower_origin/compressed_135.mp4"
+    },
+    {
+        "caption": "A fairy tends to enchanted, glowing flowers.",
+        "aestheticPath": "videos/flower_a_hps/compressed_136.mp4",
+        "pickscorePath": "videos/flower_pick/compressed_136.mp4",
+        "videocrafterPath": "videos/flower_origin/compressed_136.mp4"
+    },
+],
+    
+    [
+        {
+            "caption": "A brown dog eagerly eats from a bowl in a kitchen.",
+            "aestheticPath": "videos/dog_a_hps/compressed_0.mp4",
+            "pickscorePath": "videos/dog_pick/compressed_0.mp4",
+            "videocrafterPath": "videos/dog_origin/compressed_0.mp4"
+        },
+        {
+            "caption": "A brown dog eagerly eats from a bowl in a kitchen.",
+            "aestheticPath": "videos/dog_a_hps/compressed_1.mp4",
+            "pickscorePath": "videos/dog_pick/compressed_1.mp4",
+            "videocrafterPath": "videos/dog_origin/compressed_1.mp4"
+        },
+        {
+            "caption": "A brown dog eagerly eats from a bowl in a kitchen.",
+            "aestheticPath": "videos/dog_a_hps/compressed_10.mp4",
+            "pickscorePath": "videos/dog_pick/compressed_10.mp4",
+            "videocrafterPath": "videos/dog_origin/compressed_10.mp4"
+        },
+        {
+            "caption": "A brown dog eagerly eats from a bowl in a kitchen.",
+            "aestheticPath": "videos/dog_a_hps/compressed_100.mp4",
+            "pickscorePath": "videos/dog_pick/compressed_100.mp4",
+            "videocrafterPath": "videos/dog_origin/compressed_100.mp4"
+        },
+        {
+            "caption": "A brown dog eagerly eats from a bowl in a kitchen.",
+            "aestheticPath": "videos/dog_a_hps/compressed_101.mp4",
+            "pickscorePath": "videos/dog_pick/compressed_101.mp4",
+            "videocrafterPath": "videos/dog_origin/compressed_101.mp4"
+        },
+        {
+            "caption": "A brown dog eagerly eats from a bowl in a kitchen.",
+            "aestheticPath": "videos/dog_a_hps/compressed_102.mp4",
+            "pickscorePath": "videos/dog_pick/compressed_102.mp4",
+            "videocrafterPath": "videos/dog_origin/compressed_102.mp4"
+        },
+        {
+            "caption": "A brown dog eagerly eats from a bowl in a kitchen.",
+            "aestheticPath": "videos/dog_a_hps/compressed_103.mp4",
+            "pickscorePath": "videos/dog_pick/compressed_103.mp4",
+            "videocrafterPath": "videos/dog_origin/compressed_103.mp4"
+        },
+        {
+            "caption": "A brown dog eagerly eats from a bowl in a kitchen.",
+            "aestheticPath": "videos/dog_a_hps/compressed_104.mp4",
+            "pickscorePath": "videos/dog_pick/compressed_104.mp4",
+            "videocrafterPath": "videos/dog_origin/compressed_104.mp4"
+        },
+        {
+            "caption": "A brown dog eagerly eats from a bowl in a kitchen.",
+            "aestheticPath": "videos/dog_a_hps/compressed_105.mp4",
+            "pickscorePath": "videos/dog_pick/compressed_105.mp4",
+            "videocrafterPath": "videos/dog_origin/compressed_105.mp4"
+        },
+        {
+            "caption": "A brown dog eagerly eats from a bowl in a kitchen.",
+            "aestheticPath": "videos/dog_a_hps/compressed_106.mp4",
+            "pickscorePath": "videos/dog_pick/compressed_106.mp4",
+            "videocrafterPath": "videos/dog_origin/compressed_106.mp4"
+        },
+        {
+            "caption": "A brown dog eagerly eats from a bowl in a kitchen.",
+            "aestheticPath": "videos/dog_a_hps/compressed_107.mp4",
+            "pickscorePath": "videos/dog_pick/compressed_107.mp4",
+            "videocrafterPath": "videos/dog_origin/compressed_107.mp4"
+        },
+        {
+            "caption": "A brown dog eagerly eats from a bowl in a kitchen.",
+            "aestheticPath": "videos/dog_a_hps/compressed_108.mp4",
+            "pickscorePath": "videos/dog_pick/compressed_108.mp4",
+            "videocrafterPath": "videos/dog_origin/compressed_108.mp4"
+        },
+        {
+            "caption": "A brown dog eagerly eats from a bowl in a kitchen.",
+            "aestheticPath": "videos/dog_a_hps/compressed_109.mp4",
+            "pickscorePath": "videos/dog_pick/compressed_109.mp4",
+            "videocrafterPath": "videos/dog_origin/compressed_109.mp4"
+        },
+        {
+            "caption": "A brown dog eagerly eats from a bowl in a kitchen.",
+            "aestheticPath": "videos/dog_a_hps/compressed_11.mp4",
+            "pickscorePath": "videos/dog_pick/compressed_11.mp4",
+            "videocrafterPath": "videos/dog_origin/compressed_11.mp4"
+        },
+        {
+            "caption": "A brown dog eagerly eats from a bowl in a kitchen.",
+            "aestheticPath": "videos/dog_a_hps/compressed_110.mp4",
+            "pickscorePath": "videos/dog_pick/compressed_110.mp4",
+            "videocrafterPath": "videos/dog_origin/compressed_110.mp4"
+        },
+        {
+            "caption": "A brown dog eagerly eats from a bowl in a kitchen.",
+            "aestheticPath": "videos/dog_a_hps/compressed_111.mp4",
+            "pickscorePath": "videos/dog_pick/compressed_111.mp4",
+            "videocrafterPath": "videos/dog_origin/compressed_111.mp4"
+        },
+        {
+            "caption": "A brown dog eagerly eats from a bowl in a kitchen.",
+            "aestheticPath": "videos/dog_a_hps/compressed_112.mp4",
+            "pickscorePath": "videos/dog_pick/compressed_112.mp4",
+            "videocrafterPath": "videos/dog_origin/compressed_112.mp4"
+        },
+        {
+            "caption": "A brown dog eagerly eats from a bowl in a kitchen.",
+            "aestheticPath": "videos/dog_a_hps/compressed_113.mp4",
+            "pickscorePath": "videos/dog_pick/compressed_113.mp4",
+            "videocrafterPath": "videos/dog_origin/compressed_113.mp4"
+        },
+        {
+            "caption": "A brown dog eagerly eats from a bowl in a kitchen.",
+            "aestheticPath": "videos/dog_a_hps/compressed_114.mp4",
+            "pickscorePath": "videos/dog_pick/compressed_114.mp4",
+            "videocrafterPath": "videos/dog_origin/compressed_114.mp4"
+        },
+        {
+            "caption": "A brown dog eagerly eats from a bowl in a kitchen.",
+            "aestheticPath": "videos/dog_a_hps/compressed_115.mp4",
+            "pickscorePath": "videos/dog_pick/compressed_115.mp4",
+            "videocrafterPath": "videos/dog_origin/compressed_115.mp4"
+        },
+        {
+            "caption": "A brown dog eagerly eats from a bowl in a kitchen.",
+            "aestheticPath": "videos/dog_a_hps/compressed_116.mp4",
+            "pickscorePath": "videos/dog_pick/compressed_116.mp4",
+            "videocrafterPath": "videos/dog_origin/compressed_116.mp4"
+        },
+        {
+            "caption": "A brown dog eagerly eats from a bowl in a kitchen.",
+            "aestheticPath": "videos/dog_a_hps/compressed_117.mp4",
+            "pickscorePath": "videos/dog_pick/compressed_117.mp4",
+            "videocrafterPath": "videos/dog_origin/compressed_117.mp4"
+        },
+        {
+            "caption": "A brown dog eagerly eats from a bowl in a kitchen.",
+            "aestheticPath": "videos/dog_a_hps/compressed_118.mp4",
+            "pickscorePath": "videos/dog_pick/compressed_118.mp4",
+            "videocrafterPath": "videos/dog_origin/compressed_118.mp4"
+        },
+        {
+            "caption": "A brown dog eagerly eats from a bowl in a kitchen.",
+            "aestheticPath": "videos/dog_a_hps/compressed_119.mp4",
+            "pickscorePath": "videos/dog_pick/compressed_119.mp4",
+            "videocrafterPath": "videos/dog_origin/compressed_119.mp4"
+        },
+        {
+            "caption": "A brown dog eagerly eats from a bowl in a kitchen.",
+            "aestheticPath": "videos/dog_a_hps/compressed_12.mp4",
+            "pickscorePath": "videos/dog_pick/compressed_12.mp4",
+            "videocrafterPath": "videos/dog_origin/compressed_12.mp4"
+        },
+        {
+            "caption": "A brown dog eagerly eats from a bowl in a kitchen.",
+            "aestheticPath": "videos/dog_a_hps/compressed_120.mp4",
+            "pickscorePath": "videos/dog_pick/compressed_120.mp4",
+            "videocrafterPath": "videos/dog_origin/compressed_120.mp4"
+        },
+        {
+            "caption": "A brown dog eagerly eats from a bowl in a kitchen.",
+            "aestheticPath": "videos/dog_a_hps/compressed_121.mp4",
+            "pickscorePath": "videos/dog_pick/compressed_121.mp4",
+            "videocrafterPath": "videos/dog_origin/compressed_121.mp4"
+        },
+        {
+            "caption": "A brown dog eagerly eats from a bowl in a kitchen.",
+            "aestheticPath": "videos/dog_a_hps/compressed_122.mp4",
+            "pickscorePath": "videos/dog_pick/compressed_122.mp4",
+            "videocrafterPath": "videos/dog_origin/compressed_122.mp4"
+        },
+        {
+            "caption": "A brown dog eagerly eats from a bowl in a kitchen.",
+            "aestheticPath": "videos/dog_a_hps/compressed_123.mp4",
+            "pickscorePath": "videos/dog_pick/compressed_123.mp4",
+            "videocrafterPath": "videos/dog_origin/compressed_123.mp4"
+        },
+        {
+            "caption": "A brown dog eagerly eats from a bowl in a kitchen.",
+            "aestheticPath": "videos/dog_a_hps/compressed_124.mp4",
+            "pickscorePath": "videos/dog_pick/compressed_124.mp4",
+            "videocrafterPath": "videos/dog_origin/compressed_124.mp4"
+        },
+        {
+            "caption": "A brown dog eagerly eats from a bowl in a kitchen.",
+            "aestheticPath": "videos/dog_a_hps/compressed_125.mp4",
+            "pickscorePath": "videos/dog_pick/compressed_125.mp4",
+            "videocrafterPath": "videos/dog_origin/compressed_125.mp4"
+        },
+        {
+            "caption": "A brown dog eagerly eats from a bowl in a kitchen.",
+            "aestheticPath": "videos/dog_a_hps/compressed_126.mp4",
+            "pickscorePath": "videos/dog_pick/compressed_126.mp4",
+            "videocrafterPath": "videos/dog_origin/compressed_126.mp4"
+        },
+        {
+            "caption": "A brown dog eagerly eats from a bowl in a kitchen.",
+            "aestheticPath": "videos/dog_a_hps/compressed_127.mp4",
+            "pickscorePath": "videos/dog_pick/compressed_127.mp4",
+            "videocrafterPath": "videos/dog_origin/compressed_127.mp4"
+        },
+        {
+            "caption": "A brown dog eagerly eats from a bowl in a kitchen.",
+            "aestheticPath": "videos/dog_a_hps/compressed_128.mp4",
+            "pickscorePath": "videos/dog_pick/compressed_128.mp4",
+            "videocrafterPath": "videos/dog_origin/compressed_128.mp4"
+        },
+        {
+            "caption": "A brown dog eagerly eats from a bowl in a kitchen.",
+            "aestheticPath": "videos/dog_a_hps/compressed_129.mp4",
+            "pickscorePath": "videos/dog_pick/compressed_129.mp4",
+            "videocrafterPath": "videos/dog_origin/compressed_129.mp4"
+        },
+        {
+            "caption": "A brown dog eagerly eats from a bowl in a kitchen.",
+            "aestheticPath": "videos/dog_a_hps/compressed_13.mp4",
+            "pickscorePath": "videos/dog_pick/compressed_13.mp4",
+            "videocrafterPath": "videos/dog_origin/compressed_13.mp4"
+        },
+        {
+            "caption": "A brown dog eagerly eats from a bowl in a kitchen.",
+            "aestheticPath": "videos/dog_a_hps/compressed_130.mp4",
+            "pickscorePath": "videos/dog_pick/compressed_130.mp4",
+            "videocrafterPath": "videos/dog_origin/compressed_130.mp4"
+        },
+        {
+            "caption": "A brown dog eagerly eats from a bowl in a kitchen.",
+            "aestheticPath": "videos/dog_a_hps/compressed_131.mp4",
+            "pickscorePath": "videos/dog_pick/compressed_131.mp4",
+            "videocrafterPath": "videos/dog_origin/compressed_131.mp4"
+        },
+        {
+            "caption": "A brown dog eagerly eats from a bowl in a kitchen.",
+            "aestheticPath": "videos/dog_a_hps/compressed_132.mp4",
+            "pickscorePath": "videos/dog_pick/compressed_132.mp4",
+            "videocrafterPath": "videos/dog_origin/compressed_132.mp4"
+        },
+        {
+            "caption": "A brown dog eagerly eats from a bowl in a kitchen.",
+            "aestheticPath": "videos/dog_a_hps/compressed_133.mp4",
+            "pickscorePath": "videos/dog_pick/compressed_133.mp4",
+            "videocrafterPath": "videos/dog_origin/compressed_133.mp4"
+        },
+        {
+            "caption": "A brown dog eagerly eats from a bowl in a kitchen.",
+            "aestheticPath": "videos/dog_a_hps/compressed_134.mp4",
+            "pickscorePath": "videos/dog_pick/compressed_134.mp4",
+            "videocrafterPath": "videos/dog_origin/compressed_134.mp4"
+        },
+        {
+            "caption": "A brown dog eagerly eats from a bowl in a kitchen.",
+            "aestheticPath": "videos/dog_a_hps/compressed_135.mp4",
+            "pickscorePath": "videos/dog_pick/compressed_135.mp4",
+            "videocrafterPath": "videos/dog_origin/compressed_135.mp4"
+        },
+        {
+            "caption": "A brown dog eagerly eats from a bowl in a kitchen.",
+            "aestheticPath": "videos/dog_a_hps/compressed_136.mp4",
+            "pickscorePath": "videos/dog_pick/compressed_136.mp4",
+            "videocrafterPath": "videos/dog_origin/compressed_136.mp4"
+        },
+        {
+            "caption": "A brown dog eagerly eats from a bowl in a kitchen.",
+            "aestheticPath": "videos/dog_a_hps/compressed_137.mp4",
+            "pickscorePath": "videos/dog_pick/compressed_137.mp4",
+            "videocrafterPath": "videos/dog_origin/compressed_137.mp4"
+        },
+      ],
+      
+[
+    {
+        "caption": "A lion is majestically standing on a rocky outcrop, surveying its territory with the golden light of dawn casting a regal glow on its mane.",
+        "aestheticPath": "videos/lion_a_hps/compressed_0.mp4",
+        "pickscorePath": "videos/lion_pick/compressed_0.mp4",
+        "videocrafterPath": "videos/lion_origin/compressed_0.mp4"
+    },
+    {
+        "caption": "A lion is majestically standing on a rocky outcrop, surveying its territory with the golden light of dawn casting a regal glow on its mane.",
+        "aestheticPath": "videos/lion_a_hps/compressed_1.mp4",
+        "pickscorePath": "videos/lion_pick/compressed_1.mp4",
+        "videocrafterPath": "videos/lion_origin/compressed_1.mp4"
+    },
+    {
+        "caption": "A lion is majestically standing on a rocky outcrop, surveying its territory with the golden light of dawn casting a regal glow on its mane.",
+        "aestheticPath": "videos/lion_a_hps/compressed_10.mp4",
+        "pickscorePath": "videos/lion_pick/compressed_10.mp4",
+        "videocrafterPath": "videos/lion_origin/compressed_10.mp4"
+    },
+    {
+        "caption": "A lion is majestically standing on a rocky outcrop, surveying its territory with the golden light of dawn casting a regal glow on its mane.",
+        "aestheticPath": "videos/lion_a_hps/compressed_100.mp4",
+        "pickscorePath": "videos/lion_pick/compressed_100.mp4",
+        "videocrafterPath": "videos/lion_origin/compressed_100.mp4"
+    },
+    {
+        "caption": "A lion is majestically standing on a rocky outcrop, surveying its territory with the golden light of dawn casting a regal glow on its mane.",
+        "aestheticPath": "videos/lion_a_hps/compressed_102.mp4",
+        "pickscorePath": "videos/lion_pick/compressed_102.mp4",
+        "videocrafterPath": "videos/lion_origin/compressed_102.mp4"
+    },
+    {
+        "caption": "A lion is majestically standing on a rocky outcrop, surveying its territory with the golden light of dawn casting a regal glow on its mane.",
+        "aestheticPath": "videos/lion_a_hps/compressed_106.mp4",
+        "pickscorePath": "videos/lion_pick/compressed_106.mp4",
+        "videocrafterPath": "videos/lion_origin/compressed_106.mp4"
+    },
+    {
+        "caption": "A lion is majestically standing on a rocky outcrop, surveying its territory with the golden light of dawn casting a regal glow on its mane.",
+        "aestheticPath": "videos/lion_a_hps/compressed_107.mp4",
+        "pickscorePath": "videos/lion_pick/compressed_107.mp4",
+        "videocrafterPath": "videos/lion_origin/compressed_107.mp4"
+    },
+    {
+        "caption": "A lion is majestically standing on a rocky outcrop, surveying its territory with the golden light of dawn casting a regal glow on its mane.",
+        "aestheticPath": "videos/lion_a_hps/compressed_11.mp4",
+        "pickscorePath": "videos/lion_pick/compressed_11.mp4",
+        "videocrafterPath": "videos/lion_origin/compressed_11.mp4"
+    },
+    {
+        "caption": "A lion is majestically standing on a rocky outcrop, surveying its territory with the golden light of dawn casting a regal glow on its mane.",
+        "aestheticPath": "videos/lion_a_hps/compressed_110.mp4",
+        "pickscorePath": "videos/lion_pick/compressed_110.mp4",
+        "videocrafterPath": "videos/lion_origin/compressed_110.mp4"
+    },
+    {
+        "caption": "A lion is majestically standing on a rocky outcrop, surveying its territory with the golden light of dawn casting a regal glow on its mane.",
+        "aestheticPath": "videos/lion_a_hps/compressed_111.mp4",
+        "pickscorePath": "videos/lion_pick/compressed_111.mp4",
+        "videocrafterPath": "videos/lion_origin/compressed_111.mp4"
+    },
+    {
+        "caption": "A lion is majestically standing on a rocky outcrop, surveying its territory with the golden light of dawn casting a regal glow on its mane.",
+        "aestheticPath": "videos/lion_a_hps/compressed_112.mp4",
+        "pickscorePath": "videos/lion_pick/compressed_112.mp4",
+        "videocrafterPath": "videos/lion_origin/compressed_112.mp4"
+    },
+    {
+        "caption": "A lion is majestically standing on a rocky outcrop, surveying its territory with the golden light of dawn casting a regal glow on its mane.",
+        "aestheticPath": "videos/lion_a_hps/compressed_113.mp4",
+        "pickscorePath": "videos/lion_pick/compressed_113.mp4",
+        "videocrafterPath": "videos/lion_origin/compressed_113.mp4"
+    },
+    {
+        "caption": "A lion is majestically standing on a rocky outcrop, surveying its territory with the golden light of dawn casting a regal glow on its mane.",
+        "aestheticPath": "videos/lion_a_hps/compressed_114.mp4",
+        "pickscorePath": "videos/lion_pick/compressed_114.mp4",
+        "videocrafterPath": "videos/lion_origin/compressed_114.mp4"
+    },
+    {
+        "caption": "A lion is majestically standing on a rocky outcrop, surveying its territory with the golden light of dawn casting a regal glow on its mane.",
+        "aestheticPath": "videos/lion_a_hps/compressed_116.mp4",
+        "pickscorePath": "videos/lion_pick/compressed_116.mp4",
+        "videocrafterPath": "videos/lion_origin/compressed_116.mp4"
+    },
+    {
+        "caption": "A lion is majestically standing on a rocky outcrop, surveying its territory with the golden light of dawn casting a regal glow on its mane.",
+        "aestheticPath": "videos/lion_a_hps/compressed_117.mp4",
+        "pickscorePath": "videos/lion_pick/compressed_117.mp4",
+        "videocrafterPath": "videos/lion_origin/compressed_117.mp4"
+    },
+    {
+        "caption": "A lion is majestically standing on a rocky outcrop, surveying its territory with the golden light of dawn casting a regal glow on its mane.",
+        "aestheticPath": "videos/lion_a_hps/compressed_118.mp4",
+        "pickscorePath": "videos/lion_pick/compressed_118.mp4",
+        "videocrafterPath": "videos/lion_origin/compressed_118.mp4"
+    },
+    {
+        "caption": "A lion is majestically standing on a rocky outcrop, surveying its territory with the golden light of dawn casting a regal glow on its mane.",
+        "aestheticPath": "videos/lion_a_hps/compressed_119.mp4",
+        "pickscorePath": "videos/lion_pick/compressed_119.mp4",
+        "videocrafterPath": "videos/lion_origin/compressed_119.mp4"
+    },
+    {
+        "caption": "A lion is majestically standing on a rocky outcrop, surveying its territory with the golden light of dawn casting a regal glow on its mane.",
+        "aestheticPath": "videos/lion_a_hps/compressed_12.mp4",
+        "pickscorePath": "videos/lion_pick/compressed_12.mp4",
+        "videocrafterPath": "videos/lion_origin/compressed_12.mp4"
+    },
+    {
+        "caption": "A lion is majestically standing on a rocky outcrop, surveying its territory with the golden light of dawn casting a regal glow on its mane.",
+        "aestheticPath": "videos/lion_a_hps/compressed_120.mp4",
+        "pickscorePath": "videos/lion_pick/compressed_120.mp4",
+        "videocrafterPath": "videos/lion_origin/compressed_120.mp4"
+    },
+    {
+        "caption": "A lion is majestically standing on a rocky outcrop, surveying its territory with the golden light of dawn casting a regal glow on its mane.",
+        "aestheticPath": "videos/lion_a_hps/compressed_121.mp4",
+        "pickscorePath": "videos/lion_pick/compressed_121.mp4",
+        "videocrafterPath": "videos/lion_origin/compressed_121.mp4"
+    },
+    {
+        "caption": "A lion is majestically standing on a rocky outcrop, surveying its territory with the golden light of dawn casting a regal glow on its mane.",
+        "aestheticPath": "videos/lion_a_hps/compressed_122.mp4",
+        "pickscorePath": "videos/lion_pick/compressed_122.mp4",
+        "videocrafterPath": "videos/lion_origin/compressed_122.mp4"
+    },
+    {
+        "caption": "A lion is majestically standing on a rocky outcrop, surveying its territory with the golden light of dawn casting a regal glow on its mane.",
+        "aestheticPath": "videos/lion_a_hps/compressed_123.mp4",
+        "pickscorePath": "videos/lion_pick/compressed_123.mp4",
+        "videocrafterPath": "videos/lion_origin/compressed_123.mp4"
+    },
+    {
+        "caption": "A lion is majestically standing on a rocky outcrop, surveying its territory with the golden light of dawn casting a regal glow on its mane.",
+        "aestheticPath": "videos/lion_a_hps/compressed_124.mp4",
+        "pickscorePath": "videos/lion_pick/compressed_124.mp4",
+        "videocrafterPath": "videos/lion_origin/compressed_124.mp4"
+    },
+    {
+        "caption": "A lion is majestically standing on a rocky outcrop, surveying its territory with the golden light of dawn casting a regal glow on its mane.",
+        "aestheticPath": "videos/lion_a_hps/compressed_125.mp4",
+        "pickscorePath": "videos/lion_pick/compressed_125.mp4",
+        "videocrafterPath": "videos/lion_origin/compressed_125.mp4"
+    },
+    {
+        "caption": "A lion is majestically standing on a rocky outcrop, surveying its territory with the golden light of dawn casting a regal glow on its mane.",
+        "aestheticPath": "videos/lion_a_hps/compressed_126.mp4",
+        "pickscorePath": "videos/lion_pick/compressed_126.mp4",
+        "videocrafterPath": "videos/lion_origin/compressed_126.mp4"
+    },
+    {
+        "caption": "A lion is majestically standing on a rocky outcrop, surveying its territory with the golden light of dawn casting a regal glow on its mane.",
+        "aestheticPath": "videos/lion_a_hps/compressed_127.mp4",
+        "pickscorePath": "videos/lion_pick/compressed_127.mp4",
+        "videocrafterPath": "videos/lion_origin/compressed_127.mp4"
+    },
+    {
+        "caption": "A lion is majestically standing on a rocky outcrop, surveying its territory with the golden light of dawn casting a regal glow on its mane.",
+        "aestheticPath": "videos/lion_a_hps/compressed_128.mp4",
+        "pickscorePath": "videos/lion_pick/compressed_128.mp4",
+        "videocrafterPath": "videos/lion_origin/compressed_128.mp4"
+    },
+    {
+        "caption": "A lion is majestically standing on a rocky outcrop, surveying its territory with the golden light of dawn casting a regal glow on its mane.",
+        "aestheticPath": "videos/lion_a_hps/compressed_129.mp4",
+        "pickscorePath": "videos/lion_pick/compressed_129.mp4",
+        "videocrafterPath": "videos/lion_origin/compressed_129.mp4"
+    },
+    {
+        "caption": "A lion is majestically standing on a rocky outcrop, surveying its territory with the golden light of dawn casting a regal glow on its mane.",
+        "aestheticPath": "videos/lion_a_hps/compressed_13.mp4",
+        "pickscorePath": "videos/lion_pick/compressed_13.mp4",
+        "videocrafterPath": "videos/lion_origin/compressed_13.mp4"
+    },
+    {
+        "caption": "A lion is majestically standing on a rocky outcrop, surveying its territory with the golden light of dawn casting a regal glow on its mane.",
+        "aestheticPath": "videos/lion_a_hps/compressed_130.mp4",
+        "pickscorePath": "videos/lion_pick/compressed_130.mp4",
+        "videocrafterPath": "videos/lion_origin/compressed_130.mp4"
+    },
+    {
+        "caption": "A lion is majestically standing on a rocky outcrop, surveying its territory with the golden light of dawn casting a regal glow on its mane.",
+        "aestheticPath": "videos/lion_a_hps/compressed_131.mp4",
+        "pickscorePath": "videos/lion_pick/compressed_131.mp4",
+        "videocrafterPath": "videos/lion_origin/compressed_131.mp4"
+    },
+    {
+        "caption": "A lion is majestically standing on a rocky outcrop, surveying its territory with the golden light of dawn casting a regal glow on its mane.",
+        "aestheticPath": "videos/lion_a_hps/compressed_132.mp4",
+        "pickscorePath": "videos/lion_pick/compressed_132.mp4",
+        "videocrafterPath": "videos/lion_origin/compressed_132.mp4"
+    },
+    {
+        "caption": "A lion is majestically standing on a rocky outcrop, surveying its territory with the golden light of dawn casting a regal glow on its mane.",
+        "aestheticPath": "videos/lion_a_hps/compressed_133.mp4",
+        "pickscorePath": "videos/lion_pick/compressed_133.mp4",
+        "videocrafterPath": "videos/lion_origin/compressed_133.mp4"
+    },
+    {
+        "caption": "A lion is majestically standing on a rocky outcrop, surveying its territory with the golden light of dawn casting a regal glow on its mane.",
+        "aestheticPath": "videos/lion_a_hps/compressed_134.mp4",
+        "pickscorePath": "videos/lion_pick/compressed_134.mp4",
+        "videocrafterPath": "videos/lion_origin/compressed_134.mp4"
+    },
+    {
+        "caption": "A lion is majestically standing on a rocky outcrop, surveying its territory with the golden light of dawn casting a regal glow on its mane.",
+        "aestheticPath": "videos/lion_a_hps/compressed_135.mp4",
+        "pickscorePath": "videos/lion_pick/compressed_135.mp4",
+        "videocrafterPath": "videos/lion_origin/compressed_135.mp4"
+    },
+    {
+        "caption": "A lion is majestically standing on a rocky outcrop, surveying its territory with the golden light of dawn casting a regal glow on its mane.",
+        "aestheticPath": "videos/lion_a_hps/compressed_136.mp4",
+        "pickscorePath": "videos/lion_pick/compressed_136.mp4",
+        "videocrafterPath": "videos/lion_origin/compressed_136.mp4"
+    },
+    {
+        "caption": "A lion is majestically standing on a rocky outcrop, surveying its territory with the golden light of dawn casting a regal glow on its mane.",
+        "aestheticPath": "videos/lion_a_hps/compressed_137.mp4",
+        "pickscorePath": "videos/lion_pick/compressed_137.mp4",
+        "videocrafterPath": "videos/lion_origin/compressed_137.mp4"
+    },
+    {
+        "caption": "A lion is majestically standing on a rocky outcrop, surveying its territory with the golden light of dawn casting a regal glow on its mane.",
+        "aestheticPath": "videos/lion_a_hps/compressed_138.mp4",
+        "pickscorePath": "videos/lion_pick/compressed_138.mp4",
+        "videocrafterPath": "videos/lion_origin/compressed_138.mp4"
+    },
+    {
+        "caption": "A lion is majestically standing on a rocky outcrop, surveying its territory with the golden light of dawn casting a regal glow on its mane.",
+        "aestheticPath": "videos/lion_a_hps/compressed_139.mp4",
+        "pickscorePath": "videos/lion_pick/compressed_139.mp4",
+        "videocrafterPath": "videos/lion_origin/compressed_139.mp4"
+    },
+    {
+        "caption": "A lion is majestically standing on a rocky outcrop, surveying its territory with the golden light of dawn casting a regal glow on its mane.",
+        "aestheticPath": "videos/lion_a_hps/compressed_140.mp4",
+        "pickscorePath": "videos/lion_pick/compressed_140.mp4",
+        "videocrafterPath": "videos/lion_origin/compressed_140.mp4"
+    },
 
-    const VIDEOS_PER_PAGE = 10;
+],
+    ];
 
-    // Functions to render videos and pagination controls
-    function renderVideos(videos, page = 1) {
-      const container = document.getElementById('videoContainer');
-      container.innerHTML = "";
+    const VIDEOS_PER_CATEGORY = 30;
 
-      const startIndex = (page - 1) * VIDEOS_PER_PAGE;
-      const endIndex = Math.min(startIndex + VIDEOS_PER_PAGE, videos.length);
+    function renderCategoryVideos(categoryVideos, title) {
+      const container = document.createElement("div");
 
-      for (let i = startIndex; i < endIndex; i++) {
-        const video = videos[i];
-        const row = document.createElement('div');
-        row.className = 'columns is-centered has-text-centered pr-5';
-        row.style.alignItems = 'center';
+      const categoryTitle = document.createElement("h2");
+      categoryTitle.className = "category-title";
+      categoryTitle.textContent = title;
 
-        row.innerHTML = `
-          <div class="column is-size-4">${video.caption}</div>
-          <div class="column">
-            <div class="pb-2 is-size-6">VideoCrafter</div>
-            <video class="center" playsinline autoplay loop muted src="${video.videocrafterPath}" 
-                   width="100%" style="border-radius:10px; max-height: 100%;"></video>
-          </div>
-          <div class="column">
-            <div class="pb-2 is-size-6">VADER: PickScore Reward (Ours)</div>
-            <video class="center" playsinline autoplay loop muted src="${video.pickscorePath}" 
-                   width="100%" style="border-radius:10px; max-height: 100%;"></video>
-          </div>
-          <div class="column">
-            <div class="pb-2 is-size-6">VADER: Aesthetic and HPS Reward (Ours)</div>
-            <video class="center" playsinline autoplay loop muted src="${video.aestheticPath}" 
-                   width="100%" style="border-radius:10px; max-height: 100%;"></video>
-          </div>
+      const gridContainer = document.createElement("div");
+      gridContainer.className = "video-grid";
+
+      categoryVideos.forEach(video => {
+        const videoItem = document.createElement("div");
+        videoItem.className = "video-grid-item";
+
+        videoItem.innerHTML = `
+          <video playsinline autoplay loop muted src="${video}" 
+                 style="border-radius:10px; width:100%; max-height: 100px;"></video>
         `;
 
-        container.appendChild(row);
-      }
+        gridContainer.appendChild(videoItem);
+      });
+
+      container.appendChild(categoryTitle);
+      container.appendChild(gridContainer);
+
+      return container;
     }
 
-    function renderPagination(videos, currentPage = 1) {
-      const paginationContainer = document.getElementById('pagination');
-      paginationContainer.innerHTML = ""; // Clear previous pagination
+    function renderVideos(videoData, page = 1) {
+      const container = document.getElementById("videoContainer");
+      container.innerHTML = "";
 
-      const totalPages = Math.ceil(videos.length / VIDEOS_PER_PAGE);
-      const maxVisibleButtons = 5; // Maximum number of visible buttons at once
-      const halfRange = Math.floor(maxVisibleButtons / 2);
+      // Divide videos into categories
+      const videocrafterVideos = videoData.map(v => v.videocrafterPath).slice((page - 1) * VIDEOS_PER_CATEGORY, page * VIDEOS_PER_CATEGORY);
+      const aestheticVideos = videoData.map(v => v.aestheticPath).slice((page - 1) * VIDEOS_PER_CATEGORY, page * VIDEOS_PER_CATEGORY);
+      const pickscoreVideos = videoData.map(v => v.pickscorePath).slice((page - 1) * VIDEOS_PER_CATEGORY, page * VIDEOS_PER_CATEGORY);
+      
 
-      // Function to create a pagination button
-      const createButton = (page, isActive = false, isEllipsis = false) => {
-        const button = document.createElement('button');
-        button.className = `button ${isActive ? 'is-primary' : ''} ${isEllipsis ? 'is-static' : ''}`;
-        button.innerText = isEllipsis ? '...' : page;
+      // Render each category
+      container.appendChild(renderCategoryVideos(videocrafterVideos, "VideoCrafter"));
+      container.appendChild(renderCategoryVideos(aestheticVideos, "VADER: Aesthetic and HPS Reward (Ours)"));
+      container.appendChild(renderCategoryVideos(pickscoreVideos, "VADER: PickScore Reward (Ours)"));
+      
+    }
 
-        if (!isEllipsis) {
-          button.addEventListener('click', () => {
-            renderVideos(videos, page);
-            renderPagination(videos, page);
-          });
-        }
+    function renderPagination(videoDatas, currentPage = 1) {
+      const paginationContainer = document.getElementById("pagination");
+      paginationContainer.innerHTML = "";
 
-        return button;
-      };
+      const totalPages = videoDatas.length;
 
-      // Add "Previous" button
-      if (currentPage > 1) {
-        const prevButton = createButton(currentPage - 1, false);
-        prevButton.innerText = "Previous";
-        paginationContainer.appendChild(prevButton);
-      }
+      // Create pagination buttons
+      for (let i = 1; i <= totalPages; i++) {
+        const button = document.createElement("button");
+        button.className = `button ${i === currentPage ? "is-primary" : ""}`;
+        button.innerText = i;
 
-      // Determine start and end pages for visible buttons
-      let startPage = Math.max(1, currentPage - halfRange);
-      let endPage = Math.min(totalPages, currentPage + halfRange);
+        button.addEventListener("click", () => {
+          renderPrompt(prompts[i - 1]);
+          renderVideos(videoDatas[i - 1], 1);
+          renderPagination(videoDatas, i);
+        });
 
-      if (currentPage <= halfRange) {
-        endPage = Math.min(totalPages, maxVisibleButtons);
-      } else if (currentPage + halfRange >= totalPages) {
-        startPage = Math.max(1, totalPages - maxVisibleButtons + 1);
-      }
-
-      // Add ellipsis if startPage is greater than 1
-      if (startPage > 1) {
-        paginationContainer.appendChild(createButton(1));
-        if (startPage > 2) {
-          paginationContainer.appendChild(createButton(null, false, true)); // Ellipsis
-        }
-      }
-
-      // Add visible page buttons
-      for (let i = startPage; i <= endPage; i++) {
-        const button = createButton(i, i === currentPage);
         paginationContainer.appendChild(button);
       }
-
-      // Add ellipsis if endPage is less than totalPages
-      if (endPage < totalPages) {
-        if (endPage < totalPages - 1) {
-          paginationContainer.appendChild(createButton(null, false, true)); // Ellipsis
-        }
-        paginationContainer.appendChild(createButton(totalPages));
-      }
-
-      // Add "Next" button
-      if (currentPage < totalPages) {
-        const nextButton = createButton(currentPage + 1, false);
-        nextButton.innerText = "Next";
-        paginationContainer.appendChild(nextButton);
-      }
     }
 
-    document.addEventListener('DOMContentLoaded', () => {
-      renderVideos(videoData, 1);
-      renderPagination(videoData, 1);
+    function renderPrompt(prompt) {
+      const promptTitle = document.getElementById("promptTitle");
+      promptTitle.textContent = `Prompt: "${prompt}"`;
+    }
+
+    document.addEventListener("DOMContentLoaded", () => {
+      renderPrompt(prompts[0]);
+      renderVideos(videoDatas[0], 1);
+      renderPagination(videoDatas, 1);
     });
   </script>
 </body>
