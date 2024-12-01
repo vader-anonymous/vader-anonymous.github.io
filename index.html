@@ -1900,6 +1900,7 @@
           and <a href="https://arxiv.org/abs/2411.04427">Sonia K Murthy, et al.</a> have found similar results, where
           aligning
           a model for a specific use case often results in reduced diversity.
+          Some Visualization are exhibited in <a href="./Video_Diversity.html">Diversity Gallery</a>.
         </p>
       </div>
 
@@ -2156,6 +2157,7 @@
               <th style="text-align: center;">Dynamic Degree</th>
               <th style="text-align: center;">Aesthetic Quality</th>
               <th style="text-align: center;">Imaging Quality</th>
+              <th style="text-align: center; border-left: 2px solid orange; border-right: 2px solid orange; border-top: 2px solid orange;">Weighted Average</th>
             </tr>
           </thead>
           <tbody>
@@ -2167,6 +2169,7 @@
               <td style="text-align: center;">0.5346</td>
               <td style="text-align: center;">0.5752</td>
               <td style="text-align: center;">0.6677</td>
+              <td style="text-align: center; border-left: 2px solid orange; border-right: 2px solid orange;">0.7997</td>
             </tr>
             <tr>
               <td style="text-align: center;">T2V Turbo</th>
@@ -2175,7 +2178,8 @@
               <td style="text-align: center;">0.9562</th>
               <td style="text-align: center;">0.4771</th>
               <td style="text-align: center;">0.6183</th>
-              <td style="text-align: center;">0.7266</th>
+              <td style="text-align: center;"><b>0.7266<b></th>
+              <td style="text-align: center; border-left: 2px solid orange; border-right: 2px solid orange;">0.8126</td>
             </tr>
             <tr>
               <td style="text-align: center;">VADER-Aesthetic and HPS</td>
@@ -2184,7 +2188,8 @@
               <td style="text-align: center;"><b>0.9734</b></td>
               <td style="text-align: center;">0.4741</td>
               <td style="text-align: center;"><b>0.6295</b></td>
-              <td style="text-align: center;"><b>0.7145</b></td>
+              <td style="text-align: center;">0.7145</td>
+              <td style="text-align: center; border-left: 2px solid orange; border-right: 2px solid orange;"><b>0.8167<b></td>
             </tr>
             <tr>
               <td style="text-align: center;">VADER-PickScore</td>
@@ -2194,6 +2199,7 @@
               <td style="text-align: center;">0.3732</td>
               <td style="text-align: center;">0.6094</td>
               <td style="text-align: center;">0.6762</td>
+              <td style="text-align: center; border-left: 2px solid orange; border-right: 2px solid orange;">0.7971</td>
             </tr>
             <tr>
               <td style="text-align: center;">VADER-Aesthetic and ViCLIP</td>
@@ -2203,6 +2209,7 @@
               <td style="text-align: center;"><b>0.5519</b></td>
               <td style="text-align: center;">0.6008</td>
               <td style="text-align: center;">0.6566</td>
+              <td style="text-align: center; border-left: 2px solid orange; border-right: 2px solid orange;  border-bottom: 2px solid orange;">0.8050</td>
             </tr>
           </tbody>
         </table>
@@ -2219,9 +2226,12 @@
           Motion Smoothness (fluidity of motion, based on motion priors from a frame interpolation model),
           Dynamic Degree (extent of motion in the video, estimated with RAFT),
           Aesthetic Quality (assessed via the LAION aesthetic predictor), and
-          Imaging Quality (using MUSIQ). We generate 700 videos
+          Imaging Quality (using MUSIQ).  The weighted average is calculated by assigning weights to each metric. 
+          All metrics are given a weight of 1, except for the Dynamic Degree metric, 
+          which is assigned a weight of 0.5. We generate 700 videos
           for each model using prompts not seen during training. We find that VADER-Pick has the
           best consistency score, while VADER-HPS shows the best aesthetic and imaging quality.
+          We find VADER-HPS performs the best overall.
         </p>
       </div>
 
