@@ -216,6 +216,7 @@
               <a class="navbar-item" href="#reward-correlation">Reward Correlation</a>
               <a class="navbar-item" href="#evalcrafter-evaluation">EvalCrafter Evaluation</a>
               <a class="navbar-item" href="#vbench-evaluation">VBench Evaluation</a>
+              <a class="navbar-item" href="#vbench-evaluation-standard-prompt-suite">VBench Evaluation (Standard Prompt Suite)</a>
               <a class="navbar-item" href="#v-jepa-evaluation">VADER-V-JEPA Evaluation</a>
               <a class="navbar-item" href="#truncated-backpropagation-ablation">Truncated Backpropagation Ablation</a>
               <a class="navbar-item" href="#doodl-vader">DOODL V.S. VADER</a>
@@ -1632,7 +1633,7 @@
         </h3>
         <p class="subtitle has-text-centered"
           style="text-align: center; padding-bottom: 10px; color: black; font-family: 'Google Sans', sans-serif;">
-          Improve text-video alignment for VideoCrafter.
+          Improve text-video alignment for VideoCrafter2.
         </p>
       </div>
     </div>
@@ -1869,7 +1870,7 @@
           <thead>
             <tr>
               <th style="text-align: center;"></th>
-              <th style="text-align: center;">VideoCrafter</th>
+              <th style="text-align: center;">VideoCrafter2</th>
               <th style="text-align: center;">VADER-PickScore Reward</th>
               <th style="text-align: center;">VADER-Aesthetic and HPS Reward</th>
               <th style="text-align: center;">VADER-Aesthetic and ViCLIP Reward</th>
@@ -1891,12 +1892,12 @@
       <div class="columns is-centered">
         <p class="subtitle"
           style="width: 80%; text-align: justify; text-justify: inter-word; padding: 10px 20px; color: black; font-family: 'Google Sans', sans-serif; line-height: 1.8; font-size: 1rem;">
-          Diversity of generated videos for VADER. The base model is VideoCrafter.
+          Diversity of generated videos for VADER. The base model is VideoCrafter2.
           We generate 500 videos for each model and prompt combination. We use 5 prompts resulting in
           a total of 2500 videos per model. The diversity is calculated using the variance of VideoMAE
           latent space embeddings across the 500 videos for each prompt. We then average the variances
           over all prompts. We find that VADER variants exhibit reduced diversity compared to the
-          baseline model VideoCrafter. Prior works <a href="https://arxiv.org/abs/2310.06452">Robert Kirk, et al.</a>
+          baseline model VideoCrafter2. Prior works <a href="https://arxiv.org/abs/2310.06452">Robert Kirk, et al.</a>
           and <a href="https://arxiv.org/abs/2411.04427">Sonia K Murthy, et al.</a> have found similar results, where
           aligning
           a model for a specific use case often results in reduced diversity.
@@ -2015,7 +2016,7 @@
           </thead>
           <tbody>
             <tr>
-              <td style="text-align: center;">VideoCrafter</td>
+              <td style="text-align: center;">VideoCrafter2</td>
               <td style="text-align: center;">0.2564</td>
               <td style="text-align: center;">20.9231</td>
               <td style="text-align: center;">5.2219</td>
@@ -2056,7 +2057,7 @@
       <div class="columns is-centered">
         <p class="subtitle"
           style="width: 80%; text-align: justify; text-justify: inter-word; padding: 10px 20px; color: black; font-family: 'Google Sans', sans-serif; line-height: 1.8; font-size: 1rem;">
-          The base model is VideoCrafter. In this Table, we study how optimizing for specific reward functions via VADER
+          The base model is VideoCrafter2. In this Table, we study how optimizing for specific reward functions via VADER
           affects scores on other
           reward functions. We observe that the HPS score increases significantly after fine-tuning the base
           model via the PickScore model, indicating a strong correlation. We study correlation across different
@@ -2096,9 +2097,19 @@
           </thead>
           <tbody>
             <tr>
-              <td style="text-align: center;">VideoCrafter</td>
+              <td style="text-align: center;">VideoCrafter2</td>
               <td style="text-align: center;">55.90</td>
               <td style="text-align: center;">52.89</td>
+            </tr>
+            <tr>
+              <td style="text-align: center;">T2V Turbo (4 Steps)	</td>
+              <td style="text-align: center;">57.10</td>
+              <td style="text-align: center;">54.93</td>
+            </tr>
+            <tr>
+              <td style="text-align: center;">T2V Turbo (8 Steps)	</td>
+              <td style="text-align: center;">57.05</td>
+              <td style="text-align: center;">55.34</td>
             </tr>
             <tr>
               <td style="text-align: center;">VADER-Aesthetic and HPS</td>
@@ -2130,7 +2141,7 @@
           Flow-Score (average optical flow between frames obtained from RAFT), and
           Motion AC-Score (amplitude classification consistency with the text prompt). We generate 700 videos
           from each model for this comparision. Results demonstrate that all the VADER-variants outperform the
-          base model (VideoCrafter).
+          base model (VideoCrafter2).
         </p>
       </div>
     </div>
@@ -2142,7 +2153,7 @@
         <div class="column is-full-width">
           <h3 id="vbench-evaluation" class="title pt-5 pb-2 has-text-centered"
             style="text-align: center; padding-bottom: 10px;">
-            <strong>VBench Evaluation</strong>
+            <strong>VBench Evaluation (EvalCrafter Prompts)</strong>
           </h3>
         </div>
       </div>
@@ -2162,7 +2173,7 @@
           </thead>
           <tbody>
             <tr>
-              <td style="text-align: center;">VideoCrafter</td>
+              <td style="text-align: center;">VideoCrafter2</td>
               <td style="text-align: center;">0.9544</td>
               <td style="text-align: center;">0.9652</td>
               <td style="text-align: center;">0.9688</td>
@@ -2227,7 +2238,7 @@
       <div class="columns is-centered">
         <p class="subtitle"
           style="width: 80%; text-align: justify; text-justify: inter-word; padding: 10px 20px; color: black; font-family: 'Google Sans', sans-serif; line-height: 1.8; font-size: 1rem;">
-          VBench evaluation results VADER. The base model is VideoCrafter. The metrics used in VBench include:
+          VBench evaluation results VADER. The base model is VideoCrafter2. The metrics used in VBench include:
           Subject Consistency (consistency of the main subject across frames,
           evaluated using DINO feature similarity),
           Background Consistency (using CLIP feature similarity),
@@ -2244,6 +2255,135 @@
       </div>
 
     </div>
+
+
+
+
+
+
+
+
+
+    <!-- ######################## -->
+    <div class="container"
+      style="background-color: #fffefe; padding: 30px; border-radius: 8px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);">
+      <div class="columns is-centered">
+        <div class="column is-full-width">
+          <h3 id="vbench-evaluation-standard-prompt-suite" class="title pt-5 pb-2 has-text-centered"
+            style="text-align: center; padding-bottom: 10px;">
+            <strong>VBench Evaluation (Standard Prompt Suite)</strong>
+          </h3>
+        </div>
+      </div>
+      <div class="table-container">
+        <table>
+          <thead>
+            <tr>
+              <th style="text-align: center;">Model</th>
+              <th style="text-align: center;">Subject Consistency</th>
+              <th style="text-align: center;">Background Consistency</th>
+              <th style="text-align: center;">Motion Smoothness</th>
+              <th style="text-align: center;">Dynamic Degree</th>
+              <th style="text-align: center;">Aesthetic Quality</th>
+              <th style="text-align: center;">Imaging Quality</th>
+              <th style="text-align: center;">Temporal Flickering</th>
+              <th style="text-align: center; border-left: 2px solid orange; border-right: 2px solid orange; border-top: 2px solid orange;">Quality Score</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td style="text-align: center;">VideoCrafter2</td>
+              <td style="text-align: center;">96.85</td>
+              <td style="text-align: center;">98.22</td>
+              <td style="text-align: center;">97.73</td>
+              <td style="text-align: center;">42.50</td>
+              <td style="text-align: center;">63.13</td>
+              <td style="text-align: center;">67.22</td>
+              <td style="text-align: center;">98.41</td>
+              <td style="text-align: center; border-left: 2px solid orange; border-right: 2px solid orange;">82.20</td>
+            </tr>
+            <tr>
+              <td style="text-align: center;">Pika</td>
+              <td style="text-align: center;">96.76</td>
+              <td style="text-align: center;"><b>98.95<b></td>
+              <td style="text-align: center;">99.51</td>
+              <td style="text-align: center;">37.22</td>
+              <td style="text-align: center;">63.15</td>
+              <td style="text-align: center;">62.33</td>
+              <td style="text-align: center;"><b>99.77<b></td>
+              <td style="text-align: center; border-left: 2px solid orange; border-right: 2px solid orange;">82.68</td>
+            </tr>
+            <tr>
+              <td style="text-align: center;">Gen-2</td>
+              <td style="text-align: center;"><b>97.61<b></td>
+              <td style="text-align: center;">97.61</td>
+              <td style="text-align: center;"><b>99.58<b></td>
+              <td style="text-align: center;">18.89</td>
+              <td style="text-align: center;">66.96</td>
+              <td style="text-align: center;">67.42</td>
+              <td style="text-align: center;">99.56</td>
+              <td style="text-align: center; border-left: 2px solid orange; border-right: 2px solid orange;">82.47</td>
+            </tr>
+            <tr>
+              <td style="text-align: center;">T2V Turbo (VC2)</td>
+                <td style="text-align: center;">96.28</td>
+                <td style="text-align: center;">97.02</td>
+                <td style="text-align: center;">97.34</td>
+                <td style="text-align: center;">49.17</td>
+                <td style="text-align: center;">63.04</td>
+                <td style="text-align: center;"><b>72.49<b></td>
+                <td style="text-align: center;">97.48</td>
+              <td style="text-align: center; border-left: 2px solid orange; border-right: 2px solid orange;">82.57</td>
+            </tr>
+            <tr>
+              <td style="text-align: center;">VADER-Aesthetic and HPS</td>
+              <td style="text-align: center;">95.79</td>
+              <td style="text-align: center;">96.71</td>
+              <td style="text-align: center;">97.06</td>
+              <td style="text-align: center;"><b>66.94<b></td>
+              <td style="text-align: center;"><b>67.04<b></td>
+              <td style="text-align: center;">69.93</td>
+              <td style="text-align: center;">98.19</td>
+              <td style="text-align: center; border-left: 2px solid orange; border-right: 2px solid orange; border-bottom: 2px solid orange;"><b>84.15<b></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Updated text section -->
+      <div class="columns is-centered">
+        <p class="subtitle"
+          style="width: 80%; text-align: justify; text-justify: inter-word; padding: 10px 20px; color: black; font-family: 'Google Sans', sans-serif; line-height: 1.8; font-size: 1rem;">
+          VBench evaluation results VADER using standard prompt suite. The base model is VideoCrafter2, <a href="https://pika.art/try">Pika (2023-9)</a>, <a href="https://runwayml.com/ai-magic-tools/gen-2Gen-2">Gen-2 (2023-12)</a>, and <a href="https://arxiv.org/abs/2405.18750">T2V Turbo (VC2)</a>. The metrics used in VBench include:
+          Subject Consistency (consistency of the main subject across frames,
+          evaluated using DINO feature similarity),
+          Background Consistency (using CLIP feature similarity),
+          Motion Smoothness (fluidity of motion, based on motion priors from a frame interpolation model),
+          Dynamic Degree (extent of motion in the video, estimated with RAFT),
+          Aesthetic Quality (assessed via the LAION aesthetic predictor),
+          Imaging Quality (using MUSIQ), and Temporal Flickering (computing the mean absolute difference across frames). 
+          The Quality Score is calculated by assigning weights to each normalized metric. 
+          All metrics are given a weight of 1, except for the Dynamic Degree metric, 
+          which is assigned a weight of 0.5. This follows VBench metrics.
+          We find VADER-HPS surpass all baselines in terms of Quality Score, Aesthetic Quality and Dynamic Degree.
+        </p>
+      </div>
+
+    </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
     <!-- ######################## -->
     <!--VADER-V-JEPA Evaluation-->
@@ -2388,7 +2528,7 @@
         <p class="subtitle"
           style="width: 80%; text-align: justify; text-justify: inter-word; padding: 10px 20px; color: black; font-family: 'Google Sans', sans-serif; line-height: 1.8; font-size: 1rem;">
           We ablate the number of truncated backpropagation steps (K) in VADER. For this experiment,
-          we use VADER trained using Aesthetic and HPS Rewards. The base model is VideoCrafter. We find that higher
+          we use VADER trained using Aesthetic and HPS Rewards. The base model is VideoCrafter2. We find that higher
           values of K result in
           more semantic level changes, while K=1 results in more fine-grained changes, specifically in
           the earlier steps of training. Further, we find as we train longer, both the models start
@@ -2425,7 +2565,7 @@
           </h3>
           <p class="subtitle has-text-centered"
             style="text-align: center; padding-bottom: 10px; color: black; font-family: 'Google Sans', sans-serif;">
-            We use Aesthetic and HPS reward function to optimize models. Base model of VADER is VideoCrafter.
+            We use Aesthetic and HPS reward function to optimize models. Base model of VADER is VideoCrafter2.
           </p>
         </div>
       </div>
