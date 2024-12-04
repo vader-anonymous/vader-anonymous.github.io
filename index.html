@@ -222,8 +222,8 @@
               <a class="navbar-item" href="#truncated-backpropagation-ablation">Truncated Backpropagation Ablation</a>
               <a class="navbar-item" href="#doodl-vader">DOODL V.S. VADER</a>
               <a class="navbar-item" href="#vbench-distilled-reward-model">VBench Distilled Reward Model</a>
-              <a class="navbar-item" href="#vader-vbench-loss">VADER-VBench Loss</a>
               <a class="navbar-item" href="#vbench-reward-model-train">VBench Reward Model Train</a>
+              <a class="navbar-item" href="#vader-vbench-loss">VADER-VBench Loss</a>
             </div>
           </div>
         </div>
@@ -1790,1268 +1790,1269 @@
       <!-- Add more carousel items as needed -->
     </div>
 
+  </div>
 
 
 
 
 
-
-    <!-- ######################## -->
-    <!-- ViCLIP Training Curve -->
-    <div class="container"
-      style="background-color: #fffefe; padding: 30px; border-radius: 8px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);">
-      <div class="columns is-centered">
-        <div class="column is-full-width">
-          <h3 id="reward-curve" class="title pt-5 pb-2 has-text-centered"
-            style="text-align: center; padding-bottom: 10px;">
-            <strong>Aesthetic and ViCLIP Reward Curve</strong>
-          </h3>
-          <p class="subtitle has-text-centered"
-            style="text-align: center; padding-bottom: 10px; color: black; font-family: 'Google Sans', sans-serif;">
-            Training curve for Videocrater-based VADER fine-tuned using Aesthetic and ViCLIP Reward.
-          </p>
-        </div>
-      </div>
-      <div class="columns" style="display: flex; justify-content: center; align-items: center;">
-        <div class="column is-narrow" style="text-align: center;">
-          <img src="videos/reward_curve_smoothed.png" alt="Reward Curve"
-            style="max-width: 80%; height: auto; border-radius: 8px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);">
-        </div>
-      </div>
-    </div>
-
-    <!-- ######################## -->
-    <!-- Training efficiency comparison -->
-    <div class="container"
-      style="background-color: #f7f9fc; padding: 30px; border-radius: 8px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);">
-      <div class="columns is-centered">
-        <div class="column is-full-width">
-          <h3 id="training-efficiency-comparison" class="title pt-5 pb-2 has-text-centered"
-            style="text-align: center; padding-bottom: 10px;">
-            <strong>Training Efficiency Comparison</strong>
-          </h3>
-        </div>
-      </div>
-      <div class="columns" style="display: flex; justify-content: center; align-items: center;">
-        <div class="column is-narrow" style="text-align: center;">
-          <img src="videos/reward_curves_main.png" alt="Reward Curve"
-            style="max-width: 80%; height: auto; border-radius: 8px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);">
-        </div>
-      </div>
-
-      <!-- Updated text section -->
-      <div class="columns is-centered">
-        <p class="subtitle"
-          style="width: 80%; text-align: justify; text-justify: inter-word; padding: 10px 20px; color: black; font-family: 'Google Sans', sans-serif; line-height: 1.8; font-size: 1rem;">
-          Training efficiency comparison against various baselines, when trained for longer. The base model used here is
-          ModelScope. We compare VADER against DPO, DDPO, on-policy DPO, and on-policy DDPO. For implementing the
-          on-policy
-          version of the baselines, we simply reduce the UTD (update-to-data) ratio to 1, thus only doing a single
-          gradient
-          update for each datapoint sampled. We observe that VADER significantly outperforms all of them in terms of
-          compute
-          efficiency.
+  <!-- ######################## -->
+  <!-- ViCLIP Training Curve -->
+  <div class="container"
+    style="background-color: #fffefe; padding: 30px; border-radius: 8px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);">
+    <div class="columns is-centered">
+      <div class="column is-full-width">
+        <h3 id="reward-curve" class="title pt-5 pb-2 has-text-centered"
+          style="text-align: center; padding-bottom: 10px;">
+          <strong>Aesthetic and ViCLIP Reward Curve</strong>
+        </h3>
+        <p class="subtitle has-text-centered"
+          style="text-align: center; padding-bottom: 10px; color: black; font-family: 'Google Sans', sans-serif;">
+          Training curve for Videocrater-based VADER fine-tuned using Aesthetic and ViCLIP Reward.
         </p>
       </div>
     </div>
-
-
-
-
-    <!-- ######################## -->
-    <div class="container"
-      style="background-color: #fffefe; padding: 30px; border-radius: 8px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);">
-      <div class="columns is-centered">
-        <div class="column is-full-width">
-          <h3 id="diversity-test" class="title pt-5 pb-2 has-text-centered"
-            style="text-align: center; padding-bottom: 10px;">
-            <strong>Diversity Test</strong>
-          </h3>
-        </div>
-      </div>
-      <div class="table-container">
-        <table>
-          <thead>
-            <tr>
-              <th style="text-align: center;"></th>
-              <th style="text-align: center;">VideoCrafter2</th>
-              <th style="text-align: center;">VADER-PickScore Reward</th>
-              <th style="text-align: center;">VADER-Aesthetic and HPS Reward</th>
-              <th style="text-align: center;">VADER-Aesthetic and ViCLIP Reward</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td style="text-align: center;">Average Variance</td>
-              <td style="text-align: center;"><b>0.0037<b></td>
-              <td style="text-align: center;">0.0026</td>
-              <td style="text-align: center;">0.0023</td>
-              <td style="text-align: center;">0.0031</td>
-
-            </tr>
-          </tbody>
-        </table>
-      </div>
-      <!-- Updated text section -->
-      <div class="columns is-centered">
-        <p class="subtitle"
-          style="width: 80%; text-align: justify; text-justify: inter-word; padding: 10px 20px; color: black; font-family: 'Google Sans', sans-serif; line-height: 1.8; font-size: 1rem;">
-          Diversity of generated videos for VADER. The base model is VideoCrafter2.
-          We generate 500 videos for each model and prompt combination. We use 5 prompts resulting in
-          a total of 2500 videos per model. The diversity is calculated using the variance of VideoMAE
-          latent space embeddings across the 500 videos for each prompt. We then average the variances
-          over all prompts. We find that VADER variants exhibit reduced diversity compared to the
-          baseline model VideoCrafter2. Prior works <a href="https://arxiv.org/abs/2310.06452">Robert Kirk, et al.</a>
-          and <a href="https://arxiv.org/abs/2411.04427">Sonia K Murthy, et al.</a> have found similar results, where
-          aligning
-          a model for a specific use case often results in reduced diversity.
-          Some Visualization are exhibited in <a href="./Video_Diversity.html">Diversity Gallery</a>.
-        </p>
-      </div>
-
-    </div>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    <!-- ######################## -->
-    <div class="container"
-      style="background-color: #f7f9fc; padding: 30px; border-radius: 8px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);">
-      <div class="columns is-centered">
-        <div class="column is-full-width">
-          <h3 id="memory-usage-comparison" class="title pt-5 pb-2 has-text-centered"
-            style="text-align: center; padding-bottom: 10px;">
-            <strong>Memory Usage Comparison</strong>
-          </h3>
-        </div>
-      </div>
-      <div class="table-container">
-        <table>
-          <thead>
-            <tr>
-              <th style="text-align: center;">Method</th>
-              <th style="text-align: center;">VRAM</th>
-              <th style="text-align: center;">System RAM</th>
-              <th style="text-align: center;">Total RAM</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td style="text-align: center;">LoRA + Mixed Precision</td>
-              <td style="text-align: center;">12.1 GB</td>
-              <td style="text-align: center;">264.2 GB</td>
-              <td style="text-align: center;">276.3 GB</td>
-            </tr>
-            <tr>
-              <td style="text-align: center;">+ Subsampling Frames</td>
-              <td style="text-align: center;">12.1 GB</td>
-              <td style="text-align: center;">216.8 GB</td>
-              <td style="text-align: center;">228.9 GB</td>
-            </tr>
-            <tr>
-              <td style="text-align: center;">+ Truncated Backpropagation</td>
-              <td style="text-align: center;">12.1 GB</td>
-              <td style="text-align: center;">57.3 GB</td>
-              <td style="text-align: center;">69.4 GB</td>
-            </tr>
-            <tr>
-              <td style="text-align: center;">+ Gradient Checkpointing</td>
-              <td style="text-align: center;">12.1 GB</td>
-              <td style="text-align: center;">20.4 GB</td>
-              <td style="text-align: center;"><b>32.5 GB<b></td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-
-      <!-- Updated text section -->
-      <div class="columns is-centered">
-        <p class="subtitle"
-          style="width: 80%; text-align: justify; text-justify: inter-word; padding: 10px 20px; color: black; font-family: 'Google Sans', sans-serif; line-height: 1.8; font-size: 1rem;">
-          Ablation of memory usage for different components in ModelScope-based VADER.
-          For this experiment, we offload the memory to the CPU main memory to prevent
-          GPU out-of-memory error. Starting with the standard LoRA + Mixed Precision,
-          each row represents an added component (Subsampling Frames, Truncated Backpropagation,
-          and Gradient Checkpointing) applied incrementally to the previous row. The total RAM
-          reduced is about 240 GB after implementing all the steps.
-        </p>
-      </div>
-
-    </div>
-
-
-
-    <!-- ######################## -->
-    <div class="container"
-      style="background-color: #fffefe; padding: 30px; border-radius: 8px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);">
-      <div class="columns is-centered">
-        <div class="column is-full-width">
-          <h3 id="reward-correlation" class="title pt-5 pb-2 has-text-centered"
-            style="text-align: center; padding-bottom: 10px;">
-            <strong>Reward Correlation</strong>
-          </h3>
-        </div>
-      </div>
-      <div class="table-container">
-        <table>
-          <thead>
-            <tr>
-              <th style="text-align: center;">Model</th>
-              <th style="text-align: center;">HPS Score</th>
-              <th style="text-align: center;">PickScore Score</th>
-              <th style="text-align: center;">Aesthetic Score</th>
-              <th style="text-align: center;">ViCLIP Score</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td style="text-align: center;">VideoCrafter2</td>
-              <td style="text-align: center;">0.2564</td>
-              <td style="text-align: center;">20.9231</td>
-              <td style="text-align: center;">5.2219</td>
-              <td style="text-align: center;"><b>0.2643</b></td>
-            </tr>
-            <tr>
-              <td style="text-align: center;">VADER-Aesthetic and HPS</td>
-              <td style="text-align: center;">0.2651</td>
-              <td style="text-align: center;">21.1345</td>
-              <td style="text-align: center;"><b>5.7965</b></td>
-              <td style="text-align: center;">0.2622</td>
-            </tr>
-            <tr>
-              <td style="text-align: center;">VADER-PickScore</td>
-              <td style="text-align: center;"><b>0.2669</b></td>
-              <td style="text-align: center;"><b>21.4911</b></td>
-              <td style="text-align: center;">5.5757</td>
-              <td style="text-align: center;">0.2640</td>
-            </tr>
-            <tr>
-              <td style="text-align: center;">VADER-Aesthetic and ViCLIP</td>
-              <td style="text-align: center;">0.2511</td>
-              <td style="text-align: center;">20.8927</td>
-              <td style="text-align: center;">5.6241</td>
-              <td style="text-align: center;">0.2628</td>
-            </tr>
-          </tbody>
-        </table>
-
-      </div>
-
+    <div class="columns" style="display: flex; justify-content: center; align-items: center;">
       <div class="column is-narrow" style="text-align: center;">
-        <img src="videos/correlation.png" alt="Reward Curve"
-          style="max-width: 81%; height: auto; border-radius: 8px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);">
+        <img src="videos/reward_curve_smoothed.png" alt="Reward Curve"
+          style="max-width: 80%; height: auto; border-radius: 8px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);">
       </div>
+    </div>
+  </div>
 
-      <!-- Updated text section -->
-      <div class="columns is-centered">
-        <p class="subtitle"
-          style="width: 80%; text-align: justify; text-justify: inter-word; padding: 10px 20px; color: black; font-family: 'Google Sans', sans-serif; line-height: 1.8; font-size: 1rem;">
-          The base model is VideoCrafter2. In this Table, we study how optimizing for specific reward functions via
-          VADER
-          affects scores on other
-          reward functions. We observe that the HPS score increases significantly after fine-tuning the base
-          model via the PickScore model, indicating a strong correlation. We study correlation across different
-          reward models for VADER.
-          We find that there is a strong positive correlation between PickScore and HPS scores, while a strong
-          negative correlation between ViCLIP and Aesthetic reward function.
-        </p>
+  <!-- ######################## -->
+  <!-- Training efficiency comparison -->
+  <div class="container"
+    style="background-color: #f7f9fc; padding: 30px; border-radius: 8px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);">
+    <div class="columns is-centered">
+      <div class="column is-full-width">
+        <h3 id="training-efficiency-comparison" class="title pt-5 pb-2 has-text-centered"
+          style="text-align: center; padding-bottom: 10px;">
+          <strong>Training Efficiency Comparison</strong>
+        </h3>
       </div>
+    </div>
+    <div class="columns" style="display: flex; justify-content: center; align-items: center;">
+      <div class="column is-narrow" style="text-align: center;">
+        <img src="videos/reward_curves_main.png" alt="Reward Curve"
+          style="max-width: 80%; height: auto; border-radius: 8px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);">
+      </div>
+    </div>
+
+    <!-- Updated text section -->
+    <div class="columns is-centered">
+      <p class="subtitle"
+        style="width: 80%; text-align: justify; text-justify: inter-word; padding: 10px 20px; color: black; font-family: 'Google Sans', sans-serif; line-height: 1.8; font-size: 1rem;">
+        Training efficiency comparison against various baselines, when trained for longer. The base model used here is
+        ModelScope. We compare VADER against DPO, DDPO, on-policy DPO, and on-policy DDPO. For implementing the
+        on-policy
+        version of the baselines, we simply reduce the UTD (update-to-data) ratio to 1, thus only doing a single
+        gradient
+        update for each datapoint sampled. We observe that VADER significantly outperforms all of them in terms of
+        compute
+        efficiency.
+      </p>
+    </div>
+  </div>
+
+
+
+
+  <!-- ######################## -->
+  <div class="container"
+    style="background-color: #fffefe; padding: 30px; border-radius: 8px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);">
+    <div class="columns is-centered">
+      <div class="column is-full-width">
+        <h3 id="diversity-test" class="title pt-5 pb-2 has-text-centered"
+          style="text-align: center; padding-bottom: 10px;">
+          <strong>Diversity Test</strong>
+        </h3>
+      </div>
+    </div>
+    <div class="table-container">
+      <table>
+        <thead>
+          <tr>
+            <th style="text-align: center;"></th>
+            <th style="text-align: center;">VideoCrafter2</th>
+            <th style="text-align: center;">VADER-PickScore Reward</th>
+            <th style="text-align: center;">VADER-Aesthetic and HPS Reward</th>
+            <th style="text-align: center;">VADER-Aesthetic and ViCLIP Reward</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td style="text-align: center;">Average Variance</td>
+            <td style="text-align: center;"><b>0.0037<b></td>
+            <td style="text-align: center;">0.0026</td>
+            <td style="text-align: center;">0.0023</td>
+            <td style="text-align: center;">0.0031</td>
+
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <!-- Updated text section -->
+    <div class="columns is-centered">
+      <p class="subtitle"
+        style="width: 80%; text-align: justify; text-justify: inter-word; padding: 10px 20px; color: black; font-family: 'Google Sans', sans-serif; line-height: 1.8; font-size: 1rem;">
+        Diversity of generated videos for VADER. The base model is VideoCrafter2.
+        We generate 500 videos for each model and prompt combination. We use 5 prompts resulting in
+        a total of 2500 videos per model. The diversity is calculated using the variance of VideoMAE
+        latent space embeddings across the 500 videos for each prompt. We then average the variances
+        over all prompts. We find that VADER variants exhibit reduced diversity compared to the
+        baseline model VideoCrafter2. Prior works <a href="https://arxiv.org/abs/2310.06452">Robert Kirk, et al.</a>
+        and <a href="https://arxiv.org/abs/2411.04427">Sonia K Murthy, et al.</a> have found similar results, where
+        aligning
+        a model for a specific use case often results in reduced diversity.
+        Some Visualization are exhibited in <a href="./Video_Diversity.html">Diversity Gallery</a>.
+      </p>
+    </div>
+
+  </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  <!-- ######################## -->
+  <div class="container"
+    style="background-color: #f7f9fc; padding: 30px; border-radius: 8px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);">
+    <div class="columns is-centered">
+      <div class="column is-full-width">
+        <h3 id="memory-usage-comparison" class="title pt-5 pb-2 has-text-centered"
+          style="text-align: center; padding-bottom: 10px;">
+          <strong>Memory Usage Comparison</strong>
+        </h3>
+      </div>
+    </div>
+    <div class="table-container">
+      <table>
+        <thead>
+          <tr>
+            <th style="text-align: center;">Method</th>
+            <th style="text-align: center;">VRAM</th>
+            <th style="text-align: center;">System RAM</th>
+            <th style="text-align: center;">Total RAM</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td style="text-align: center;">LoRA + Mixed Precision</td>
+            <td style="text-align: center;">12.1 GB</td>
+            <td style="text-align: center;">264.2 GB</td>
+            <td style="text-align: center;">276.3 GB</td>
+          </tr>
+          <tr>
+            <td style="text-align: center;">+ Subsampling Frames</td>
+            <td style="text-align: center;">12.1 GB</td>
+            <td style="text-align: center;">216.8 GB</td>
+            <td style="text-align: center;">228.9 GB</td>
+          </tr>
+          <tr>
+            <td style="text-align: center;">+ Truncated Backpropagation</td>
+            <td style="text-align: center;">12.1 GB</td>
+            <td style="text-align: center;">57.3 GB</td>
+            <td style="text-align: center;">69.4 GB</td>
+          </tr>
+          <tr>
+            <td style="text-align: center;">+ Gradient Checkpointing</td>
+            <td style="text-align: center;">12.1 GB</td>
+            <td style="text-align: center;">20.4 GB</td>
+            <td style="text-align: center;"><b>32.5 GB<b></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Updated text section -->
+    <div class="columns is-centered">
+      <p class="subtitle"
+        style="width: 80%; text-align: justify; text-justify: inter-word; padding: 10px 20px; color: black; font-family: 'Google Sans', sans-serif; line-height: 1.8; font-size: 1rem;">
+        Ablation of memory usage for different components in ModelScope-based VADER.
+        For this experiment, we offload the memory to the CPU main memory to prevent
+        GPU out-of-memory error. Starting with the standard LoRA + Mixed Precision,
+        each row represents an added component (Subsampling Frames, Truncated Backpropagation,
+        and Gradient Checkpointing) applied incrementally to the previous row. The total RAM
+        reduced is about 240 GB after implementing all the steps.
+      </p>
+    </div>
+
+  </div>
+
+
+
+  <!-- ######################## -->
+  <div class="container"
+    style="background-color: #fffefe; padding: 30px; border-radius: 8px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);">
+    <div class="columns is-centered">
+      <div class="column is-full-width">
+        <h3 id="reward-correlation" class="title pt-5 pb-2 has-text-centered"
+          style="text-align: center; padding-bottom: 10px;">
+          <strong>Reward Correlation</strong>
+        </h3>
+      </div>
+    </div>
+    <div class="table-container">
+      <table>
+        <thead>
+          <tr>
+            <th style="text-align: center;">Model</th>
+            <th style="text-align: center;">HPS Score</th>
+            <th style="text-align: center;">PickScore Score</th>
+            <th style="text-align: center;">Aesthetic Score</th>
+            <th style="text-align: center;">ViCLIP Score</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td style="text-align: center;">VideoCrafter2</td>
+            <td style="text-align: center;">0.2564</td>
+            <td style="text-align: center;">20.9231</td>
+            <td style="text-align: center;">5.2219</td>
+            <td style="text-align: center;"><b>0.2643</b></td>
+          </tr>
+          <tr>
+            <td style="text-align: center;">VADER-Aesthetic and HPS</td>
+            <td style="text-align: center;">0.2651</td>
+            <td style="text-align: center;">21.1345</td>
+            <td style="text-align: center;"><b>5.7965</b></td>
+            <td style="text-align: center;">0.2622</td>
+          </tr>
+          <tr>
+            <td style="text-align: center;">VADER-PickScore</td>
+            <td style="text-align: center;"><b>0.2669</b></td>
+            <td style="text-align: center;"><b>21.4911</b></td>
+            <td style="text-align: center;">5.5757</td>
+            <td style="text-align: center;">0.2640</td>
+          </tr>
+          <tr>
+            <td style="text-align: center;">VADER-Aesthetic and ViCLIP</td>
+            <td style="text-align: center;">0.2511</td>
+            <td style="text-align: center;">20.8927</td>
+            <td style="text-align: center;">5.6241</td>
+            <td style="text-align: center;">0.2628</td>
+          </tr>
+        </tbody>
+      </table>
 
     </div>
 
+    <div class="column is-narrow" style="text-align: center;">
+      <img src="videos/correlation.png" alt="Reward Curve"
+        style="max-width: 81%; height: auto; border-radius: 8px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);">
+    </div>
+
+    <!-- Updated text section -->
+    <div class="columns is-centered">
+      <p class="subtitle"
+        style="width: 80%; text-align: justify; text-justify: inter-word; padding: 10px 20px; color: black; font-family: 'Google Sans', sans-serif; line-height: 1.8; font-size: 1rem;">
+        The base model is VideoCrafter2. In this Table, we study how optimizing for specific reward functions via
+        VADER
+        affects scores on other
+        reward functions. We observe that the HPS score increases significantly after fine-tuning the base
+        model via the PickScore model, indicating a strong correlation. We study correlation across different
+        reward models for VADER.
+        We find that there is a strong positive correlation between PickScore and HPS scores, while a strong
+        negative correlation between ViCLIP and Aesthetic reward function.
+      </p>
+    </div>
+
+  </div>
 
 
-    <!-- ######################## -->
-    <div class="container"
-      style="background-color: #f7f9fc; padding: 30px; border-radius: 8px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);">
-      <div class="columns is-centered">
-        <div class="column is-full-width">
-          <h3 id="evalcrafter-evaluation" class="title pt-5 pb-2 has-text-centered"
-            style="text-align: center; padding-bottom: 10px;">
-            <strong>EvalCrater Evaluation</strong>
-          </h3>
-          <p class="subtitle has-text-centered"
-            style="text-align: center; padding-bottom: 10px; color: black; font-family: 'Google Sans', sans-serif;">
-            Evaluated on VideoCrafter-based VADER.
-          </p>
-        </div>
+
+  <!-- ######################## -->
+  <div class="container"
+    style="background-color: #f7f9fc; padding: 30px; border-radius: 8px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);">
+    <div class="columns is-centered">
+      <div class="column is-full-width">
+        <h3 id="evalcrafter-evaluation" class="title pt-5 pb-2 has-text-centered"
+          style="text-align: center; padding-bottom: 10px;">
+          <strong>EvalCrater Evaluation</strong>
+        </h3>
+        <p class="subtitle has-text-centered"
+          style="text-align: center; padding-bottom: 10px; color: black; font-family: 'Google Sans', sans-serif;">
+          Evaluated on VideoCrafter-based VADER.
+        </p>
       </div>
-      <div class="table-container">
-        <table>
-          <thead>
-            <tr>
-              <th style="text-align: center;">Model</th>
-              <th style="text-align: center;">Temporal Coherence</th>
-              <th style="text-align: center;">Motion Quality</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td style="text-align: center;">VideoCrafter2</td>
-              <td style="text-align: center;">55.90</td>
-              <td style="text-align: center;">52.89</td>
-            </tr>
-            <tr>
-              <td style="text-align: center;">T2V Turbo (4 Steps) </td>
-              <td style="text-align: center;">57.10</td>
-              <td style="text-align: center;">54.93</td>
-            </tr>
-            <tr>
-              <td style="text-align: center;">T2V Turbo (8 Steps) </td>
-              <td style="text-align: center;">57.05</td>
-              <td style="text-align: center;">55.34</td>
-            </tr>
+    </div>
+    <div class="table-container">
+      <table>
+        <thead>
+          <tr>
+            <th style="text-align: center;">Model</th>
+            <th style="text-align: center;">Temporal Coherence</th>
+            <th style="text-align: center;">Motion Quality</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td style="text-align: center;">VideoCrafter2</td>
+            <td style="text-align: center;">55.90</td>
+            <td style="text-align: center;">52.89</td>
+          </tr>
+          <tr>
+            <td style="text-align: center;">T2V Turbo (4 Steps) </td>
+            <td style="text-align: center;">57.10</td>
+            <td style="text-align: center;">54.93</td>
+          </tr>
+          <tr>
+            <td style="text-align: center;">T2V Turbo (8 Steps) </td>
+            <td style="text-align: center;">57.05</td>
+            <td style="text-align: center;">55.34</td>
+          </tr>
+          <tr>
+            <td style="text-align: center;">VADER-Aesthetic and HPS</td>
+            <td style="text-align: center;">59.65</td>
+            <td style="text-align: center;"><b>55.46</b></td>
+          </tr>
+          <tr>
+            <td style="text-align: center;">VADER-PickScore</td>
+            <td style="text-align: center;"><b>60.75</b></td>
+            <td style="text-align: center;">54.65</td>
+          </tr>
+          <tr>
+            <td style="text-align: center;">VADER-Aesthetic and ViCLIP</td>
+            <td style="text-align: center;">57.08</td>
+            <td style="text-align: center;">54.25</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <!-- Updated text section -->
+    <div class="columns is-centered">
+      <p class="subtitle"
+        style="width: 80%; text-align: justify; text-justify: inter-word; padding: 10px 20px; color: black; font-family: 'Google Sans', sans-serif; line-height: 1.8; font-size: 1rem;">
+        EvalCrafter evaluation results for VADER.
+        EvalCrafter calculates Temporal Coherence using Warping Error,
+        Semantic Consistency (cosine similarity of the embeddings of consecutive frames),
+        and Face Consistency, which assess frame-wise pixel and semantic consistency.
+        Motion Quality is evaluated through Action-Score (action classification accuracy),
+        Flow-Score (average optical flow between frames obtained from RAFT), and
+        Motion AC-Score (amplitude classification consistency with the text prompt). We generate 700 videos
+        from each model for this comparision. Results demonstrate that all the VADER-variants outperform the
+        base model (VideoCrafter2).
+      </p>
+    </div>
+  </div>
+
+  <!-- ######################## -->
+  <div class="container"
+    style="background-color: #fffefe; padding: 30px; border-radius: 8px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);">
+    <div class="columns is-centered">
+      <div class="column is-full-width">
+        <h3 id="vbench-evaluation" class="title pt-5 pb-2 has-text-centered"
+          style="text-align: center; padding-bottom: 10px;">
+          <strong>VBench Evaluation (EvalCrafter Prompts)</strong>
+        </h3>
+      </div>
+    </div>
+    <div class="table-container">
+      <table>
+        <thead>
+          <tr>
+            <th style="text-align: center;">Model</th>
+            <th style="text-align: center;">Subject Consistency</th>
+            <th style="text-align: center;">Background Consistency</th>
+            <th style="text-align: center;">Motion Smoothness</th>
+            <th style="text-align: center;">Dynamic Degree</th>
+            <th style="text-align: center;">Aesthetic Quality</th>
+            <th style="text-align: center;">Imaging Quality</th>
+            <th
+              style="text-align: center; border-left: 2px solid orange; border-right: 2px solid orange; border-top: 2px solid orange;">
+              Weighted Average</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td style="text-align: center;">VideoCrafter2</td>
+            <td style="text-align: center;">0.9544</td>
+            <td style="text-align: center;">0.9652</td>
+            <td style="text-align: center;">0.9688</td>
+            <td style="text-align: center;">0.5346</td>
+            <td style="text-align: center;">0.5752</td>
+            <td style="text-align: center;">0.6677</td>
+            <td style="text-align: center; border-left: 2px solid orange; border-right: 2px solid orange;">0.7997</td>
+          </tr>
+          <tr>
+            <td style="text-align: center;">T2V Turbo (4 Steps)</th>
+            <td style="text-align: center;">0.9639</th>
+            <td style="text-align: center;">0.9656</th>
+            <td style="text-align: center;">0.9562</th>
+            <td style="text-align: center;">0.4771</th>
+            <td style="text-align: center;">0.6183</th>
+            <td style="text-align: center;"><b>0.7266<b></th>
+            <td style="text-align: center; border-left: 2px solid orange; border-right: 2px solid orange;">0.8126</td>
+          </tr>
+          <td style="text-align: center;">T2V Turbo (8 Steps)</th>
+          <td style="text-align: center;"><b>0.9735<b></th>
+          <td style="text-align: center;"><b>0.9736<b></th>
+          <td style="text-align: center;">0.9572</th>
+          <td style="text-align: center;">0.3686</th>
+          <td style="text-align: center;">0.6265</th>
+          <td style="text-align: center;">0.7168</th>
+          <td style="text-align: center; border-left: 2px solid orange; border-right: 2px solid orange;">0.8058</th>
             <tr>
               <td style="text-align: center;">VADER-Aesthetic and HPS</td>
-              <td style="text-align: center;">59.65</td>
-              <td style="text-align: center;"><b>55.46</b></td>
-            </tr>
-            <tr>
-              <td style="text-align: center;">VADER-PickScore</td>
-              <td style="text-align: center;"><b>60.75</b></td>
-              <td style="text-align: center;">54.65</td>
-            </tr>
-            <tr>
-              <td style="text-align: center;">VADER-Aesthetic and ViCLIP</td>
-              <td style="text-align: center;">57.08</td>
-              <td style="text-align: center;">54.25</td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-      <!-- Updated text section -->
-      <div class="columns is-centered">
-        <p class="subtitle"
-          style="width: 80%; text-align: justify; text-justify: inter-word; padding: 10px 20px; color: black; font-family: 'Google Sans', sans-serif; line-height: 1.8; font-size: 1rem;">
-          EvalCrafter evaluation results for VADER.
-          EvalCrafter calculates Temporal Coherence using Warping Error,
-          Semantic Consistency (cosine similarity of the embeddings of consecutive frames),
-          and Face Consistency, which assess frame-wise pixel and semantic consistency.
-          Motion Quality is evaluated through Action-Score (action classification accuracy),
-          Flow-Score (average optical flow between frames obtained from RAFT), and
-          Motion AC-Score (amplitude classification consistency with the text prompt). We generate 700 videos
-          from each model for this comparision. Results demonstrate that all the VADER-variants outperform the
-          base model (VideoCrafter2).
-        </p>
-      </div>
-    </div>
-
-    <!-- ######################## -->
-    <div class="container"
-      style="background-color: #fffefe; padding: 30px; border-radius: 8px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);">
-      <div class="columns is-centered">
-        <div class="column is-full-width">
-          <h3 id="vbench-evaluation" class="title pt-5 pb-2 has-text-centered"
-            style="text-align: center; padding-bottom: 10px;">
-            <strong>VBench Evaluation (EvalCrafter Prompts)</strong>
-          </h3>
-        </div>
-      </div>
-      <div class="table-container">
-        <table>
-          <thead>
-            <tr>
-              <th style="text-align: center;">Model</th>
-              <th style="text-align: center;">Subject Consistency</th>
-              <th style="text-align: center;">Background Consistency</th>
-              <th style="text-align: center;">Motion Smoothness</th>
-              <th style="text-align: center;">Dynamic Degree</th>
-              <th style="text-align: center;">Aesthetic Quality</th>
-              <th style="text-align: center;">Imaging Quality</th>
-              <th
-                style="text-align: center; border-left: 2px solid orange; border-right: 2px solid orange; border-top: 2px solid orange;">
-                Weighted Average</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td style="text-align: center;">VideoCrafter2</td>
-              <td style="text-align: center;">0.9544</td>
-              <td style="text-align: center;">0.9652</td>
-              <td style="text-align: center;">0.9688</td>
-              <td style="text-align: center;">0.5346</td>
-              <td style="text-align: center;">0.5752</td>
-              <td style="text-align: center;">0.6677</td>
-              <td style="text-align: center; border-left: 2px solid orange; border-right: 2px solid orange;">0.7997</td>
-            </tr>
-            <tr>
-              <td style="text-align: center;">T2V Turbo (4 Steps)</th>
-              <td style="text-align: center;">0.9639</th>
-              <td style="text-align: center;">0.9656</th>
-              <td style="text-align: center;">0.9562</th>
-              <td style="text-align: center;">0.4771</th>
-              <td style="text-align: center;">0.6183</th>
-              <td style="text-align: center;"><b>0.7266<b></th>
-              <td style="text-align: center; border-left: 2px solid orange; border-right: 2px solid orange;">0.8126</td>
-            </tr>
-            <td style="text-align: center;">T2V Turbo (8 Steps)</th>
-            <td style="text-align: center;"><b>0.9735<b></th>
-            <td style="text-align: center;"><b>0.9736<b></th>
-            <td style="text-align: center;">0.9572</th>
-            <td style="text-align: center;">0.3686</th>
-            <td style="text-align: center;">0.6265</th>
-            <td style="text-align: center;">0.7168</th>
-            <td style="text-align: center; border-left: 2px solid orange; border-right: 2px solid orange;">0.8058</th>
-              <tr>
-                <td style="text-align: center;">VADER-Aesthetic and HPS</td>
-                <td style="text-align: center;">0.9659</td>
-                <td style="text-align: center;">0.9713</td>
-                <td style="text-align: center;"><b>0.9734</b></td>
-                <td style="text-align: center;">0.4741</td>
-                <td style="text-align: center;"><b>0.6295</b></td>
-                <td style="text-align: center;">0.7145</td>
-                <td style="text-align: center; border-left: 2px solid orange; border-right: 2px solid orange;">
-                  <b>0.8167<b>
-                </td>
-              </tr>
-              <tr>
-                <td style="text-align: center;">VADER-PickScore</td>
-                <td style="text-align: center;">0.9668</td>
-                <td style="text-align: center;">0.9727</td>
-                <td style="text-align: center;">0.9726</td>
-                <td style="text-align: center;">0.3732</td>
-                <td style="text-align: center;">0.6094</td>
-                <td style="text-align: center;">0.6762</td>
-                <td style="text-align: center; border-left: 2px solid orange; border-right: 2px solid orange;">0.7971
-                </td>
-              </tr>
-              <tr>
-                <td style="text-align: center;">VADER-Aesthetic and ViCLIP</td>
-                <td style="text-align: center;">0.9564</td>
-                <td style="text-align: center;">0.9662</td>
-                <td style="text-align: center;">0.9714</td>
-                <td style="text-align: center;"><b>0.5519</b></td>
-                <td style="text-align: center;">0.6008</td>
-                <td style="text-align: center;">0.6566</td>
-                <td
-                  style="text-align: center; border-left: 2px solid orange; border-right: 2px solid orange;  border-bottom: 2px solid orange;">
-                  0.8050</td>
-              </tr>
-          </tbody>
-        </table>
-      </div>
-
-      <!-- Updated text section -->
-      <div class="columns is-centered">
-        <p class="subtitle"
-          style="width: 80%; text-align: justify; text-justify: inter-word; padding: 10px 20px; color: black; font-family: 'Google Sans', sans-serif; line-height: 1.8; font-size: 1rem;">
-          VBench evaluation results VADER using EvalCrafter Prompts. The base model is VideoCrafter2. The metrics used
-          in VBench include:
-          Subject Consistency (consistency of the main subject across frames,
-          evaluated using DINO feature similarity),
-          Background Consistency (using CLIP feature similarity),
-          Motion Smoothness (fluidity of motion, based on motion priors from a frame interpolation model),
-          Dynamic Degree (extent of motion in the video, estimated with RAFT),
-          Aesthetic Quality (assessed via the LAION aesthetic predictor), and
-          Imaging Quality (using MUSIQ). The weighted average is calculated by assigning weights to each metric.
-          All metrics are given a weight of 1, except for the Dynamic Degree metric,
-          which is assigned a weight of 0.5. We generate 700 videos
-          for each model using EvalCrafter prompts that are not seen during training. We find that VADER-Pick has the
-          best consistency score, while VADER-HPS shows the best aesthetic and imaging quality.
-          We find VADER-HPS performs the best overall.
-        </p>
-      </div>
-
-    </div>
-
-
-
-
-
-
-
-
-
-    <!-- ######################## -->
-    <div class="container"
-      style="background-color: #fffefe; padding: 30px; border-radius: 8px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);">
-      <div class="columns is-centered">
-        <div class="column is-full-width">
-          <h3 id="vbench-evaluation-standard-prompt-suite" class="title pt-5 pb-2 has-text-centered"
-            style="text-align: center; padding-bottom: 10px;">
-            <strong>VBench Evaluation (Standard Prompt Suite)</strong>
-          </h3>
-        </div>
-      </div>
-      <div class="table-container">
-        <table>
-          <thead>
-            <tr>
-              <th style="text-align: center;">Model</th>
-              <th style="text-align: center;">Subject Consistency</th>
-              <th style="text-align: center;">Background Consistency</th>
-              <th style="text-align: center;">Motion Smoothness</th>
-              <th style="text-align: center;">Dynamic Degree</th>
-              <th style="text-align: center;">Aesthetic Quality</th>
-              <th style="text-align: center;">Imaging Quality</th>
-              <th style="text-align: center;">Temporal Flickering</th>
-              <th
-                style="text-align: center; border-left: 2px solid orange; border-right: 2px solid orange; border-top: 2px solid orange;">
-                Quality Score</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td style="text-align: center;">VideoCrafter2</td>
-              <td style="text-align: center;">96.85</td>
-              <td style="text-align: center;">98.22</td>
-              <td style="text-align: center;">97.73</td>
-              <td style="text-align: center;">42.50</td>
-              <td style="text-align: center;">63.13</td>
-              <td style="text-align: center;">67.22</td>
-              <td style="text-align: center;">98.41</td>
-              <td style="text-align: center; border-left: 2px solid orange; border-right: 2px solid orange;">82.20</td>
-            </tr>
-            <tr>
-              <td style="text-align: center;">Pika</td>
-              <td style="text-align: center;">96.76</td>
-              <td style="text-align: center;"><b>98.95<b></td>
-              <td style="text-align: center;">99.51</td>
-              <td style="text-align: center;">37.22</td>
-              <td style="text-align: center;">63.15</td>
-              <td style="text-align: center;">62.33</td>
-              <td style="text-align: center;"><b>99.77<b></td>
-              <td style="text-align: center; border-left: 2px solid orange; border-right: 2px solid orange;">82.68</td>
-            </tr>
-            <tr>
-              <td style="text-align: center;">Gen-2</td>
-              <td style="text-align: center;"><b>97.61<b></td>
-              <td style="text-align: center;">97.61</td>
-              <td style="text-align: center;"><b>99.58<b></td>
-              <td style="text-align: center;">18.89</td>
-              <td style="text-align: center;">66.96</td>
-              <td style="text-align: center;">67.42</td>
-              <td style="text-align: center;">99.56</td>
-              <td style="text-align: center; border-left: 2px solid orange; border-right: 2px solid orange;">82.47</td>
-            </tr>
-            <tr>
-              <td style="text-align: center;">T2V Turbo (VC2)</td>
-              <td style="text-align: center;">96.28</td>
-              <td style="text-align: center;">97.02</td>
-              <td style="text-align: center;">97.34</td>
-              <td style="text-align: center;">49.17</td>
-              <td style="text-align: center;">63.04</td>
-              <td style="text-align: center;"><b>72.49<b></td>
-              <td style="text-align: center;">97.48</td>
-              <td style="text-align: center; border-left: 2px solid orange; border-right: 2px solid orange;">82.57</td>
-            </tr>
-            <tr>
-              <td style="text-align: center;">VADER-Aesthetic and HPS</td>
-              <td style="text-align: center;">95.79</td>
-              <td style="text-align: center;">96.71</td>
-              <td style="text-align: center;">97.06</td>
-              <td style="text-align: center;"><b>66.94<b></td>
-              <td style="text-align: center;"><b>67.04<b></td>
-              <td style="text-align: center;">69.93</td>
-              <td style="text-align: center;">98.19</td>
-              <td
-                style="text-align: center; border-left: 2px solid orange; border-right: 2px solid orange; border-bottom: 2px solid orange;">
-                <b>84.15<b>
+              <td style="text-align: center;">0.9659</td>
+              <td style="text-align: center;">0.9713</td>
+              <td style="text-align: center;"><b>0.9734</b></td>
+              <td style="text-align: center;">0.4741</td>
+              <td style="text-align: center;"><b>0.6295</b></td>
+              <td style="text-align: center;">0.7145</td>
+              <td style="text-align: center; border-left: 2px solid orange; border-right: 2px solid orange;">
+                <b>0.8167<b>
               </td>
             </tr>
-          </tbody>
-        </table>
-      </div>
-
-      <!-- Updated text section -->
-      <div class="columns is-centered">
-        <p class="subtitle"
-          style="width: 80%; text-align: justify; text-justify: inter-word; padding: 10px 20px; color: black; font-family: 'Google Sans', sans-serif; line-height: 1.8; font-size: 1rem;">
-          VBench evaluation results VADER using standard prompt suite. The base model is VideoCrafter2, <a
-            href="https://pika.art/try">Pika (2023-9)</a>, <a
-            href="https://runwayml.com/ai-magic-tools/gen-2Gen-2">Gen-2 (2023-12)</a>, and <a
-            href="https://arxiv.org/abs/2405.18750">T2V Turbo (VC2)</a>. The metrics used in VBench include:
-          Subject Consistency (consistency of the main subject across frames,
-          evaluated using DINO feature similarity),
-          Background Consistency (using CLIP feature similarity),
-          Motion Smoothness (fluidity of motion, based on motion priors from a frame interpolation model),
-          Dynamic Degree (extent of motion in the video, estimated with RAFT),
-          Aesthetic Quality (assessed via the LAION aesthetic predictor),
-          Imaging Quality (using MUSIQ), and Temporal Flickering (computing the mean absolute difference across frames).
-          The Quality Score is calculated by assigning weights to each normalized metric.
-          All metrics are given a weight of 1, except for the Dynamic Degree metric,
-          which is assigned a weight of 0.5. This follows VBench metrics.
-          We find VADER-HPS surpass all baselines in terms of Quality Score, Aesthetic Quality and Dynamic Degree.
-        </p>
-      </div>
-
+            <tr>
+              <td style="text-align: center;">VADER-PickScore</td>
+              <td style="text-align: center;">0.9668</td>
+              <td style="text-align: center;">0.9727</td>
+              <td style="text-align: center;">0.9726</td>
+              <td style="text-align: center;">0.3732</td>
+              <td style="text-align: center;">0.6094</td>
+              <td style="text-align: center;">0.6762</td>
+              <td style="text-align: center; border-left: 2px solid orange; border-right: 2px solid orange;">0.7971
+              </td>
+            </tr>
+            <tr>
+              <td style="text-align: center;">VADER-Aesthetic and ViCLIP</td>
+              <td style="text-align: center;">0.9564</td>
+              <td style="text-align: center;">0.9662</td>
+              <td style="text-align: center;">0.9714</td>
+              <td style="text-align: center;"><b>0.5519</b></td>
+              <td style="text-align: center;">0.6008</td>
+              <td style="text-align: center;">0.6566</td>
+              <td
+                style="text-align: center; border-left: 2px solid orange; border-right: 2px solid orange;  border-bottom: 2px solid orange;">
+                0.8050</td>
+            </tr>
+        </tbody>
+      </table>
     </div>
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    <!-- ######################## -->
-    <!--VADER-V-JEPA Evaluation-->
-    <div class="container"
-      style="background-color: #f7f9fc; padding: 30px; border-radius: 8px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);">
-      <div class="columns is-centered">
-        <div class="column is-full-width">
-          <h3 id="v-jepa-evaluation" class="title pt-5 pb-2 has-text-centered"
-            style="text-align: center; padding-bottom: 10px;">
-            <strong>VADER-V-JEPA Evaluation</strong>
-          </h3>
-        </div>
-      </div>
-      <div class="table-container">
-        <table>
-          <thead>
-            <tr>
-              <th style="text-align: center;">Model</th>
-              <th style="text-align: center;">Subject Consistency</th>
-              <th style="text-align: center;">Background Consistency</th>
-              <th style="text-align: center;">Motion Smoothness</th>
-              <th style="text-align: center;">Dynamic Degree</th>
-              <th style="text-align: center;">Aesthetic Quality</th>
-              <th style="text-align: center;">Imaging Quality</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td style="text-align: center;">Stable Video Diffusion</td>
-              <td style="text-align: center;">0.9042</td>
-              <td style="text-align: center;">0.9469</td>
-              <td style="text-align: center;">0.9634</td>
-              <td style="text-align: center;">0.8333</td>
-              <td style="text-align: center;">0.6782</td>
-              <td style="text-align: center;">0.6228</td>
-            </tr>
-            <tr>
-              <td style="text-align: center;">VADER-V-JEPA</td>
-              <td style="text-align: center;"><b>0.9401<b></td>
-              <td style="text-align: center;"><b>0.9551</b></td>
-              <td style="text-align: center;"><b>0.9669</b></td>
-              <td style="text-align: center;">0.8333</td>
-              <td style="text-align: center;"><b>0.6807</b></td>
-              <td style="text-align: center;"><b>0.6384</b></td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-
-      <!-- Updated text section -->
-      <div class="columns is-centered">
-        <p class="subtitle"
-          style="width: 80%; text-align: justify; text-justify: inter-word; padding: 10px 20px; color: black; font-family: 'Google Sans', sans-serif; line-height: 1.8; font-size: 1rem;">
-          VBench evaluation results for Image to Video diffusion models.
-          The base model is Stable Video Diffusion. We compare Stable Video Diffusion and
-          VADER-V-JEPA. VADER-V-JEPA demonstrates improvements across most metrics, particularly
-          in consistency and aesthetic quality.
-        </p>
-      </div>
-
-    </div>
-
-
-    <!-- ######################## -->
-    <!--VADER-V-JEPA Evaluation-->
-    <div class="container"
-      style="background-color: #fffefe; padding: 30px; border-radius: 8px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);">
-      <div class="columns is-centered">
-        <div class="column is-full-width">
-          <h3 id="truncated-backpropagation-ablation" class="title pt-5 pb-2 has-text-centered"
-            style="text-align: center; padding-bottom: 10px;">
-            <strong>Truncated Backpropagation Ablation</strong>
-          </h3>
-        </div>
-      </div>
-      <div class="table-container">
-        <table>
-          <thead>
-            <tr>
-              <th style="text-align: center;">Training Step</th>
-              <th style="text-align: center;">Reward Value (k=1)</th>
-              <th style="text-align: center;">Reward Value (k=10)</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td style="text-align: center;">1</td>
-              <td style="text-align: center;">5.047</td>
-              <td style="text-align: center;">5.0946</td>
-            </tr>
-            <tr>
-              <td style="text-align: center;">100</td>
-              <td style="text-align: center;">5.3342</td>
-              <td style="text-align: center;">5.2523</td>
-            </tr>
-            <tr>
-              <td style="text-align: center;">200</td>
-              <td style="text-align: center;">5.4977</td>
-              <td style="text-align: center;">5.2072</td>
-            </tr>
-            <tr>
-              <td style="text-align: center;">300</td>
-              <td style="text-align: center;"><b>5.6479</b></td>
-              <td style="text-align: center;">5.1906</td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-      <p class="subtitle has-text-centered"
-        style="text-align: center; padding-bottom: 0px; color: black; font-family: 'Google Sans', sans-serif;">
-        From left to right, we demenstrate videos for training steps 1, 100, 200, and 300.
+    <!-- Updated text section -->
+    <div class="columns is-centered">
+      <p class="subtitle"
+        style="width: 80%; text-align: justify; text-justify: inter-word; padding: 10px 20px; color: black; font-family: 'Google Sans', sans-serif; line-height: 1.8; font-size: 1rem;">
+        VBench evaluation results VADER using EvalCrafter Prompts. The base model is VideoCrafter2. The metrics used
+        in VBench include:
+        Subject Consistency (consistency of the main subject across frames,
+        evaluated using DINO feature similarity),
+        Background Consistency (using CLIP feature similarity),
+        Motion Smoothness (fluidity of motion, based on motion priors from a frame interpolation model),
+        Dynamic Degree (extent of motion in the video, estimated with RAFT),
+        Aesthetic Quality (assessed via the LAION aesthetic predictor), and
+        Imaging Quality (using MUSIQ). The weighted average is calculated by assigning weights to each metric.
+        All metrics are given a weight of 1, except for the Dynamic Degree metric,
+        which is assigned a weight of 0.5. We generate 700 videos
+        for each model using EvalCrafter prompts that are not seen during training. We find that VADER-Pick has the
+        best consistency score, while VADER-HPS shows the best aesthetic and imaging quality.
+        We find VADER-HPS performs the best overall.
       </p>
-      <!-- Image Section -->
-      <div class="columns is-centered"
-        style="flex-direction: column; align-items: center; gap: 20px; width: 80%; margin: auto;">
+    </div>
 
-        <!-- k=1 -->
-        <div class="video-container" style="width: 100%; text-align: center;">
-          <div class="text-box"
-            style="margin-bottom: 10px; font-size: 1em; font-weight: bold; display: inline-block; color: white; padding: 5px 10px; border-radius: 10px; box-shadow: 0 2px 5px rgba(0, 0, 0, 0.7); background-color: #000000;">
-            k=1
-          </div>
-          <img class="d-block w-100" src="videos/truncated/k1.gif" alt="k=1"
-            style="border-radius: 10px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);">
+  </div>
+
+
+
+
+
+
+
+
+
+  <!-- ######################## -->
+  <div class="container"
+    style="background-color: #fffefe; padding: 30px; border-radius: 8px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);">
+    <div class="columns is-centered">
+      <div class="column is-full-width">
+        <h3 id="vbench-evaluation-standard-prompt-suite" class="title pt-5 pb-2 has-text-centered"
+          style="text-align: center; padding-bottom: 10px;">
+          <strong>VBench Evaluation (Standard Prompt Suite)</strong>
+        </h3>
+      </div>
+    </div>
+    <div class="table-container">
+      <table>
+        <thead>
+          <tr>
+            <th style="text-align: center;">Model</th>
+            <th style="text-align: center;">Subject Consistency</th>
+            <th style="text-align: center;">Background Consistency</th>
+            <th style="text-align: center;">Motion Smoothness</th>
+            <th style="text-align: center;">Dynamic Degree</th>
+            <th style="text-align: center;">Aesthetic Quality</th>
+            <th style="text-align: center;">Imaging Quality</th>
+            <th style="text-align: center;">Temporal Flickering</th>
+            <th
+              style="text-align: center; border-left: 2px solid orange; border-right: 2px solid orange; border-top: 2px solid orange;">
+              Quality Score</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td style="text-align: center;">VideoCrafter2</td>
+            <td style="text-align: center;">96.85</td>
+            <td style="text-align: center;">98.22</td>
+            <td style="text-align: center;">97.73</td>
+            <td style="text-align: center;">42.50</td>
+            <td style="text-align: center;">63.13</td>
+            <td style="text-align: center;">67.22</td>
+            <td style="text-align: center;">98.41</td>
+            <td style="text-align: center; border-left: 2px solid orange; border-right: 2px solid orange;">82.20</td>
+          </tr>
+          <tr>
+            <td style="text-align: center;">Pika</td>
+            <td style="text-align: center;">96.76</td>
+            <td style="text-align: center;"><b>98.95<b></td>
+            <td style="text-align: center;">99.51</td>
+            <td style="text-align: center;">37.22</td>
+            <td style="text-align: center;">63.15</td>
+            <td style="text-align: center;">62.33</td>
+            <td style="text-align: center;"><b>99.77<b></td>
+            <td style="text-align: center; border-left: 2px solid orange; border-right: 2px solid orange;">82.68</td>
+          </tr>
+          <tr>
+            <td style="text-align: center;">Gen-2</td>
+            <td style="text-align: center;"><b>97.61<b></td>
+            <td style="text-align: center;">97.61</td>
+            <td style="text-align: center;"><b>99.58<b></td>
+            <td style="text-align: center;">18.89</td>
+            <td style="text-align: center;">66.96</td>
+            <td style="text-align: center;">67.42</td>
+            <td style="text-align: center;">99.56</td>
+            <td style="text-align: center; border-left: 2px solid orange; border-right: 2px solid orange;">82.47</td>
+          </tr>
+          <tr>
+            <td style="text-align: center;">T2V Turbo (VC2)</td>
+            <td style="text-align: center;">96.28</td>
+            <td style="text-align: center;">97.02</td>
+            <td style="text-align: center;">97.34</td>
+            <td style="text-align: center;">49.17</td>
+            <td style="text-align: center;">63.04</td>
+            <td style="text-align: center;"><b>72.49<b></td>
+            <td style="text-align: center;">97.48</td>
+            <td style="text-align: center; border-left: 2px solid orange; border-right: 2px solid orange;">82.57</td>
+          </tr>
+          <tr>
+            <td style="text-align: center;">VADER-Aesthetic and HPS</td>
+            <td style="text-align: center;">95.79</td>
+            <td style="text-align: center;">96.71</td>
+            <td style="text-align: center;">97.06</td>
+            <td style="text-align: center;"><b>66.94<b></td>
+            <td style="text-align: center;"><b>67.04<b></td>
+            <td style="text-align: center;">69.93</td>
+            <td style="text-align: center;">98.19</td>
+            <td
+              style="text-align: center; border-left: 2px solid orange; border-right: 2px solid orange; border-bottom: 2px solid orange;">
+              <b>84.15<b>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Updated text section -->
+    <div class="columns is-centered">
+      <p class="subtitle"
+        style="width: 80%; text-align: justify; text-justify: inter-word; padding: 10px 20px; color: black; font-family: 'Google Sans', sans-serif; line-height: 1.8; font-size: 1rem;">
+        VBench evaluation results VADER using standard prompt suite. The base model is VideoCrafter2, <a
+          href="https://pika.art/try">Pika (2023-9)</a>, <a href="https://runwayml.com/ai-magic-tools/gen-2Gen-2">Gen-2
+          (2023-12)</a>, and <a href="https://arxiv.org/abs/2405.18750">T2V Turbo (VC2)</a>. The metrics used in VBench
+        include:
+        Subject Consistency (consistency of the main subject across frames,
+        evaluated using DINO feature similarity),
+        Background Consistency (using CLIP feature similarity),
+        Motion Smoothness (fluidity of motion, based on motion priors from a frame interpolation model),
+        Dynamic Degree (extent of motion in the video, estimated with RAFT),
+        Aesthetic Quality (assessed via the LAION aesthetic predictor),
+        Imaging Quality (using MUSIQ), and Temporal Flickering (computing the mean absolute difference across frames).
+        The Quality Score is calculated by assigning weights to each normalized metric.
+        All metrics are given a weight of 1, except for the Dynamic Degree metric,
+        which is assigned a weight of 0.5. This follows VBench metrics.
+        We find VADER-HPS surpass all baselines in terms of Quality Score, Aesthetic Quality and Dynamic Degree.
+      </p>
+    </div>
+
+  </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  <!-- ######################## -->
+  <!--VADER-V-JEPA Evaluation-->
+  <div class="container"
+    style="background-color: #f7f9fc; padding: 30px; border-radius: 8px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);">
+    <div class="columns is-centered">
+      <div class="column is-full-width">
+        <h3 id="v-jepa-evaluation" class="title pt-5 pb-2 has-text-centered"
+          style="text-align: center; padding-bottom: 10px;">
+          <strong>VADER-V-JEPA Evaluation</strong>
+        </h3>
+      </div>
+    </div>
+    <div class="table-container">
+      <table>
+        <thead>
+          <tr>
+            <th style="text-align: center;">Model</th>
+            <th style="text-align: center;">Subject Consistency</th>
+            <th style="text-align: center;">Background Consistency</th>
+            <th style="text-align: center;">Motion Smoothness</th>
+            <th style="text-align: center;">Dynamic Degree</th>
+            <th style="text-align: center;">Aesthetic Quality</th>
+            <th style="text-align: center;">Imaging Quality</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td style="text-align: center;">Stable Video Diffusion</td>
+            <td style="text-align: center;">0.9042</td>
+            <td style="text-align: center;">0.9469</td>
+            <td style="text-align: center;">0.9634</td>
+            <td style="text-align: center;">0.8333</td>
+            <td style="text-align: center;">0.6782</td>
+            <td style="text-align: center;">0.6228</td>
+          </tr>
+          <tr>
+            <td style="text-align: center;">VADER-V-JEPA</td>
+            <td style="text-align: center;"><b>0.9401<b></td>
+            <td style="text-align: center;"><b>0.9551</b></td>
+            <td style="text-align: center;"><b>0.9669</b></td>
+            <td style="text-align: center;">0.8333</td>
+            <td style="text-align: center;"><b>0.6807</b></td>
+            <td style="text-align: center;"><b>0.6384</b></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Updated text section -->
+    <div class="columns is-centered">
+      <p class="subtitle"
+        style="width: 80%; text-align: justify; text-justify: inter-word; padding: 10px 20px; color: black; font-family: 'Google Sans', sans-serif; line-height: 1.8; font-size: 1rem;">
+        VBench evaluation results for Image to Video diffusion models.
+        The base model is Stable Video Diffusion. We compare Stable Video Diffusion and
+        VADER-V-JEPA. VADER-V-JEPA demonstrates improvements across most metrics, particularly
+        in consistency and aesthetic quality.
+      </p>
+    </div>
+
+  </div>
+
+
+  <!-- ######################## -->
+  <!--VADER-V-JEPA Evaluation-->
+  <div class="container"
+    style="background-color: #fffefe; padding: 30px; border-radius: 8px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);">
+    <div class="columns is-centered">
+      <div class="column is-full-width">
+        <h3 id="truncated-backpropagation-ablation" class="title pt-5 pb-2 has-text-centered"
+          style="text-align: center; padding-bottom: 10px;">
+          <strong>Truncated Backpropagation Ablation</strong>
+        </h3>
+      </div>
+    </div>
+    <div class="table-container">
+      <table>
+        <thead>
+          <tr>
+            <th style="text-align: center;">Training Step</th>
+            <th style="text-align: center;">Reward Value (k=1)</th>
+            <th style="text-align: center;">Reward Value (k=10)</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td style="text-align: center;">1</td>
+            <td style="text-align: center;">5.047</td>
+            <td style="text-align: center;">5.0946</td>
+          </tr>
+          <tr>
+            <td style="text-align: center;">100</td>
+            <td style="text-align: center;">5.3342</td>
+            <td style="text-align: center;">5.2523</td>
+          </tr>
+          <tr>
+            <td style="text-align: center;">200</td>
+            <td style="text-align: center;">5.4977</td>
+            <td style="text-align: center;">5.2072</td>
+          </tr>
+          <tr>
+            <td style="text-align: center;">300</td>
+            <td style="text-align: center;"><b>5.6479</b></td>
+            <td style="text-align: center;">5.1906</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="subtitle has-text-centered"
+      style="text-align: center; padding-bottom: 0px; color: black; font-family: 'Google Sans', sans-serif;">
+      From left to right, we demenstrate videos for training steps 1, 100, 200, and 300.
+    </p>
+    <!-- Image Section -->
+    <div class="columns is-centered"
+      style="flex-direction: column; align-items: center; gap: 20px; width: 80%; margin: auto;">
+
+      <!-- k=1 -->
+      <div class="video-container" style="width: 100%; text-align: center;">
+        <div class="text-box"
+          style="margin-bottom: 10px; font-size: 1em; font-weight: bold; display: inline-block; color: white; padding: 5px 10px; border-radius: 10px; box-shadow: 0 2px 5px rgba(0, 0, 0, 0.7); background-color: #000000;">
+          k=1
         </div>
-        <!-- k=10 -->
-        <div class="video-container" style="width: 100%; text-align: center;">
-          <div class="text-box"
-            style="margin-bottom: 10px; font-size: 1em; font-weight: bold; display: inline-block; color: white; padding: 5px 10px; border-radius: 10px; box-shadow: 0 2px 5px rgba(0, 0, 0, 0.7); background-color: #000000;">
-            k=10
+        <img class="d-block w-100" src="videos/truncated/k1.gif" alt="k=1"
+          style="border-radius: 10px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);">
+      </div>
+      <!-- k=10 -->
+      <div class="video-container" style="width: 100%; text-align: center;">
+        <div class="text-box"
+          style="margin-bottom: 10px; font-size: 1em; font-weight: bold; display: inline-block; color: white; padding: 5px 10px; border-radius: 10px; box-shadow: 0 2px 5px rgba(0, 0, 0, 0.7); background-color: #000000;">
+          k=10
+        </div>
+        <img class="d-block w-100" src="videos/truncated/k10.gif" alt="k=10"
+          style="border-radius: 10px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);">
+        <div class="carousel-caption">
+          A rabbit hitting the drums with its paws in a garden with blooming flowers.
+        </div>
+      </div>
+    </div>
+
+    <!-- Updated text section -->
+    <div class="columns is-centered">
+      <p class="subtitle"
+        style="width: 80%; text-align: justify; text-justify: inter-word; padding: 10px 20px; color: black; font-family: 'Google Sans', sans-serif; line-height: 1.8; font-size: 1rem;">
+        We ablate the number of truncated backpropagation steps (K) in VADER. For this experiment,
+        we use VADER trained using Aesthetic and HPS Rewards. The base model is VideoCrafter2. We find that higher
+        values of K result in
+        more semantic level changes, while K=1 results in more fine-grained changes, specifically in
+        the earlier steps of training. Further, we find as we train longer, both the models start
+        exhibiting semantic level changes. We also find it is easier to optimize with a smaller value of
+        K, as can be seen in the results below.
+      </p>
+    </div>
+
+  </div>
+  <!-- end of truncated section -->
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  <!-- ######################## -->
+  <!-- DOODL vs VADER -->
+  <div class="container"
+    style="background-color: #f7f9fc; padding: 30px; border-radius: 8px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);">
+    <div class="columns is-centered">
+      <div class="column is-full-width">
+        <h3 id="doodl-vader" class="title pt-5 pb-2 has-text-centered"
+          style="text-align: center; padding-bottom: 10px;">
+          <strong>DOODL V.S. VADER</strong>
+        </h3>
+        <p class="subtitle has-text-centered"
+          style="text-align: center; padding-bottom: 10px; color: black; font-family: 'Google Sans', sans-serif;">
+          We use Aesthetic and HPS reward function to optimize models. Base model of VADER is VideoCrafter2.
+        </p>
+      </div>
+    </div>
+
+    <div class="table-container">
+      <table>
+        <thead>
+          <tr>
+            <th style="text-align: center;"></th>
+            <th style="text-align: center;">DOODL (2 GPU minutes per sample)</th>
+            <th style="text-align: center;">DOODL (20 GPU minutes per sample)</th>
+            <th style="text-align: center;">VADER (12 GPU hours of training)</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td style="text-align: center;">Reward</td>
+            <td style="text-align: center;">4.9583</td>
+            <td style="text-align: center;">4.9687</td>
+            <td style="text-align: center;">5.2810</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div id="videoCarouselIndicators9" class="carousel slide" data-ride="carousel" data-interval="5000">
+      <div class="carousel-inner">
+        <!-- video 1 -->
+        <div class="carousel-item active">
+          <div class="d-flex justify-content-center video-wrapper">
+            <div class="video-container">
+              <div class="text-box">DOODL</div>
+              <video class="d-block w-100" autoplay muted loop>
+                <source src="videos/DOODL/0000.mp4" type="video/mp4">
+              </video>
+            </div>
+            <div class="video-container">
+              <div class="text-box">VADER</div>
+              <video class="d-block w-100" autoplay muted loop>
+                <source src="videos/1aesthetic_hps/samples/0000.mp4" type="video/mp4">
+              </video>
+            </div>
+            <a class="carousel-control-prev" href="#videoCarouselIndicators9" role="button" data-slide="prev">
+              <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+              <span class="sr-only">Previous</span>
+            </a>
+            <a class="carousel-control-next" href="#videoCarouselIndicators9" role="button" data-slide="next">
+              <span class="carousel-control-next-icon" aria-hidden="true"></span>
+              <span class="sr-only">Next</span>
+            </a>
           </div>
-          <img class="d-block w-100" src="videos/truncated/k10.gif" alt="k=10"
-            style="border-radius: 10px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);">
           <div class="carousel-caption">
-            A rabbit hitting the drums with its paws in a garden with blooming flowers.
+            2 dog and a whale, ocean adventure.
+          </div>
+        </div>
+        <!-- video 2 -->
+        <div class="carousel-item">
+          <div class="d-flex justify-content-center video-wrapper">
+            <div class="video-container">
+              <div class="text-box">DOODL</div>
+              <video class="d-block w-100" autoplay muted loop>
+                <source src="videos/DOODL/0001.mp4" type="video/mp4">
+              </video>
+            </div>
+            <div class="video-container">
+              <div class="text-box">VADER</div>
+              <video class="d-block w-100" autoplay muted loop>
+                <source src="videos/1aesthetic_hps/samples/0001.mp4" type="video/mp4">
+              </video>
+            </div>
+            <a class="carousel-control-prev" href="#videoCarouselIndicators9" role="button" data-slide="prev">
+              <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+              <span class="sr-only">Previous</span>
+            </a>
+            <a class="carousel-control-next" href="#videoCarouselIndicators9" role="button" data-slide="next">
+              <span class="carousel-control-next-icon" aria-hidden="true"></span>
+              <span class="sr-only">Next</span>
+            </a>
+          </div>
+          <div class="carousel-caption">
+            Teddy bear and 3 real bear.
+          </div>
+        </div>
+        <!-- video 3 -->
+        <div class="carousel-item">
+          <div class="d-flex justify-content-center video-wrapper">
+            <div class="video-container">
+              <div class="text-box">DOODL</div>
+              <video class="d-block w-100" autoplay muted loop>
+                <source src="videos/DOODL/0007.mp4" type="video/mp4">
+              </video>
+            </div>
+            <div class="video-container">
+              <div class="text-box">VADER</div>
+              <video class="d-block w-100" autoplay muted loop>
+                <source src="videos/1aesthetic_hps/samples/0007.mp4" type="video/mp4">
+              </video>
+            </div>
+            <a class="carousel-control-prev" href="#videoCarouselIndicators9" role="button" data-slide="prev">
+              <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+              <span class="sr-only">Previous</span>
+            </a>
+            <a class="carousel-control-next" href="#videoCarouselIndicators9" role="button" data-slide="next">
+              <span class="carousel-control-next-icon" aria-hidden="true"></span>
+              <span class="sr-only">Next</span>
+            </a>
+          </div>
+          <div class="carousel-caption">
+            Four godzillas.
+          </div>
+        </div>
+        <!-- Add more carousel items as needed -->
+      </div>
+    </div>
+
+  </div>
+
+
+  <!-- ######################## -->
+  <!-- DOODL vs VADER -->
+  <div class="container"
+    style="background-color: #fffefe; padding: 30px; border-radius: 8px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);">
+    <div class="columns is-centered">
+      <div class="column is-full-width">
+        <h3 id="vbench-distilled-reward-model" class="title pt-5 pb-2 has-text-centered"
+          style="text-align: center; padding-bottom: 10px;">
+          <strong>VBench Distilled Reward Model</strong>
+        </h3>
+      </div>
+    </div>
+
+    <div class="table-container">
+      <table>
+        <thead>
+          <tr>
+            <th style="text-align: center;">Model</th>
+            <th style="text-align: center;">Subject Consistency</th>
+            <th style="text-align: center;">Background Consistency</th>
+            <th style="text-align: center;">Motion Smoothness</th>
+            <th style="text-align: center;">Dynamic Degree</th>
+            <th style="text-align: center;">Aesthetic Quality</th>
+            <th style="text-align: center;">Imaging Quality</th>
+            <th
+              style="text-align: center; border-left: 2px solid orange; border-right: 2px solid orange; border-top: 2px solid orange;">
+              Weighted Average</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td style="text-align: center;">VideoCrafter2</td>
+            <td style="text-align: center;">0.9544</td>
+            <td style="text-align: center;">0.9652</td>
+            <td style="text-align: center;">0.9688</td>
+            <td style="text-align: center;">0.5346</td>
+            <td style="text-align: center;">0.5752</td>
+            <td style="text-align: center;">0.6677</td>
+            <td style="text-align: center; border-left: 2px solid orange; border-right: 2px solid orange;">0.7997</td>
+          </tr>
+          <tr>
+            <td style="text-align: center;">T2V Turbo (4 Steps)</th>
+            <td style="text-align: center;">0.9639</th>
+            <td style="text-align: center;">0.9656</th>
+            <td style="text-align: center;">0.9562</th>
+            <td style="text-align: center;">0.4771</th>
+            <td style="text-align: center;">0.6183</th>
+            <td style="text-align: center;"><b>0.7266<b></th>
+            <td style="text-align: center; border-left: 2px solid orange; border-right: 2px solid orange;">0.8126</td>
+          </tr>
+          <td style="text-align: center;">T2V Turbo (8 Steps)</th>
+          <td style="text-align: center;"><b>0.9735<b></th>
+          <td style="text-align: center;"><b>0.9736<b></th>
+          <td style="text-align: center;">0.9572</th>
+          <td style="text-align: center;">0.3686</th>
+          <td style="text-align: center;">0.6265</th>
+          <td style="text-align: center;">0.7168</th>
+          <td style="text-align: center; border-left: 2px solid orange; border-right: 2px solid orange;">0.8058</th>
+            <tr>
+              <td style="text-align: center;">VADER-Aesthetic and HPS</td>
+              <td style="text-align: center;">0.9659</td>
+              <td style="text-align: center;">0.9713</td>
+              <td style="text-align: center;"><b>0.9734</b></td>
+              <td style="text-align: center;">0.4741</td>
+              <td style="text-align: center;">0.6295</td>
+              <td style="text-align: center;">0.7145</td>
+              <td style="text-align: center; border-left: 2px solid orange; border-right: 2px solid orange;">
+                0.8167
+              </td>
+            </tr>
+            <tr>
+              <td style="text-align: center;">VADER-PickScore</td>
+              <td style="text-align: center;">0.9668</td>
+              <td style="text-align: center;">0.9727</td>
+              <td style="text-align: center;">0.9726</td>
+              <td style="text-align: center;">0.3732</td>
+              <td style="text-align: center;">0.6094</td>
+              <td style="text-align: center;">0.6762</td>
+              <td style="text-align: center; border-left: 2px solid orange; border-right: 2px solid orange;">0.7971
+              </td>
+            </tr>
+            <tr>
+              <td style="text-align: center;">VADER-Aesthetic and ViCLIP</td>
+              <td style="text-align: center;">0.9564</td>
+              <td style="text-align: center;">0.9662</td>
+              <td style="text-align: center;">0.9714</td>
+              <td style="text-align: center;"><b>0.5519</b></td>
+              <td style="text-align: center;">0.6008</td>
+              <td style="text-align: center;">0.6566</td>
+              <td style="text-align: center; border-left: 2px solid orange; border-right: 2px solid orange;">
+                0.8050</td>
+            </tr>
+            <tr>
+              <td style="text-align: center;"><b>VADER-VBench<b></td>
+              <td style="text-align: center;">0.9638</th>
+              <td style="text-align: center;">0.9678</th>
+              <td style="text-align: center;">0.9691</th>
+              <td style="text-align: center;">0.5361</th>
+              <td style="text-align: center;"><b>0.6393<b></th>
+              <td style="text-align: center;">0.7231</th>
+              <td
+                style="text-align: center; border-left: 2px solid orange; border-right: 2px solid orange;  border-bottom: 2px solid orange;">
+                <b>0.8238<b>
+              </td>
+            </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div id="videoCarouselIndicators15" class="carousel slide" data-ride="carousel" data-interval="5000">
+      <div class="carousel-inner">
+        <!-- video 1 -->
+        <div class="carousel-item active">
+          <div class="d-flex justify-content-center video-wrapper">
+            <div class="video-container">
+              <div class="text-box">VADER-HPS</div>
+              <video class="d-block w-100" autoplay muted loop>
+                <source src="videos/vbench_reward_comparison/hps/0003.mp4" type="video/mp4">
+              </video>
+            </div>
+            <div class="video-container">
+              <div class="text-box">VADER-VBench</div>
+              <video class="d-block w-100" autoplay muted loop>
+                <source src="videos/vbench_reward_comparison/custom/3.mp4" type="video/mp4">
+              </video>
+            </div>
+            <a class="carousel-control-prev" href="#videoCarouselIndicators15" role="button" data-slide="prev">
+              <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+              <span class="sr-only">Previous</span>
+            </a>
+            <a class="carousel-control-next" href="#videoCarouselIndicators15" role="button" data-slide="next">
+              <span class="carousel-control-next-icon" aria-hidden="true"></span>
+              <span class="sr-only">Next</span>
+            </a>
+          </div>
+          <div class="carousel-caption">
+            A small bird sits atop a blooming flower stem.
+          </div>
+        </div>
+        <!-- video 2 -->
+        <div class="carousel-item">
+          <div class="d-flex justify-content-center video-wrapper">
+            <div class="video-container">
+              <div class="text-box">VADER-HPS</div>
+              <video class="d-block w-100" autoplay muted loop>
+                <source src="videos/vbench_reward_comparison/hps/0156.mp4" type="video/mp4">
+              </video>
+            </div>
+            <div class="video-container">
+              <div class="text-box">VADER-VBench</div>
+              <video class="d-block w-100" autoplay muted loop>
+                <source src="videos/vbench_reward_comparison/custom/156.mp4" type="video/mp4">
+              </video>
+            </div>
+            <a class="carousel-control-prev" href="#videoCarouselIndicators15" role="button" data-slide="prev">
+              <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+              <span class="sr-only">Previous</span>
+            </a>
+            <a class="carousel-control-next" href="#videoCarouselIndicators15" role="button" data-slide="next">
+              <span class="carousel-control-next-icon" aria-hidden="true"></span>
+              <span class="sr-only">Next</span>
+            </a>
+          </div>
+          <div class="carousel-caption">
+            A rainy day in the city, raindrops pouring down from grey clouds above, people hurrying on the street with
+            umbrellas.
+          </div>
+        </div>
+        <!-- video 3 -->
+        <div class="carousel-item">
+          <div class="d-flex justify-content-center video-wrapper">
+            <div class="video-container">
+              <div class="text-box">VADER-HPS</div>
+              <video class="d-block w-100" autoplay muted loop>
+                <source src="videos/vbench_reward_comparison/hps/0005.mp4" type="video/mp4">
+              </video>
+            </div>
+            <div class="video-container">
+              <div class="text-box">VADER-VBench</div>
+              <video class="d-block w-100" autoplay muted loop>
+                <source src="videos/vbench_reward_comparison/custom/5.mp4" type="video/mp4">
+              </video>
+            </div>
+            <a class="carousel-control-prev" href="#videoCarouselIndicators15" role="button" data-slide="prev">
+              <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+              <span class="sr-only">Previous</span>
+            </a>
+            <a class="carousel-control-next" href="#videoCarouselIndicators15" role="button" data-slide="next">
+              <span class="carousel-control-next-icon" aria-hidden="true"></span>
+              <span class="sr-only">Next</span>
+            </a>
+          </div>
+          <div class="carousel-caption">
+            A peaceful cow grazing in a green field under the clear blue sky.
+          </div>
+        </div>
+        <!-- Add more carousel items as needed -->
+        <!-- video 4 -->
+        <div class="carousel-item">
+          <div class="d-flex justify-content-center video-wrapper">
+            <div class="video-container">
+              <div class="text-box">VADER-HPS</div>
+              <video class="d-block w-100" autoplay muted loop>
+                <source src="videos/vbench_reward_comparison/hps/0099.mp4" type="video/mp4">
+              </video>
+            </div>
+            <div class="video-container">
+              <div class="text-box">VADER-VBench</div>
+              <video class="d-block w-100" autoplay muted loop>
+                <source src="videos/vbench_reward_comparison/custom/99.mp4" type="video/mp4">
+              </video>
+            </div>
+            <a class="carousel-control-prev" href="#videoCarouselIndicators15" role="button" data-slide="prev">
+              <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+              <span class="sr-only">Previous</span>
+            </a>
+            <a class="carousel-control-next" href="#videoCarouselIndicators15" role="button" data-slide="next">
+              <span class="carousel-control-next-icon" aria-hidden="true"></span>
+              <span class="sr-only">Next</span>
+            </a>
+          </div>
+          <div class="carousel-caption">
+            Iron Man is walking towards the camera in the rain at night, with a lot of fog behind him. Science fiction
+            movie, close-up
           </div>
         </div>
       </div>
-
       <!-- Updated text section -->
       <div class="columns is-centered">
         <p class="subtitle"
           style="width: 80%; text-align: justify; text-justify: inter-word; padding: 10px 20px; color: black; font-family: 'Google Sans', sans-serif; line-height: 1.8; font-size: 1rem;">
-          We ablate the number of truncated backpropagation steps (K) in VADER. For this experiment,
-          we use VADER trained using Aesthetic and HPS Rewards. The base model is VideoCrafter2. We find that higher
-          values of K result in
-          more semantic level changes, while K=1 results in more fine-grained changes, specifically in
-          the earlier steps of training. Further, we find as we train longer, both the models start
-          exhibiting semantic level changes. We also find it is easier to optimize with a smaller value of
-          K, as can be seen in the results below.
-        </p>
-      </div>
-
-    </div>
-    <!-- end of truncated section -->
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    <!-- ######################## -->
-    <!-- DOODL vs VADER -->
-    <div class="container"
-      style="background-color: #f7f9fc; padding: 30px; border-radius: 8px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);">
-      <div class="columns is-centered">
-        <div class="column is-full-width">
-          <h3 id="doodl-vader" class="title pt-5 pb-2 has-text-centered"
-            style="text-align: center; padding-bottom: 10px;">
-            <strong>DOODL V.S. VADER</strong>
-          </h3>
-          <p class="subtitle has-text-centered"
-            style="text-align: center; padding-bottom: 10px; color: black; font-family: 'Google Sans', sans-serif;">
-            We use Aesthetic and HPS reward function to optimize models. Base model of VADER is VideoCrafter2.
-          </p>
-        </div>
-      </div>
-
-      <div class="table-container">
-        <table>
-          <thead>
-            <tr>
-              <th style="text-align: center;"></th>
-              <th style="text-align: center;">DOODL (2 GPU minutes per sample)</th>
-              <th style="text-align: center;">DOODL (20 GPU minutes per sample)</th>
-              <th style="text-align: center;">VADER (12 GPU hours of training)</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td style="text-align: center;">Reward</td>
-              <td style="text-align: center;">4.9583</td>
-              <td style="text-align: center;">4.9687</td>
-              <td style="text-align: center;">5.2810</td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-      <div id="videoCarouselIndicators9" class="carousel slide" data-ride="carousel" data-interval="5000">
-        <div class="carousel-inner">
-          <!-- video 1 -->
-          <div class="carousel-item active">
-            <div class="d-flex justify-content-center video-wrapper">
-              <div class="video-container">
-                <div class="text-box">DOODL</div>
-                <video class="d-block w-100" autoplay muted loop>
-                  <source src="videos/DOODL/0000.mp4" type="video/mp4">
-                </video>
-              </div>
-              <div class="video-container">
-                <div class="text-box">VADER</div>
-                <video class="d-block w-100" autoplay muted loop>
-                  <source src="videos/1aesthetic_hps/samples/0000.mp4" type="video/mp4">
-                </video>
-              </div>
-              <a class="carousel-control-prev" href="#videoCarouselIndicators9" role="button" data-slide="prev">
-                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                <span class="sr-only">Previous</span>
-              </a>
-              <a class="carousel-control-next" href="#videoCarouselIndicators9" role="button" data-slide="next">
-                <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                <span class="sr-only">Next</span>
-              </a>
-            </div>
-            <div class="carousel-caption">
-              2 dog and a whale, ocean adventure.
-            </div>
-          </div>
-          <!-- video 2 -->
-          <div class="carousel-item">
-            <div class="d-flex justify-content-center video-wrapper">
-              <div class="video-container">
-                <div class="text-box">DOODL</div>
-                <video class="d-block w-100" autoplay muted loop>
-                  <source src="videos/DOODL/0001.mp4" type="video/mp4">
-                </video>
-              </div>
-              <div class="video-container">
-                <div class="text-box">VADER</div>
-                <video class="d-block w-100" autoplay muted loop>
-                  <source src="videos/1aesthetic_hps/samples/0001.mp4" type="video/mp4">
-                </video>
-              </div>
-              <a class="carousel-control-prev" href="#videoCarouselIndicators9" role="button" data-slide="prev">
-                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                <span class="sr-only">Previous</span>
-              </a>
-              <a class="carousel-control-next" href="#videoCarouselIndicators9" role="button" data-slide="next">
-                <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                <span class="sr-only">Next</span>
-              </a>
-            </div>
-            <div class="carousel-caption">
-              Teddy bear and 3 real bear.
-            </div>
-          </div>
-          <!-- video 3 -->
-          <div class="carousel-item">
-            <div class="d-flex justify-content-center video-wrapper">
-              <div class="video-container">
-                <div class="text-box">DOODL</div>
-                <video class="d-block w-100" autoplay muted loop>
-                  <source src="videos/DOODL/0007.mp4" type="video/mp4">
-                </video>
-              </div>
-              <div class="video-container">
-                <div class="text-box">VADER</div>
-                <video class="d-block w-100" autoplay muted loop>
-                  <source src="videos/1aesthetic_hps/samples/0007.mp4" type="video/mp4">
-                </video>
-              </div>
-              <a class="carousel-control-prev" href="#videoCarouselIndicators9" role="button" data-slide="prev">
-                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                <span class="sr-only">Previous</span>
-              </a>
-              <a class="carousel-control-next" href="#videoCarouselIndicators9" role="button" data-slide="next">
-                <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                <span class="sr-only">Next</span>
-              </a>
-            </div>
-            <div class="carousel-caption">
-              Four godzillas.
-            </div>
-          </div>
-          <!-- Add more carousel items as needed -->
-        </div>
-      </div>
-
-    </div>
-
-
-    <!-- ######################## -->
-    <!-- DOODL vs VADER -->
-    <div class="container"
-      style="background-color: #fffefe; padding: 30px; border-radius: 8px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);">
-      <div class="columns is-centered">
-        <div class="column is-full-width">
-          <h3 id="vbench-distilled-reward-model" class="title pt-5 pb-2 has-text-centered"
-            style="text-align: center; padding-bottom: 10px;">
-            <strong>VBench Distilled Reward Model</strong>
-          </h3>
-        </div>
-      </div>
-
-      <div class="table-container">
-        <table>
-          <thead>
-            <tr>
-              <th style="text-align: center;">Model</th>
-              <th style="text-align: center;">Subject Consistency</th>
-              <th style="text-align: center;">Background Consistency</th>
-              <th style="text-align: center;">Motion Smoothness</th>
-              <th style="text-align: center;">Dynamic Degree</th>
-              <th style="text-align: center;">Aesthetic Quality</th>
-              <th style="text-align: center;">Imaging Quality</th>
-              <th
-                style="text-align: center; border-left: 2px solid orange; border-right: 2px solid orange; border-top: 2px solid orange;">
-                Weighted Average</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td style="text-align: center;">VideoCrafter2</td>
-              <td style="text-align: center;">0.9544</td>
-              <td style="text-align: center;">0.9652</td>
-              <td style="text-align: center;">0.9688</td>
-              <td style="text-align: center;">0.5346</td>
-              <td style="text-align: center;">0.5752</td>
-              <td style="text-align: center;">0.6677</td>
-              <td style="text-align: center; border-left: 2px solid orange; border-right: 2px solid orange;">0.7997</td>
-            </tr>
-            <tr>
-              <td style="text-align: center;">T2V Turbo (4 Steps)</th>
-              <td style="text-align: center;">0.9639</th>
-              <td style="text-align: center;">0.9656</th>
-              <td style="text-align: center;">0.9562</th>
-              <td style="text-align: center;">0.4771</th>
-              <td style="text-align: center;">0.6183</th>
-              <td style="text-align: center;"><b>0.7266<b></th>
-              <td style="text-align: center; border-left: 2px solid orange; border-right: 2px solid orange;">0.8126</td>
-            </tr>
-            <td style="text-align: center;">T2V Turbo (8 Steps)</th>
-            <td style="text-align: center;"><b>0.9735<b></th>
-            <td style="text-align: center;"><b>0.9736<b></th>
-            <td style="text-align: center;">0.9572</th>
-            <td style="text-align: center;">0.3686</th>
-            <td style="text-align: center;">0.6265</th>
-            <td style="text-align: center;">0.7168</th>
-            <td style="text-align: center; border-left: 2px solid orange; border-right: 2px solid orange;">0.8058</th>
-              <tr>
-                <td style="text-align: center;">VADER-Aesthetic and HPS</td>
-                <td style="text-align: center;">0.9659</td>
-                <td style="text-align: center;">0.9713</td>
-                <td style="text-align: center;"><b>0.9734</b></td>
-                <td style="text-align: center;">0.4741</td>
-                <td style="text-align: center;">0.6295</td>
-                <td style="text-align: center;">0.7145</td>
-                <td style="text-align: center; border-left: 2px solid orange; border-right: 2px solid orange;">
-                  0.8167
-                </td>
-              </tr>
-              <tr>
-                <td style="text-align: center;">VADER-PickScore</td>
-                <td style="text-align: center;">0.9668</td>
-                <td style="text-align: center;">0.9727</td>
-                <td style="text-align: center;">0.9726</td>
-                <td style="text-align: center;">0.3732</td>
-                <td style="text-align: center;">0.6094</td>
-                <td style="text-align: center;">0.6762</td>
-                <td style="text-align: center; border-left: 2px solid orange; border-right: 2px solid orange;">0.7971
-                </td>
-              </tr>
-              <tr>
-                <td style="text-align: center;">VADER-Aesthetic and ViCLIP</td>
-                <td style="text-align: center;">0.9564</td>
-                <td style="text-align: center;">0.9662</td>
-                <td style="text-align: center;">0.9714</td>
-                <td style="text-align: center;"><b>0.5519</b></td>
-                <td style="text-align: center;">0.6008</td>
-                <td style="text-align: center;">0.6566</td>
-                <td style="text-align: center; border-left: 2px solid orange; border-right: 2px solid orange;">
-                  0.8050</td>
-              </tr>
-              <tr>
-                <td style="text-align: center;"><b>VADER-VBench<b></td>
-                <td style="text-align: center;">0.9638</th>
-                <td style="text-align: center;">0.9678</th>
-                <td style="text-align: center;">0.9691</th>
-                <td style="text-align: center;">0.5361</th>
-                <td style="text-align: center;"><b>0.6393<b></th>
-                <td style="text-align: center;">0.7231</th>
-                <td
-                  style="text-align: center; border-left: 2px solid orange; border-right: 2px solid orange;  border-bottom: 2px solid orange;">
-                  <b>0.8238<b>
-                </td>
-              </tr>
-          </tbody>
-        </table>
-      </div>
-
-      <div id="videoCarouselIndicators15" class="carousel slide" data-ride="carousel" data-interval="5000">
-        <div class="carousel-inner">
-          <!-- video 1 -->
-          <div class="carousel-item active">
-            <div class="d-flex justify-content-center video-wrapper">
-              <div class="video-container">
-                <div class="text-box">VADER-HPS</div>
-                <video class="d-block w-100" autoplay muted loop>
-                  <source src="videos/vbench_reward_comparison/hps/0003.mp4" type="video/mp4">
-                </video>
-              </div>
-              <div class="video-container">
-                <div class="text-box">VADER-VBench</div>
-                <video class="d-block w-100" autoplay muted loop>
-                  <source src="videos/vbench_reward_comparison/custom/3.mp4" type="video/mp4">
-                </video>
-              </div>
-              <a class="carousel-control-prev" href="#videoCarouselIndicators15" role="button" data-slide="prev">
-                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                <span class="sr-only">Previous</span>
-              </a>
-              <a class="carousel-control-next" href="#videoCarouselIndicators15" role="button" data-slide="next">
-                <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                <span class="sr-only">Next</span>
-              </a>
-            </div>
-            <div class="carousel-caption">
-              A small bird sits atop a blooming flower stem.
-            </div>
-          </div>
-          <!-- video 2 -->
-          <div class="carousel-item">
-            <div class="d-flex justify-content-center video-wrapper">
-              <div class="video-container">
-                <div class="text-box">VADER-HPS</div>
-                <video class="d-block w-100" autoplay muted loop>
-                  <source src="videos/vbench_reward_comparison/hps/0156.mp4" type="video/mp4">
-                </video>
-              </div>
-              <div class="video-container">
-                <div class="text-box">VADER-VBench</div>
-                <video class="d-block w-100" autoplay muted loop>
-                  <source src="videos/vbench_reward_comparison/custom/156.mp4" type="video/mp4">
-                </video>
-              </div>
-              <a class="carousel-control-prev" href="#videoCarouselIndicators15" role="button" data-slide="prev">
-                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                <span class="sr-only">Previous</span>
-              </a>
-              <a class="carousel-control-next" href="#videoCarouselIndicators15" role="button" data-slide="next">
-                <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                <span class="sr-only">Next</span>
-              </a>
-            </div>
-            <div class="carousel-caption">
-              A rainy day in the city, raindrops pouring down from grey clouds above, people hurrying on the street with
-              umbrellas.
-            </div>
-          </div>
-          <!-- video 3 -->
-          <div class="carousel-item">
-            <div class="d-flex justify-content-center video-wrapper">
-              <div class="video-container">
-                <div class="text-box">VADER-HPS</div>
-                <video class="d-block w-100" autoplay muted loop>
-                  <source src="videos/vbench_reward_comparison/hps/0005.mp4" type="video/mp4">
-                </video>
-              </div>
-              <div class="video-container">
-                <div class="text-box">VADER-VBench</div>
-                <video class="d-block w-100" autoplay muted loop>
-                  <source src="videos/vbench_reward_comparison/custom/5.mp4" type="video/mp4">
-                </video>
-              </div>
-              <a class="carousel-control-prev" href="#videoCarouselIndicators15" role="button" data-slide="prev">
-                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                <span class="sr-only">Previous</span>
-              </a>
-              <a class="carousel-control-next" href="#videoCarouselIndicators15" role="button" data-slide="next">
-                <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                <span class="sr-only">Next</span>
-              </a>
-            </div>
-            <div class="carousel-caption">
-              A peaceful cow grazing in a green field under the clear blue sky.
-            </div>
-          </div>
-          <!-- Add more carousel items as needed -->
-          <!-- video 4 -->
-          <div class="carousel-item">
-            <div class="d-flex justify-content-center video-wrapper">
-              <div class="video-container">
-                <div class="text-box">VADER-HPS</div>
-                <video class="d-block w-100" autoplay muted loop>
-                  <source src="videos/vbench_reward_comparison/hps/0099.mp4" type="video/mp4">
-                </video>
-              </div>
-              <div class="video-container">
-                <div class="text-box">VADER-VBench</div>
-                <video class="d-block w-100" autoplay muted loop>
-                  <source src="videos/vbench_reward_comparison/custom/99.mp4" type="video/mp4">
-                </video>
-              </div>
-              <a class="carousel-control-prev" href="#videoCarouselIndicators15" role="button" data-slide="prev">
-                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                <span class="sr-only">Previous</span>
-              </a>
-              <a class="carousel-control-next" href="#videoCarouselIndicators15" role="button" data-slide="next">
-                <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                <span class="sr-only">Next</span>
-              </a>
-            </div>
-            <div class="carousel-caption">
-              Iron Man is walking towards the camera in the rain at night, with a lot of fog behind him. Science fiction
-              movie, close-up
-            </div>
-          </div>
-        </div>
-        <!-- Updated text section -->
-        <div class="columns is-centered">
-          <p class="subtitle"
-            style="width: 80%; text-align: justify; text-justify: inter-word; padding: 10px 20px; color: black; font-family: 'Google Sans', sans-serif; line-height: 1.8; font-size: 1rem;">
-            VBench Evaluation Results (EvalCrafter Prompts). Evaluation details are available in the <a
-              href="./#vbench-evaluation">previous section</a>.
-            Additionally, we present a qualitative comparison between VADER-Aesthetic and HPS (VADER-HPS) as well as
-            VADER-VBench Distilled Reward Model
-            (VADER-VBench).
-          </p>
-        </div>
-      </div>
-    </div>
-
-
-    <!-- ######################## -->
-    <!-- Training efficiency comparison -->
-    <div class="container"
-      style="background-color: #f7f9fc; padding: 30px; border-radius: 8px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);">
-      <div class="columns is-centered">
-        <div class="column is-full-width">
-          <h3 id="vbench-reward-model-train" class="title pt-5 pb-2 has-text-centered"
-            style="text-align: center; padding-bottom: 10px;">
-            <strong>Training Plots of VBench Distilled Reward Model</strong>
-          </h3>
-        </div>
-      </div>
-
-      <!-- Side-by-side images tightly aligned and centered -->
-      <div class="columns is-centered" style="display: flex; justify-content: center; align-items: center; gap: 10px;">
-        <div style="display: flex; justify-content: center; align-items: center;">
-          <img src="videos/reward_training_curves.png" alt="Training Curve of Reward Model"
-            style="height: 300px; object-fit: contain; border-radius: 8px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);">
-        </div>
-        <div style="display: flex; justify-content: center; align-items: center;">
-          <img src="videos/ranking_curves.png" alt="Training Curve of Reward Model"
-            style="height: 300px; object-fit: contain; border-radius: 8px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);">
-        </div>
-      </div>
-
-      <!-- Updated text section -->
-      <div class="columns is-centered">
-        <p class="subtitle"
-          style="width: 80%; text-align: center; text-justify: inter-word; padding: 10px 20px; color: black; font-family: 'Google Sans', sans-serif; line-height: 1.8; font-size: 1rem;">
-          Training Curves for VBench Distilled Reward Model.
+          VBench Evaluation Results (EvalCrafter Prompts). Evaluation details are available in the <a
+            href="./#vbench-evaluation">previous section</a>.
+          Additionally, we present a qualitative comparison between VADER-Aesthetic and HPS (VADER-HPS) as well as
+          VADER-VBench Distilled Reward Model
+          (VADER-VBench).
         </p>
       </div>
     </div>
+  </div>
 
 
-
-    <!-- ######################## -->
-    <!-- Training efficiency comparison -->
-    <div class="container"
-      style="background-color: #fffefe; padding: 30px; border-radius: 8px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);">
-      <div class="columns is-centered">
-        <div class="column is-full-width">
-          <h3 id="vader-vbench-loss" class="title pt-5 pb-2 has-text-centered"
-            style="text-align: center; padding-bottom: 10px;">
-            <strong>Reward Training Curve of VADER-VBench</strong>
-          </h3>
-        </div>
+  <!-- ######################## -->
+  <!-- Training efficiency comparison -->
+  <div class="container"
+    style="background-color: #f7f9fc; padding: 30px; border-radius: 8px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);">
+    <div class="columns is-centered">
+      <div class="column is-full-width">
+        <h3 id="vbench-reward-model-train" class="title pt-5 pb-2 has-text-centered"
+          style="text-align: center; padding-bottom: 10px;">
+          <strong>Training Plots of VBench Distilled Reward Model</strong>
+        </h3>
       </div>
-      <div class="columns" style="display: flex; justify-content: center; align-items: center;">
-        <div class="column is-narrow" style="text-align: center;">
-          <img src="videos/vader_vbench.png" alt="Training Curve of Reward Model"
-            style="max-width: 50%; height: auto; border-radius: 8px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);">
-        </div>
-      </div>
+    </div>
 
-      <!-- Updated text section -->
-      <div class="columns is-centered">
-        <p class="subtitle"
-          style="width: 50%; text-align: center; text-justify: inter-word; padding: 10px 20px; color: black; font-family: 'Google Sans', sans-serif; line-height: 1.8; font-size: 1rem;">
-          The reward curve when training VADER using the VBench Distilled reward model.
+    <!-- Side-by-side images tightly aligned and centered -->
+    <div class="columns is-centered" style="display: flex; justify-content: center; align-items: center; gap: 10px;">
+      <div style="display: flex; justify-content: center; align-items: center;">
+        <img src="videos/reward_training_curves.png" alt="Training Curve of Reward Model"
+          style="height: 300px; object-fit: contain; border-radius: 8px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);">
+      </div>
+      <div style="display: flex; justify-content: center; align-items: center;">
+        <img src="videos/ranking_curves.png" alt="Training Curve of Reward Model"
+          style="height: 300px; object-fit: contain; border-radius: 8px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);">
+      </div>
+    </div>
+
+    <!-- Updated text section -->
+    <div class="columns is-centered">
+      <p class="subtitle"
+        style="width: 80%; text-align: center; text-justify: inter-word; padding: 10px 20px; color: black; font-family: 'Google Sans', sans-serif; line-height: 1.8; font-size: 1rem;">
+        Training Curves for VBench Distilled Reward Model.
+      </p>
+    </div>
+  </div>
+
+
+
+  <!-- ######################## -->
+  <!-- Training efficiency comparison -->
+  <div class="container"
+    style="background-color: #fffefe; padding: 30px; border-radius: 8px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);">
+    <div class="columns is-centered">
+      <div class="column is-full-width">
+        <h3 id="vader-vbench-loss" class="title pt-5 pb-2 has-text-centered"
+          style="text-align: center; padding-bottom: 10px;">
+          <strong>Reward Training Curve of VADER-VBench</strong>
+        </h3>
+      </div>
+    </div>
+    <div class="columns" style="display: flex; justify-content: center; align-items: center;">
+      <div class="column is-narrow" style="text-align: center;">
+        <img src="videos/vader_vbench.png" alt="Training Curve of Reward Model"
+          style="max-width: 50%; height: auto; border-radius: 8px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);">
+      </div>
+    </div>
+
+    <!-- Updated text section -->
+    <div class="columns is-centered">
+      <p class="subtitle"
+        style="width: 50%; text-align: center; text-justify: inter-word; padding: 10px 20px; color: black; font-family: 'Google Sans', sans-serif; line-height: 1.8; font-size: 1rem;">
+        The reward curve when training VADER using the VBench Distilled reward model.
+      </p>
+    </div>
+  </div>
+
+
+
+
+
+
+
+  <!-- ######################## -->
+  <div class="container"
+    style="text-align: center; padding-bottom: 8em; background-color: #f7f9fc; padding: 30px; border-radius: 8px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);">
+    <div class="columns is-centered">
+      <div class="column is-full-width">
+        <h3 id="video-gallery" class="title pt-5 pb-2 has-text-centered"
+          style="text-align: center; padding-bottom: 10px;">
+          <strong>Video Gallery</strong>
+        </h3>
+        <p class="subtitle has-text-centered"
+          style="text-align: center; padding-bottom: 10px; color: black; font-family: 'Google Sans', sans-serif;">
+          More Videos from VADER are exhibited in <a href="./Video_Gallery.html">Video Gallery</a>.
         </p>
       </div>
     </div>
+  </div>
 
-
-
-
-
-
-
-    <!-- ######################## -->
-    <div class="container"
-      style="text-align: center; padding-bottom: 8em; background-color: #f7f9fc; padding: 30px; border-radius: 8px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);">
-      <div class="columns is-centered">
-        <div class="column is-full-width">
-          <h3 id="video-gallery" class="title pt-5 pb-2 has-text-centered"
-            style="text-align: center; padding-bottom: 10px;">
-            <strong>Video Gallery</strong>
-          </h3>
-          <p class="subtitle has-text-centered"
-            style="text-align: center; padding-bottom: 10px; color: black; font-family: 'Google Sans', sans-serif;">
-            More Videos from VADER are exhibited in <a href="./Video_Gallery.html">Video Gallery</a>.
-          </p>
-        </div>
+  <footer class="footer">
+    <div class="container">
+      <div class="content has-text-centered">
+        <br />
+        <p> Template from <a href="https://nerfies.github.io"><span class="dnerf">Nerfies</span></a>.
+        </p>
       </div>
     </div>
+  </footer>
 
-    <footer class="footer">
-      <div class="container">
-        <div class="content has-text-centered">
-          <br />
-          <p> Template from <a href="https://nerfies.github.io"><span class="dnerf">Nerfies</span></a>.
-          </p>
-        </div>
-      </div>
-    </footer>
-
-    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
-      integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
-      crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js"
-      integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
-      crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js"
-      integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
-      crossorigin="anonymous"></script>
+  <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
+    integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
+    crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js"
+    integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+    crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js"
+    integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+    crossorigin="anonymous"></script>
 </body>
 
 </html>
