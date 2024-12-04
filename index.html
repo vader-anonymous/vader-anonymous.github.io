@@ -222,6 +222,8 @@
               <a class="navbar-item" href="#truncated-backpropagation-ablation">Truncated Backpropagation Ablation</a>
               <a class="navbar-item" href="#doodl-vader">DOODL V.S. VADER</a>
               <a class="navbar-item" href="#vbench-distilled-reward-model">VBench Distilled Reward Model</a>
+              <a class="navbar-item" href="#vader-vbench-loss">VADER-VBench Loss</a>
+              <a class="navbar-item" href="#vbench-reward-model-train">VBench Reward Model Train</a>
             </div>
           </div>
         </div>
@@ -2844,7 +2846,68 @@
 
 
 
+      <!-- ######################## -->
+      <!-- Training efficiency comparison -->
+      <div class="container"
+        style="background-color: #f7f9fc; padding: 30px; border-radius: 8px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);">
+        <div class="columns is-centered">
+          <div class="column is-full-width">
+            <h3 id="vbench-reward-model-train" class="title pt-5 pb-2 has-text-centered"
+              style="text-align: center; padding-bottom: 10px;">
+              <strong>Training Plots of Distilled Reward Model</strong>
+            </h3>
+          </div>
+        </div>
+        <div class="columns" style="display: flex; justify-content: center; align-items: center;">
+          <div class="column is-narrow" style="text-align: center;">
+            <img src="videos/reward_training_curves.png" alt="Training Curve of Reward Model"
+              style="max-width: 80%; height: auto; border-radius: 8px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);">
+          </div>
+        </div>
+        <div class="columns" style="display: flex; justify-content: center; align-items: center;">
+          <div class="column is-narrow" style="text-align: center;">
+            <img src="videos/ranking_curves.png" alt="Training Curve of Reward Model"
+              style="max-width: 20%; height: auto; border-radius: 8px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);">
+          </div>
+        </div>
 
+        <!-- Updated text section -->
+        <div class="columns is-centered">
+          <p class="subtitle"
+            style="width: 80%; text-align: justify; text-justify: inter-word; padding: 10px 20px; color: black; font-family: 'Google Sans', sans-serif; line-height: 1.8; font-size: 1rem;">
+            Training Curves for VBench Distilled Reward Model.
+          </p>
+        </div>
+      </div>
+
+
+      <!-- ######################## -->
+      <!-- Training efficiency comparison -->
+      <div class="container"
+        style="background-color: #f7f9fc; padding: 30px; border-radius: 8px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);">
+        <div class="columns is-centered">
+          <div class="column is-full-width">
+            <h3 id="vader-vbench-loss" class="title pt-5 pb-2 has-text-centered"
+              style="text-align: center; padding-bottom: 10px;">
+              <strong>Training Curve of VADER-VBench</strong>
+            </h3>
+          </div>
+        </div>
+        <div class="columns" style="display: flex; justify-content: center; align-items: center;">
+          <div class="column is-narrow" style="text-align: center;">
+            <img src="videos/vader_vbench.png" alt="Training Curve of Reward Model"
+              style="max-width: 80%; height: auto; border-radius: 8px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);">
+          </div>
+        </div>
+
+        <!-- Updated text section -->
+        <div class="columns is-centered">
+          <p class="subtitle"
+            style="width: 80%; text-align: justify; text-justify: inter-word; padding: 10px 20px; color: black; font-family: 'Google Sans', sans-serif; line-height: 1.8; font-size: 1rem;">
+            The reward curve when training VADER using the VBench Distilled reward model.
+          </p>
+        </div>
+      </div>
 
 
 
